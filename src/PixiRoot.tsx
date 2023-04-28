@@ -4,9 +4,13 @@ import * as React from "react";
 import * as PIXI from 'pixi.js'
 
 export const PixiRoot = (props: {app: PIXI.Application}) => {
-	const ref = useRef(null);
+	const ref: React.useRef<HTMLDivElement> = useRef(null);
 	useEffect(() => {
-		ref.current.appendChild(props.app.view);
+		let view = props.app.view;
+		ref.current.appendChild(view);
+		return () => {
+			ref.current.removeChild(view);
+		}
 	}, [ref]);
 	return <div ref={ref} />;
 }
