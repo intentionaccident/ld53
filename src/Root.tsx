@@ -44,6 +44,7 @@ interface Room {
 	roomOpen: boolean;
 
 	isSource: boolean;
+	isSink: boolean;
 }
 
 function DrawRoom(room: RoomHandle) {
@@ -169,12 +170,13 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 				rightPipeCapacity: x == 5 ? 0 : 5,
 
 				topOpen: y != 1,
-				bottomOpen: y != 2,
+				bottomOpen: true,
 				leftOpen: x != 1,
-				rightOpen: x != 3,
+				rightOpen: true,
 				roomOpen: true,
 
 				isSource: x == 1 && y == 1,
+				isSink: x == 4 && y == 3
 			},
 			graphics: {
 				pipes: pipeGraphics,
@@ -292,6 +294,34 @@ export function Root() {
 								);
 								roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] += 1;
 								waterLeft -= 1;
+							}
+						}
+					}
+
+					if (previous[y][x].isSink) {
+						let waterToConsume = 1;
+						let candidates = [
+							// Bottom
+							{ x: x, y: y, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity', isOpen: previous[y][x].bottomOpen },
+							// Left
+							{ x: x - 1, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity', isOpen: previous[y][x].leftOpen },
+							// Top
+							{ x: x, y: y - 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity', isOpen: previous[y][x].topOpen },
+							// Right
+							{ x: x, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity', isOpen: previous[y][x].rightOpen },
+						];
+						while (candidates.length > 0 && waterToConsume > 0) {
+							candidates = candidates.filter(candidate =>
+								candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+								&& roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
+								&& candidate.isOpen
+							);
+							if (candidates.length > 0) {
+								candidates = candidates.sort(
+									(a, b) => candidatePressure(a) - candidatePressure(b)
+								);
+								roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] -= 1;
+								waterToConsume -= 1;
 							}
 						}
 					}
