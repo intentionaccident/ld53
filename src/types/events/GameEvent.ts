@@ -1,13 +1,11 @@
-import { GameEventType } from "./GameEventType";
+import { KeyPressedEvent } from "./KeyPressedEvent";
 import { RoomEditEvent } from "./RoomEditEvent";
+import { RotateIntersectionEvent } from "./RotateIntersectionEvent";
+import { FeatureClickedEvent } from "./FeatureClickedEvent";
 
-interface GameEventInternal {
-	type: GameEventType,
-	key?: string,
-	x?: number,
-	y?: number,
-}
-
-export type GameEvent = RoomEditEvent | GameEventInternal;
+export type GameEvent = RoomEditEvent
+	| KeyPressedEvent
+	| FeatureClickedEvent
+	| RotateIntersectionEvent;
 
 

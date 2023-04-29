@@ -7,7 +7,7 @@ import { UIRoot } from "./UIRoot";
 import { PixiRoot } from "./PixiRoot";
 import { RoomHandle } from "./types/RoomHandle";
 import { drawRoom } from "./draw/drawRoom";
-import { processEvents } from "./ProcessEvents";
+import { processEvents } from "./processEvents";
 import { updateRooms } from "./UpdateRooms";
 import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
@@ -17,6 +17,7 @@ import {SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED} from "./constan
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 import { GameEventType } from "./types/events/GameEventType";
+import { RoomEditTarget } from "./types/events/RoomEditTarget";
 
 export const app = new Application({
 	width: 640,
@@ -78,17 +79,41 @@ const roomHandlesDrawQueue = ship.roomHandles.flat().reverse();
 
 for (const room of roomHandlesDrawQueue) {
 	room.graphics.intersection.on('rightdown', (event) => {
-		ship.eventQueue.push({ type: GameEventType.CounterRotateIntersection, x: room.coordinate.x, y: room.coordinate.y });
+		ship.eventQueue.push({ type: GameEventType.RotateIntersection, coord: room.coordinate });
 	});
 	room.graphics.intersection.on('mousedown', (event) => {
 		if (event.button === 0) {
-			ship.eventQueue.push({ type: GameEventType.RotateIntersection, x: room.coordinate.x, y: room.coordinate.y });
+			ship.eventQueue.push({ type: GameEventType.RotateIntersection, clockwise: true, coord: room.coordinate });
 		}
 	});
 	room.graphics.features.on('mousedown', (event) => console.log("source", event));
-	room.graphics.verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event));
+	room.graphics.verticalPipe.on('mousedown', (event) => {
+		if (!event.ctrlKey) {
+			return;
+		}
+		ship.eventQueue.push({
+			type: GameEventType.RoomEdit,
+			coord: room.coordinate,
+			edit: {
+				target: RoomEditTarget.Pipe,
+				vertical: true
+			}
+		})
+	});
+	room.graphics.horizontalPipe.on('mousedown', (event) => {
+		if (!event.ctrlKey) {
+			return;
+		}
+		ship.eventQueue.push({
+			type: GameEventType.RoomEdit,
+			coord: room.coordinate,
+			edit: {
+				target: RoomEditTarget.Pipe
+			}
+		})
+	});
 	room.graphics.features.on('mousedown', (event) => {
-		ship.eventQueue.push({ type: GameEventType.FeatureClicked, x: room.coordinate.x, y: room.coordinate.y });
+		ship.eventQueue.push({ type: GameEventType.FeatureClicked, coord: room.coordinate });
 	});
 }
 
@@ -102,7 +127,7 @@ export function Root() {
 		};
 
 		const gameLoop = (delta) => {
-			processEvents(ship, setGloopAmount);
+			processEvents(ship, { setGloopAmount });
 
 			elapsedTimeBetweenGloopMovement += delta;
 

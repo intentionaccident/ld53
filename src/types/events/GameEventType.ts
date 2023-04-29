@@ -1,9 +1,7 @@
 
 export enum GameEventType {
-	RoomEditEvent,
+	RoomEdit,
 	KeyPressed,
-	KeyReleased,
 	RotateIntersection,
-	CounterRotateIntersection,
 	FeatureClicked
 }
