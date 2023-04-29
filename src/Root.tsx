@@ -13,6 +13,7 @@ const app = new Application({
 });
 
 const tileSize = 64;
+const LINE_SIZE = 4;
 const slantedness = 0.5;
 const INTERSECTION_RADIUS = 8;
 
@@ -27,7 +28,11 @@ interface RoomHandle {
 	data: Room
 	graphics: {
 		room: PIXI.Graphics
-		pipes: PIXI.Graphics
+		pipes: PIXI.Container
+		intersection: PIXI.Graphics
+		verticalPipe: PIXI.Graphics
+		horizontalPipe: PIXI.Graphics
+		source: PIXI.Graphics
 	}
 }
 
@@ -48,8 +53,8 @@ interface Room {
 	feature: RoomFeature;
 }
 
-function DrawRoom(room: RoomHandle) {
-	const graphics = room.graphics.pipes;
+function drawIntersection(room: RoomHandle) {
+	const graphics = room.graphics.intersection
 
 	graphics.clear();
 
@@ -100,45 +105,72 @@ function DrawRoom(room: RoomHandle) {
 	graphics.endFill();
 
 	if (room.data.leftOpen) {
-		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
 		graphics.lineTo(-INTERSECTION_RADIUS, 0);
 		graphics.endFill();
 	}
 
 	if (room.data.rightOpen) {
-		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
 		graphics.lineTo(INTERSECTION_RADIUS, 0);
 		graphics.endFill();
 	}
 
 	if (room.data.topOpen) {
-		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
 		graphics.lineTo(INTERSECTION_RADIUS * slantedness, -INTERSECTION_RADIUS);
 		graphics.endFill();
 	}
 
 	if (room.data.bottomOpen) {
-		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
 		graphics.lineTo(-INTERSECTION_RADIUS * slantedness, INTERSECTION_RADIUS);
 		graphics.endFill();
 	}
+}
 
-	if (room.data.bottomPipeCapacity > 0) {
-		graphics.beginFill(0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
-		graphics.lineStyle(4, 0x333333, 1);
+function drawSource(room: RoomHandle) {
+	const graphics = room.graphics.source
+
+	graphics.clear();
+
+	room.data.leftOpen
+	if (room.data.isSource) {
+		graphics.beginFill(room.data.isSource ? 0x009999 : 0x999999);
+		graphics.lineStyle(LINE_SIZE, 0x00FFFF, 1);
 		graphics.drawPolygon([
-			0, INTERSECTION_RADIUS,
-			INTERSECTION_RADIUS, INTERSECTION_RADIUS,
-			INTERSECTION_RADIUS - (tileSize - INTERSECTION_RADIUS * 2) * slantedness, tileSize - INTERSECTION_RADIUS * 2,
-			0 - (tileSize - INTERSECTION_RADIUS * 2) * slantedness, tileSize - INTERSECTION_RADIUS * 2,
+			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
+			-tileSize / 2, 0,
+			0, 0,
+			(tileSize * slantedness) / 2, -tileSize / 2,
 		]);
 		graphics.endFill();
 	}
+}
+
+function drawVerticalPipe(room: RoomHandle) {
+	const graphics = room.graphics.verticalPipe
+
+	graphics.clear();
+
+	if (room.data.bottomPipeCapacity > 0) {
+		graphics.lineStyle(LINE_SIZE, 0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
+		graphics.lineTo(
+			0 - (tileSize - INTERSECTION_RADIUS) * slantedness, tileSize - INTERSECTION_RADIUS,
+		);
+		graphics.endFill();
+	}
+}
+
+function drawHorizontalPipe(room: RoomHandle) {
+	const graphics = room.graphics.horizontalPipe
+
+	graphics.clear();
 
 	// Draw right pipe
 	if (room.data.rightPipeCapacity > 0) {
 		graphics.beginFill(0x009999, room.data.rightPipe / room.data.rightPipeCapacity);
-		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
 		graphics.drawPolygon([
 			20, 0,
 			20, 10,
@@ -147,6 +179,13 @@ function DrawRoom(room: RoomHandle) {
 		]);
 		graphics.endFill();
 	}
+}
+
+function DrawRoom(room: RoomHandle) {
+	drawSource(room)
+	drawIntersection(room)
+	drawVerticalPipe(room)
+	drawHorizontalPipe(room)
 }
 
 const shipContainer = new PIXI.Container();
@@ -159,7 +198,6 @@ shipContainer.addChild(backgroundContainer);
 
 const foregroundContainer = new PIXI.Container();
 shipContainer.addChild(foregroundContainer);
-
 
 const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 	Array.from({ length: 6 }, (_, x) => {
@@ -180,10 +218,31 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 		]);
 		roomGraphics.endFill();
 
-		const pipeGraphics = new PIXI.Graphics();
+		const pipeGraphics = new PIXI.Container();
 		foregroundContainer.addChild(pipeGraphics)
 		pipeGraphics.x = -y * tileSize * slantedness + x * tileSize + tileSize / 2 - tileSize * slantedness / 2;
 		pipeGraphics.y = y * tileSize + tileSize / 2;
+
+		const verticalPipe = new PIXI.Graphics();
+		const horizontalPipe = new PIXI.Graphics();
+		const intersection = new PIXI.Graphics();
+		const source = new PIXI.Graphics();
+		pipeGraphics.addChild(
+			verticalPipe,
+			horizontalPipe,
+			intersection,
+			source
+		)
+
+		intersection.on('mousedown', (event) => console.log("intersaction", event))
+		intersection.interactive = true
+		source.on('mousedown', (event) => console.log("source", event))
+		source.interactive = true
+		verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event))
+		verticalPipe.interactive = true
+
+		horizontalPipe.on('mousedown', (event) => console.log("horizontalPipe", event))
+		horizontalPipe.interactive = true
 
 		return {
 			coordinate: new PIXI.Point(x, y),
@@ -207,6 +266,10 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 			graphics: {
 				pipes: pipeGraphics,
 				room: roomGraphics,
+				verticalPipe,
+				horizontalPipe,
+				intersection,
+				source,
 			}
 		} as RoomHandle;
 	})
@@ -244,7 +307,7 @@ export function Root() {
 				const previous = roomHandles.map(row => row.map(row => row.data))
 				for (let x = 0; x < 6; x++) {
 					for (let y = 0; y < 4; y++) {
-						roomHandles[y][x].data = {...previous[y][x]};
+						roomHandles[y][x].data = { ...previous[y][x] };
 
 						const candidatePressure = candidate =>
 							roomHandles[candidate.y][candidate.x].data[candidate.pipe] / roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity];
