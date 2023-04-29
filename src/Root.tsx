@@ -19,7 +19,7 @@ const INTERSECTION_RADIUS = 8;
 // TODO: Use Discriminating Unions for `GameEvent`s
 interface GameEvent {
 	type: 'KeyPressed' | 'KeyReleased',
-	name: string
+	key: string
 }
 
 interface RoomHandle {
@@ -30,6 +30,8 @@ interface RoomHandle {
 		pipes: PIXI.Graphics
 	}
 }
+
+type RoomFeature = 'source' | 'sink' | 'landingGear' | null;
 
 interface Room {
 	bottomPipe: number;
@@ -43,8 +45,7 @@ interface Room {
 	rightOpen: boolean;
 	roomOpen: boolean;
 
-	isSource: boolean;
-	isSink: boolean;
+	feature: RoomFeature;
 }
 
 function DrawRoom(room: RoomHandle) {
@@ -52,9 +53,32 @@ function DrawRoom(room: RoomHandle) {
 
 	graphics.clear();
 
-	room.data.leftOpen
-	if (room.data.isSource) {
-		graphics.beginFill(room.data.isSource ? 0x009999 : 0x999999);
+	if (room.data.feature == 'source') {
+		graphics.beginFill(0x009999);
+		graphics.lineStyle(4, 0x00FFFF, 1);
+		graphics.drawPolygon([
+			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
+			-tileSize / 2, 0,
+			0, 0,
+			(tileSize * slantedness) / 2, -tileSize / 2,
+		]);
+		graphics.endFill();
+	}
+
+	if (room.data.feature == 'sink') {
+		graphics.beginFill(0x003333);
+		graphics.lineStyle(4, 0x00FFFF, 1);
+		graphics.drawPolygon([
+			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
+			-tileSize / 2, 0,
+			0, 0,
+			(tileSize * slantedness) / 2, -tileSize / 2,
+		]);
+		graphics.endFill();
+	}
+
+	if (room.data.feature == 'landingGear') {
+		graphics.beginFill(0x666666);
 		graphics.lineStyle(4, 0x00FFFF, 1);
 		graphics.drawPolygon([
 			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
@@ -175,8 +199,10 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 				rightOpen: true,
 				roomOpen: true,
 
-				isSource: x == 1 && y == 1,
-				isSink: x == 4 && y == 3
+				feature: x == 1 && y == 1
+					? 'source'
+					: (x == 4 && y == 3
+						? 'sink' : (x == 2 && y == 3) ? 'landingGear' : null)
 			},
 			graphics: {
 				pipes: pipeGraphics,
@@ -186,23 +212,26 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 	})
 );
 const eventQueue: GameEvent[] = [];
-
 const roomHandlesDrawQueue = roomHandles.flat().reverse()
+let gloopAmount = 100;
+let landingGearFuel = 0;
+const requiredLandingGearFuel = 50;
 
 export function Root() {
-	const [lastPressedKey, setLastPressedKey] = useState('');
+	const [gloopAmountValue, setGloopAmount] = useState(100);
+	const [landingGearFuelValue, setLandingGearFuel] = useState(0);
 
 	useEffect(() => {
 		const keyDownListener = (event) => {
-			const name = event.key;
-			eventQueue.push({ type: 'KeyPressed', name });
+			eventQueue.push({ type: 'KeyPressed', key: event.key });
 		};
 
 		const gameLoop = (delta) => {
 			while (eventQueue.length > 0) {
 				const event = eventQueue.pop();
-				if (event.type === 'KeyPressed') {
-					setLastPressedKey(event.name);
+				if (event.type === 'KeyPressed' && event.key == ' ') {
+					gloopAmount += 10;
+					setGloopAmount(gloopAmount);
 				}
 			}
 
@@ -216,8 +245,7 @@ export function Root() {
 
 					for (let [pipe, pipeCapacity] of [['rightPipe', 'rightPipeCapacity'], ['bottomPipe', 'bottomPipeCapacity']]) {
 						console.assert(previous[y][x][pipe] <= previous[y][x][pipeCapacity]);
-						if (previous[y][x][pipe] > 1) {
-							// TODO: Check for intersection openness
+						if (previous[y][x][pipe] > 0) {
 							let candidates =
 								pipe == 'rightPipe' ? [
 									// Left-side bottom
@@ -270,8 +298,10 @@ export function Root() {
 						}
 					}
 
-					if (previous[y][x].isSource) {
-						let waterLeft = 2;
+					if (previous[y][x].feature === 'source') {
+						let waterLeft = gloopAmount - 2 >= 0 ? 2 : 0;
+						gloopAmount -= waterLeft;
+						setGloopAmount(gloopAmount);
 						let candidates = [
 							// Bottom
 							{ x: x, y: y, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity', isOpen: previous[y][x].bottomOpen },
@@ -298,7 +328,7 @@ export function Root() {
 						}
 					}
 
-					if (previous[y][x].isSink) {
+					if (previous[y][x].feature === 'sink') {
 						let waterToConsume = 1;
 						let candidates = [
 							// Bottom
@@ -325,6 +355,36 @@ export function Root() {
 							}
 						}
 					}
+
+					if (previous[y][x].feature === 'landingGear' && landingGearFuel < requiredLandingGearFuel) {
+						let gloopToConsume = 1;
+						let candidates = [
+							// Bottom
+							{ x: x, y: y, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity', isOpen: previous[y][x].bottomOpen },
+							// Left
+							{ x: x - 1, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity', isOpen: previous[y][x].leftOpen },
+							// Top
+							{ x: x, y: y - 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity', isOpen: previous[y][x].topOpen },
+							// Right
+							{ x: x, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity', isOpen: previous[y][x].rightOpen },
+						];
+						while (candidates.length > 0 && gloopToConsume > 0) {
+							candidates = candidates.filter(candidate =>
+								candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+								&& roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
+								&& candidate.isOpen
+							);
+							if (candidates.length > 0) {
+								candidates = candidates.sort(
+									(a, b) => candidatePressure(a) - candidatePressure(b)
+								);
+								roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] -= 1;
+								gloopToConsume -= 1;
+								landingGearFuel += 1;
+							}
+						}
+					}
+					setLandingGearFuel(landingGearFuel);
 				}
 			}
 
@@ -344,7 +404,7 @@ export function Root() {
 	return <div>
 		<GameFrame>
 			<PixiRoot app={app} />
-			<UIRoot lastPressedKey={lastPressedKey} />
+			<UIRoot gloopAmount={gloopAmountValue} landingGearFuel={landingGearFuelValue} requiredLandingGearFuel={requiredLandingGearFuel} />
 		</GameFrame>
 	</div>;
 }
