@@ -2,6 +2,7 @@ import { Ship } from "./types/Ship";
 import { SINK_REQUEST_TIMEOUT } from "./constants";
 import { GameEventType } from "./types/events/GameEventType";
 import { KeyPressedEvent } from "./types/events/KeyPressedEvent";
+import { RoomEditTarget } from "./types/events/RoomEditTarget";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -65,6 +66,19 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 					}
 				}
 				continue;
+			} case GameEventType.RoomEdit: {
+				const room = ship.roomHandles[event.coord.y][event.coord.x];
+				switch (event.edit.target) {
+					case RoomEditTarget.Pipe: {
+						if (event.edit.vertical) {
+							room.data.bottomPipeCapacity = room.data.bottomPipeCapacity > 0 ? 0 : 5
+							continue
+						}
+						room.data.rightPipeCapacity = room.data.rightPipeCapacity > 0 ? 0 : 5
+						continue
+					}
+				}
+				continue
 			} default: {
 				console.warn("unprocessed event", event)
 				continue;

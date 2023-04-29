@@ -13,7 +13,7 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
-import {SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED} from "./constants";
+import { SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED } from "./constants";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 import { GameEventType } from "./types/events/GameEventType";
@@ -92,6 +92,7 @@ for (const room of roomHandlesDrawQueue) {
 		if (!event.ctrlKey) {
 			return;
 		}
+		console.log("verticalPipe", event)
 		ship.eventQueue.push({
 			type: GameEventType.RoomEdit,
 			coord: room.coordinate,
@@ -105,6 +106,7 @@ for (const room of roomHandlesDrawQueue) {
 		if (!event.ctrlKey) {
 			return;
 		}
+		console.log("horizontalPipe", event)
 		ship.eventQueue.push({
 			type: GameEventType.RoomEdit,
 			coord: room.coordinate,

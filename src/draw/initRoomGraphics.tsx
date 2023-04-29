@@ -37,7 +37,6 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics']):
 	]);
 	verticalPipe.interactive = true;
 
-	horizontalPipe.on('mousedown', (event) => console.log("horizontalPipe", event));
 	horizontalPipe.hitArea = new PIXI.Polygon([
 		INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
 		TILE_WIDTH - INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
