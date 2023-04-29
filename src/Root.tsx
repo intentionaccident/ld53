@@ -118,7 +118,7 @@ const ship: Ship = {
 					roomOpen: true,
 
 					feature:  ({
-						'+': {type: 'source'},
+						'+': {type: 'source', queued: 0},
 						'-': {type: 'sink', storage: 0, capacity: 10},
 						'undefined': {type: 'empty'}
 					})[layout.f]

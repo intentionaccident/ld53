@@ -20,6 +20,16 @@ export function processEvents(ship: Ship, setGloopAmount) {
 			room.data.rightOpen = room.data.bottomOpen;
 			room.data.bottomOpen = room.data.leftOpen;
 			room.data.leftOpen = previousTop;
+		} else if (event.type === 'FeatureClicked') {
+			const room = ship.roomHandles[event.y][event.x];
+			if (room.data.feature.type === 'source') {
+				if (ship.gloopAmount > 0) {
+					const addedAmount = Math.min(ship.gloopAmount, 10)
+					room.data.feature.queued += addedAmount;
+					ship.gloopAmount -= addedAmount;
+					setGloopAmount(ship.gloopAmount);
+				}
+			}
 		}
 	}
 }
