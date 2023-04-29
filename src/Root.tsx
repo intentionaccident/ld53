@@ -80,7 +80,9 @@ const ship: Ship = {
 			})
 			intersection.interactive = true;
 			intersection.cursor = 'pointer';
-			feature.on('mousedown', (event) => console.log("source", event))
+			feature.on('mousedown', (event) => {
+				ship.eventQueue.push({type: 'FeatureClicked', x, y});
+			});
 			feature.interactive = true
 			verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event))
 			verticalPipe.hitArea = new PIXI.Polygon([
