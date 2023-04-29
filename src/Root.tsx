@@ -47,7 +47,9 @@ interface GameEvent {
 
 interface Room {
 	bottomPipe: number;
+	bottomPipeCapacity: number;
 	rightPipe: number;
+	rightPipeCapacity: number;
 
 	topOpen: boolean;
 	bottomOpen: boolean;
@@ -61,7 +63,9 @@ interface Room {
 let rooms: Room[][] = Array.from({length: 4}, (_, y) =>
 	Array.from({length: 6}, (_, x) => ({
 		bottomPipe: 0,
+		bottomPipeCapacity: y == 3 ? 0 : 2,
 		rightPipe: 0,
+		rightPipeCapacity: x == 5 ? 0 : 2,
 
 		topOpen: true,
 		bottomOpen: true,
@@ -75,10 +79,38 @@ let rooms: Room[][] = Array.from({length: 4}, (_, y) =>
 
 function DrawRoom(room: Room, graphics: PIXI.Graphics) {
 	graphics.clear();
+
+	// Draw intersection dot
 	graphics.beginFill(room.isSource ? 0x009999: 0x999999);
 	graphics.lineStyle(4, 0x00FFFF, 1);
 	graphics.drawCircle(10, 0, 8);
 	graphics.endFill();
+
+	// Draw bottom pipe
+	if (room.bottomPipeCapacity > 0) {
+		graphics.beginFill(room.rightPipe > 0 ? 0x009999 : 0x999999);
+		graphics.lineStyle(4, 0x333333, 1);
+		graphics.drawPolygon([
+			5, 10,
+			15, 10,
+			-10, 60,
+			-20, 60
+		]);
+		graphics.endFill();
+	}
+
+	// Draw right pipe
+	if (room.rightPipeCapacity > 0) {
+		graphics.beginFill(room.rightPipe > 0 ? 0x009999 : 0x999999);
+		graphics.lineStyle(4, 0x333333, 1);
+		graphics.drawPolygon([
+			20, 0,
+			20, 10,
+			65, 10,
+			65, 0
+		]);
+		graphics.endFill();
+	}
 }
 
 const roomGraphics: PIXI.Graphics[][] = Array.from({length: 4}, (_, y) =>
