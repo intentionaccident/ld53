@@ -111,10 +111,10 @@ const ship: Ship = {
 					rightPipe: 0,
 					rightPipeCapacity: x == 5 ? 0 : 5,
 
-					topOpen: ['+', '|'].includes(layout.i),
+					topOpen: ['+', '|', 'L', 'J'].includes(layout.i),
 					bottomOpen: ['+', '|', '>', '<'].includes(layout.i),
-					leftOpen: ['+', '-', '>'].includes(layout.i),
-					rightOpen: ['+', '-', '<'].includes(layout.i),
+					leftOpen: ['+', '-', '>', 'J'].includes(layout.i),
+					rightOpen: ['+', '-', '<', 'L'].includes(layout.i),
 					roomOpen: true,
 
 					feature:  ({
