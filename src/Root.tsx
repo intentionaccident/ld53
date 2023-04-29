@@ -57,7 +57,7 @@ function DrawRoom(room: RoomHandle) {
 
 	// Draw bottom pipe
 	if (room.data.bottomPipeCapacity > 0) {
-		graphics.beginFill(room.data.rightPipe > 0 ? 0x009999 : 0x999999);
+		graphics.beginFill(0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
 		graphics.lineStyle(4, 0x333333, 1);
 		graphics.drawPolygon([
 			0, INTERSECTION_RADIUS,
@@ -70,7 +70,7 @@ function DrawRoom(room: RoomHandle) {
 
 	// Draw right pipe
 	if (room.data.rightPipeCapacity > 0) {
-		graphics.beginFill(room.data.rightPipe > 0 ? 0x009999 : 0x999999);
+		graphics.beginFill(0x009999, room.data.rightPipe / room.data.rightPipeCapacity);
 		graphics.lineStyle(4, 0x333333, 1);
 		graphics.drawPolygon([
 			20, 0,
