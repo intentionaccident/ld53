@@ -139,7 +139,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 
 		const feature = ship.roomHandles[y][x].data.feature;
 		if (feature.type === 'source' || (feature.type === 'sink' && feature.state === 'releasing')) {
-			let waterLeft = Math.min(feature.storage, 2);
+			let waterLeft = Math.min(feature.storage, feature.releaseSpeed);
 			let candidates = [
 				// Bottom
 				{
@@ -192,7 +192,6 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 		}
 
 		if (feature.type === 'sink') {
-			console.log('storage ' + feature.storage)
 			if (feature.state === 'requesting') {
 				let waterToConsume = 1;
 				let candidates = [

@@ -17,8 +17,17 @@ export const SINK_BUSY_TIME = {
 	reactor: 30
 }
 
+const sinkRequestTimeout = 60;
 export const SINK_REQUEST_TIMEOUT = {
-	thrusters: 60,
-	navigation: 60,
-	reactor:  60,
+	thrusters: sinkRequestTimeout,
+	navigation: sinkRequestTimeout,
+	reactor:  sinkRequestTimeout,
+}
+
+export const SOURCE_RELEASE_SPEED = 2;
+const sinkReleaseSpeed = 6;
+export const SINK_RELEASE_SPEED = {
+	thrusters: sinkReleaseSpeed,
+	navigation: sinkReleaseSpeed,
+	reactor:  sinkReleaseSpeed,
 }

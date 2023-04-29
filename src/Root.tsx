@@ -13,7 +13,7 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
-import { SINK_CAPACITY } from "./constants";
+import {SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED} from "./constants";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 
@@ -51,10 +51,10 @@ export const ship: Ship = {
 					roomOpen: true,
 
 					feature: ({
-						'+': { type: 'source', storage: 0 },
-						't': { type: 'sink', subtype: 'thrusters', capacity: SINK_CAPACITY['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
-						'n': { type: 'sink', subtype: 'navigation', capacity: SINK_CAPACITY['navigation'], state: 'idle', storage: 0, timeLeft: 0 },
-						'r': { type: 'sink', subtype: 'reactor', capacity: SINK_CAPACITY['reactor'], state: 'idle', storage: 0, timeLeft: 0 },
+						'+': { type: 'source', releaseSpeed: SOURCE_RELEASE_SPEED, storage: 0 },
+						't': { type: 'sink', subtype: 'thrusters', capacity: SINK_CAPACITY['thrusters'], releaseSpeed: SINK_RELEASE_SPEED['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
+						'n': { type: 'sink', subtype: 'navigation', capacity: SINK_CAPACITY['navigation'], releaseSpeed: SINK_RELEASE_SPEED['navigation'], state: 'idle', storage: 0, timeLeft: 0 },
+						'r': { type: 'sink', subtype: 'reactor', capacity: SINK_CAPACITY['reactor'], releaseSpeed: SINK_RELEASE_SPEED['reactor'], state: 'idle', storage: 0, timeLeft: 0 },
 						'undefined': { type: 'empty' }
 					})[layout?.f]
 				},
@@ -80,7 +80,6 @@ for (const room of roomHandlesDrawQueue) {
 		ship.eventQueue.push({ type: 'CounterRotateIntersection', x: room.coordinate.x, y: room.coordinate.y });
 	});
 	room.graphics.intersection.on('mousedown', (event) => {
-		console.log(event);
 		if (event.button === 0) {
 			ship.eventQueue.push({ type: 'RotateIntersection', x: room.coordinate.x, y: room.coordinate.y });
 		}
