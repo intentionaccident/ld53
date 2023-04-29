@@ -116,7 +116,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 						},
 					];
 
-				// Let's limit our water movement to max 1 per room for now
+				// Let's limit our gloop movement to max 1 per room for now
 				candidates = candidates.filter(candidate =>
 					candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
 					&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] < ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity]
@@ -139,7 +139,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 
 		const feature = ship.roomHandles[y][x].data.feature;
 		if (feature.type === 'source' || (feature.type === 'sink' && feature.state === 'releasing')) {
-			let waterLeft = Math.min(feature.storage, feature.releaseSpeed);
+			let gloopLeft = Math.min(feature.storage, feature.releaseSpeed);
 			let candidates = [
 				// Bottom
 				{
@@ -174,7 +174,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 					isOpen: previous[y][x].rightOpen
 				},
 			];
-			while (candidates.length > 0 && waterLeft > 0) {
+			while (candidates.length > 0 && gloopLeft > 0) {
 				candidates = candidates.filter(candidate =>
 					candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
 					&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] < ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity]
@@ -185,7 +185,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 						(a, b) => candidatePressure(a) - candidatePressure(b)
 					);
 					ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] += 1;
-					waterLeft -= 1;
+					gloopLeft -= 1;
 					feature.storage -= 1;
 				}
 			}
@@ -193,7 +193,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 
 		if (feature.type === 'sink') {
 			if (feature.state === 'requesting') {
-				let waterToConsume = 1;
+				let gloopToConsume = 1;
 				let candidates = [
 					// Bottom
 					{
@@ -228,7 +228,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 						isOpen: previous[y][x].rightOpen
 					},
 				];
-				while (candidates.length > 0 && waterToConsume > 0) {
+				while (candidates.length > 0 && gloopToConsume > 0) {
 					candidates = candidates.filter(candidate =>
 						candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
 						&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
@@ -239,7 +239,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 							(a, b) => candidatePressure(a) - candidatePressure(b)
 						);
 						ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] -= 1;
-						waterToConsume -= 1;
+						gloopToConsume -= 1;
 						feature.storage += 1;
 					}
 				}
