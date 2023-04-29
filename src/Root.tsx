@@ -151,6 +151,7 @@ export function Root() {
 					for (let [pipe, pipeCapacity] of [['rightPipe', 'rightPipeCapacity'], ['bottomPipe', 'bottomPipeCapacity']]) {
 						console.assert(previous[y][x][pipe] <= previous[y][x][pipeCapacity]);
 						if (previous[y][x][pipe] === previous[y][x][pipeCapacity]) {
+							// TODO: Check for intersection openness
 							const candidates =
 								pipe == 'rightPipe' ? [
 									// Left-side bottom
@@ -185,7 +186,7 @@ export function Root() {
 							// TODO: Should run until out of good candidates (candidates where the pressure dictates we move water towards them)
 							for (const candidate of candidates) {
 								// Break when out of water
-								if (rooms[y][x][pipe] <= 0) break;
+								if (rooms[y][x][pipe] < rooms[y][x][pipeCapacity]) break;
 								// Ignore out of bounds
 								if (candidate.x < 0 || candidate.x >= 6 || candidate.y < 0 || candidate.y >= 4) {
 									continue;
@@ -205,47 +206,23 @@ export function Root() {
 
 					if (previous[y][x].isSource) {
 						let waterLeft = 1;
-						// top
-						if (y - 1 >= 0
-							&& previous[y][x].topOpen
-							&& previous[y - 1][x].bottomPipe < previous[y - 1][x].bottomPipeCapacity
-							&& rooms[y - 1][x].bottomPipe < rooms[y - 1][x].bottomPipeCapacity
-							&& waterLeft > 0
-						) {
-							rooms[y - 1][x].bottomPipe += 1;
-							waterLeft -= 1;
-						}
-
-						// right
-						if (x + 1 < 6
-							&& previous[y][x].rightOpen
-							&& previous[y][x].rightPipe < previous[y][x].rightPipeCapacity
-							&& rooms[y][x].rightPipe < rooms[y][x].rightPipeCapacity
-							&& waterLeft > 0
-						) {
-							rooms[y][x].rightPipe += 1;
-							waterLeft -= 1;
-						}
-
-						// bottom
-						if (y + 1 < 4
-							&& previous[y][x].bottomOpen
-							&& previous[y][x].bottomPipe < previous[y][x].bottomPipeCapacity
-							&& rooms[y][x].bottomPipe < rooms[y][x].bottomPipeCapacity
-							&& waterLeft > 0
-						) {
-							rooms[y][x].bottomPipe += 1;
-							waterLeft -= 1;
-						}
-
-						// left
-						if (x - 1 >= 0
-							&& previous[y][x].leftOpen
-							&& previous[y][x - 1].rightPipe < previous[y][x - 1].rightPipeCapacity
-							&& rooms[y][x - 1].rightPipe < rooms[y][x - 1].rightPipeCapacity
-							&& waterLeft > 0
-						) {
-							rooms[y][x - 1].rightPipe += 1;
+						// TODO: Check for intersection openness
+						const candidates = [
+							// Bottom
+							{x: x, y: y, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+							// Left
+							{x: x - 1, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+							// Top
+							{x: x, y: y - 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+							// Right
+							{x: x, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+						].filter(candidate =>
+							candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+							&& rooms[candidate.y][candidate.x][candidate.pipe] < rooms[candidate.y][candidate.x][candidate.pipeCapacity]
+						);
+						for (const candidate of candidates) {
+							if (waterLeft <= 0) break;
+							rooms[candidate.y][candidate.x][candidate.pipe] += 1;
 							waterLeft -= 1;
 						}
 					}
