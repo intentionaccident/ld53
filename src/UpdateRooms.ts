@@ -1,10 +1,10 @@
-import {Ship} from "./types/Ship";
+import { Ship } from "./types/Ship";
 
 export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
-	for (let x = 0; x < 6; x++)
-	for (let y = 0; y < 4; y++) {
-		ship.roomHandles[y][x].data = {...previous[y][x]};
+	for (let y = 0; y < ship.roomHandles.length; y++) 
+	for (let x = 0; x < ship.roomHandles[y].length; x++){
+		ship.roomHandles[y][x].data = { ...previous[y][x] };
 
 		const candidatePressure = candidate =>
 			ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] / ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity];

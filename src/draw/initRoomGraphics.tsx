@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { RoomHandle } from "../types/RoomHandle";
-import { INTERSECTION_RADIUS, LINE_SIZE, SLANT, SLANTEDNESS, TILE_HEIGHT, TILE_WIDTH } from "../constants";
+import { INTERSECTION_RADIUS, SLANT, TILE_HEIGHT, TILE_WIDTH } from "../constants";
 import { Ship } from "../types/Ship";
 
 export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics']): RoomHandle['graphics'] {
@@ -8,16 +8,6 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics']):
 	roomGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y;
 	roomGraphics.y = TILE_HEIGHT * coord.y;
 	graphics.background.addChild(roomGraphics);
-
-	roomGraphics.beginFill(0x999999);
-	roomGraphics.lineStyle(LINE_SIZE, 0xFFFFFF, 1);
-	roomGraphics.drawPolygon([
-		0, 0,
-		TILE_WIDTH, 0,
-		TILE_WIDTH - SLANT, TILE_HEIGHT,
-		-SLANT, TILE_HEIGHT,
-	]);
-	roomGraphics.endFill();
 
 	const pipeGraphics = new PIXI.Container();
 	graphics.foreground.addChild(pipeGraphics);

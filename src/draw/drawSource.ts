@@ -1,5 +1,5 @@
-import {LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH} from "../constants";
-import {RoomHandle} from "../types/RoomHandle";
+import { LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH } from "../constants";
+import { RoomHandle } from "../types/RoomHandle";
 
 export function drawSource(room: RoomHandle) {
 	const graphics = room.graphics.features;

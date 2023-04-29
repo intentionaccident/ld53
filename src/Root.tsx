@@ -13,14 +13,15 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
-import {NAVIGATION_GLOOP_CAPACITY, REACTOR_GLOOP_CAPACITY, THRUSTERS_GLOOP_CAPACITY} from "./constants";
+import { NAVIGATION_GLOOP_CAPACITY, REACTOR_GLOOP_CAPACITY, THRUSTERS_GLOOP_CAPACITY } from "./constants";
+import { setRoomVisibility } from "./utils/setRoomVisibility";
+import { drawRoomBackground } from "./draw/drawRoomBackground";
 
 export const app = new Application({
 	width: 640,
 	height: 480,
 	antialias: true
 });
-
 
 const shipGraphics = initShipGraphics()
 
@@ -32,18 +33,21 @@ export const ship: Ship = {
 	roomHandles: shipLayout.map((layoutRow, y) =>
 		layoutRow.map((layout, x) => {
 			const coordinate = new PIXI.Point(x, y)
-			return {
+			const graphics = initRoomGraphics(coordinate, shipGraphics)
+			const hidden = layout == null
+			const room = {
 				coordinate,
 				data: {
+					hidden,
 					bottomPipe: 0,
 					bottomPipeCapacity: y == 3 ? 0 : 5,
 					rightPipe: 0,
 					rightPipeCapacity: x == 5 ? 0 : 5,
 
-					topOpen: ['+', '|', 'L', 'J'].includes(layout.i),
-					bottomOpen: ['+', '|', '>', '<'].includes(layout.i),
-					leftOpen: ['+', '-', '>', 'J'].includes(layout.i),
-					rightOpen: ['+', '-', '<', 'L'].includes(layout.i),
+					topOpen: ['+', '|', 'L', 'J'].includes(layout?.i),
+					bottomOpen: ['+', '|', '>', '<'].includes(layout?.i),
+					leftOpen: ['+', '-', '>', 'J'].includes(layout?.i),
+					rightOpen: ['+', '-', '<', 'L'].includes(layout?.i),
 					roomOpen: true,
 
 					feature: ({
@@ -52,10 +56,16 @@ export const ship: Ship = {
 						'n': { type: 'sink', subtype: 'navigation', storage: 0, capacity: NAVIGATION_GLOOP_CAPACITY },
 						'r': { type: 'sink', subtype: 'reactor', storage: 0, capacity: REACTOR_GLOOP_CAPACITY },
 						'undefined': { type: 'empty' }
-					})[layout.f]
+					})[layout?.f]
 				},
-				graphics: initRoomGraphics(coordinate, shipGraphics)
+				graphics
 			} as RoomHandle;
+
+			drawRoomBackground(room)
+			if (hidden) {
+				setRoomVisibility(room, false)
+			}
+			return room
 		})
 	),
 	graphics: shipGraphics

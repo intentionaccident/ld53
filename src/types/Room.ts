@@ -1,6 +1,7 @@
-import {RoomFeature} from "./RoomFeature";
+import { RoomFeature } from "./RoomFeature";
 
 export interface Room {
+	hidden?: boolean
 	bottomPipe: number;
 	bottomPipeCapacity: number;
 	rightPipe: number;

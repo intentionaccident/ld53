@@ -4,8 +4,8 @@ import { app } from "./Root";
 
 export function initShipGraphics(): Ship['graphics'] {
 	const shipContainer = new PIXI.Container();
-	shipContainer.x = 128;
-	shipContainer.y = 32;
+	shipContainer.x = 64 + 32;
+	shipContainer.y = 16;
 	app.stage.addChild(shipContainer);
 
 	const backgroundContainer = new PIXI.Container();
