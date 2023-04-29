@@ -5,7 +5,7 @@ import * as PIXI from 'pixi.js'
 export const PixiRoot = (props: { app: PIXI.Application }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		let view = props.app.view;
+		const view = props.app.view as any as Node;
 		ref.current.appendChild(view);
 		return () => {
 			ref.current.removeChild(view);
