@@ -18,6 +18,7 @@ import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 import { GameEventType } from "./types/events/GameEventType";
 import { RoomEditTarget } from "./types/events/RoomEditTarget";
+import {saveLevel} from "./saveLevel";
 
 export const app = new Application({
 	width: 640,
@@ -46,10 +47,10 @@ export const ship: Ship = {
 					rightPipe: 0,
 					rightPipeCapacity: ['+', '-'].includes(layout?.p) ? 5 : 0,
 
-					topOpen: ['+', '|', 'L', 'J'].includes(layout?.i),
-					bottomOpen: ['+', '|', '>', '<'].includes(layout?.i),
-					leftOpen: ['+', '-', '>', 'J'].includes(layout?.i),
-					rightOpen: ['+', '-', '<', 'L'].includes(layout?.i),
+					topOpen: ['┼', '┤', '┴', '┘', '├', '│', '└', '╵'].includes(layout?.i),
+					bottomOpen: ['┼', '┤', '├', '│', '┬', '┐', '┌', '╷'].includes(layout?.i),
+					leftOpen: ['┼', '┤', '┴', '┘', '┬', '┐', '─', '╴'].includes(layout?.i),
+					rightOpen: ['┼', '┴', '├', '└', '┬', '─', '┌', '╶'].includes(layout?.i),
 					roomOpen: true,
 
 					feature: ({
@@ -122,6 +123,7 @@ export function Root() {
 	const [landingGearFuelValue, setLandingGearFuel] = useState(0);
 
 	useEffect(() => {
+		console.log(saveLevel(ship));
 		const keyDownListener = (event) => {
 			ship.eventQueue.push({ type: GameEventType.KeyPressed, key: event.key });
 		};
