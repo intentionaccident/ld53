@@ -1,5 +1,6 @@
-import {RoomHandle} from "./RoomHandle";
-import {GameEvent} from "./GameEvent";
+import { RoomHandle } from "./RoomHandle";
+import { GameEvent } from "./GameEvent";
+import * as PIXI from "pixi.js";
 
 export interface Ship {
 	gloopAmount: number;
@@ -7,4 +8,9 @@ export interface Ship {
 	requiredLandingGearFuel: number;
 	roomHandles: RoomHandle[][];
 	eventQueue: GameEvent[];
+	graphics: {
+		root: PIXI.Container;
+		background: PIXI.Container;
+		foreground: PIXI.Container;
+	}
 }

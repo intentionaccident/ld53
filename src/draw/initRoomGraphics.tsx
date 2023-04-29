@@ -1,0 +1,66 @@
+import * as PIXI from "pixi.js";
+import { RoomHandle } from "../types/RoomHandle";
+import { INTERSECTION_RADIUS, LINE_SIZE, SLANT, SLANTEDNESS, TILE_HEIGHT, TILE_WIDTH } from "../constants";
+import { Ship } from "../types/Ship";
+
+export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics']): RoomHandle['graphics'] {
+	const roomGraphics = new PIXI.Graphics();
+	roomGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y;
+	roomGraphics.y = TILE_HEIGHT * coord.y;
+	graphics.background.addChild(roomGraphics);
+
+	roomGraphics.beginFill(0x999999);
+	roomGraphics.lineStyle(LINE_SIZE, 0xFFFFFF, 1);
+	roomGraphics.drawPolygon([
+		0, 0,
+		TILE_WIDTH, 0,
+		TILE_WIDTH - SLANT, TILE_HEIGHT,
+		-SLANT, TILE_HEIGHT,
+	]);
+	roomGraphics.endFill();
+
+	const pipeGraphics = new PIXI.Container();
+	graphics.foreground.addChild(pipeGraphics);
+	pipeGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y + TILE_WIDTH / 2 - SLANT / 2;
+	pipeGraphics.y = TILE_HEIGHT * coord.y + TILE_HEIGHT / 2;
+
+	const verticalPipe = new PIXI.Graphics();
+	const horizontalPipe = new PIXI.Graphics();
+	const intersection = new PIXI.Graphics();
+	const feature = new PIXI.Graphics();
+	pipeGraphics.addChild(
+		feature,
+		verticalPipe,
+		horizontalPipe,
+		intersection
+	);
+
+	intersection.interactive = true;
+	intersection.cursor = 'pointer';
+	feature.interactive = true;
+	verticalPipe.hitArea = new PIXI.Polygon([
+		-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+		INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+		INTERSECTION_RADIUS - SLANT, TILE_HEIGHT - INTERSECTION_RADIUS,
+		-INTERSECTION_RADIUS - SLANT, TILE_HEIGHT - INTERSECTION_RADIUS,
+	]);
+	verticalPipe.interactive = true;
+
+	horizontalPipe.on('mousedown', (event) => console.log("horizontalPipe", event));
+	horizontalPipe.hitArea = new PIXI.Polygon([
+		INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
+		TILE_WIDTH - INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
+		TILE_WIDTH - INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+		INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+	]);
+	horizontalPipe.interactive = true;
+
+	return {
+		pipes: pipeGraphics,
+		room: roomGraphics,
+		verticalPipe,
+		horizontalPipe,
+		intersection,
+		features: feature,
+	};
+}

@@ -1,4 +1,4 @@
-import { LINE_SIZE, tileSize } from "../constants";
+import { LINE_SIZE, TILE_WIDTH } from "../constants";
 import { RoomHandle } from "../types/RoomHandle";
 import { getPipeColor } from "./getPipeColor";
 
@@ -12,7 +12,7 @@ export function drawHorizontalPipe(room: RoomHandle) {
 		graphics.lineStyle(LINE_SIZE, getPipeColor(room.data.rightPipe, room.data.rightPipeCapacity), 1);
 
 		graphics.lineTo(
-			tileSize, 0
+			TILE_WIDTH, 0
 		);
 		graphics.endFill();
 	}

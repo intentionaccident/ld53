@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-import {Room} from "./Room";
+import { Room } from "./Room";
 
 export interface RoomHandle {
 	coordinate: PIXI.Point;
@@ -11,6 +11,6 @@ export interface RoomHandle {
 		intersection: PIXI.Graphics;
 		verticalPipe: PIXI.Graphics;
 		horizontalPipe: PIXI.Graphics;
-		source: PIXI.Graphics;
+		features: PIXI.Graphics;
 	};
 }
