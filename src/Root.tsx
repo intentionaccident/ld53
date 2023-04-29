@@ -63,9 +63,9 @@ interface Room {
 let rooms: Room[][] = Array.from({length: 4}, (_, y) =>
 	Array.from({length: 6}, (_, x) => ({
 		bottomPipe: 0,
-		bottomPipeCapacity: y == 3 ? 0 : 2,
+		bottomPipeCapacity: y == 3 ? 0 : 5,
 		rightPipe: 0,
-		rightPipeCapacity: x == 5 ? 0 : 2,
+		rightPipeCapacity: x == 5 ? 0 : 5,
 
 		topOpen: true,
 		bottomOpen: true,
@@ -88,7 +88,7 @@ function DrawRoom(room: Room, graphics: PIXI.Graphics) {
 
 	// Draw bottom pipe
 	if (room.bottomPipeCapacity > 0) {
-		graphics.beginFill(room.bottomPipe > 0 ? 0x009999 : 0x999999);
+		graphics.beginFill(room.bottomPipe > 0 ? 0x009999 : 0x999999, room.bottomPipe / room.bottomPipeCapacity);
 		graphics.lineStyle(4, 0x333333, 1);
 		graphics.drawPolygon([
 			5, 10,
@@ -101,7 +101,7 @@ function DrawRoom(room: Room, graphics: PIXI.Graphics) {
 
 	// Draw right pipe
 	if (room.rightPipeCapacity > 0) {
-		graphics.beginFill(room.rightPipe > 0 ? 0x009999 : 0x999999);
+		graphics.beginFill(room.rightPipe > 0 ? 0x009999 : 0x999999, room.rightPipe / room.rightPipeCapacity);
 		graphics.lineStyle(4, 0x333333, 1);
 		graphics.drawPolygon([
 			20, 0,
@@ -147,6 +147,62 @@ export function Root() {
 			for (let x = 0; x < 6; x++) {
 				for (let y = 0; y < 4; y++) {
 					rooms[y][x] = {...previous[y][x]};
+
+					for (let [pipe, pipeCapacity] of [['rightPipe', 'rightPipeCapacity'], ['bottomPipe', 'bottomPipeCapacity']]) {
+						console.assert(previous[y][x][pipe] <= previous[y][x][pipeCapacity]);
+						if (previous[y][x][pipe] === previous[y][x][pipeCapacity]) {
+							const candidates =
+								pipe == 'rightPipe' ? [
+									// Left-side bottom
+									{x: x, y: y, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+									// Left-side left
+									{x: x - 1, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+									// Left-side up
+									{x: x, y: y - 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+
+									// Right-side bottom
+									{x: x + 1, y: y, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+									// Right-side right
+									{x: x + 1, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+									// Right-side up
+									{x: x + 1, y: y - 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+								] : [
+									// Top-side left
+									{x: x - 1, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+									// Top-side up
+									{x: x, y: y - 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+									// Top-side right
+									{x: x, y: y, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+
+									// Bottom-side bottom
+									{x: x, y: y + 1, pipe: 'bottomPipe', pipeCapacity: 'bottomPipeCapacity'},
+									// Bottom-side left
+									{x: x - 1, y: y + 1, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+									// Bottom-side right
+									{x: x, y: y + 1, pipe: 'rightPipe', pipeCapacity: 'rightPipeCapacity'},
+								];
+
+							// TODO: Should run until out of good candidates (candidates where the pressure dictates we move water towards them)
+							for (const candidate of candidates) {
+								// Break when out of water
+								if (rooms[y][x][pipe] <= 0) break;
+								// Ignore out of bounds
+								if (candidate.x < 0 || candidate.x >= 6 || candidate.y < 0 || candidate.y >= 4) {
+									continue;
+								}
+								if (
+									// TODO: Should be comparing pressure here instead
+									previous[candidate.y][candidate.x][candidate.pipe] >= previous[candidate.y][candidate.x][candidate.pipeCapacity]
+									|| rooms[candidate.y][candidate.x][candidate.pipe] >= rooms[candidate.y][candidate.x][candidate.pipeCapacity]
+								) {
+									continue;
+								}
+								rooms[candidate.y][candidate.x][candidate.pipe] += 1;
+								rooms[y][x][pipe] -= 1;
+							}
+						}
+					}
+
 					if (previous[y][x].isSource) {
 						let waterLeft = 1;
 						// top
@@ -185,18 +241,13 @@ export function Root() {
 						// left
 						if (x - 1 >= 0
 							&& previous[y][x].leftOpen
-							&& previous[y][x-1].rightPipe < previous[y][x-1].rightPipeCapacity
-							&& rooms[y][x-1].rightPipe < rooms[y][x-1].rightPipeCapacity
+							&& previous[y][x - 1].rightPipe < previous[y][x - 1].rightPipeCapacity
+							&& rooms[y][x - 1].rightPipe < rooms[y][x - 1].rightPipeCapacity
 							&& waterLeft > 0
 						) {
-							rooms[y][x-1].rightPipe += 1;
+							rooms[y][x - 1].rightPipe += 1;
 							waterLeft -= 1;
 						}
-					}
-
-					console.assert(previous[y][x].rightPipe <= previous[y][x].rightPipeCapacity);
-					if (previous[y][x].rightPipe === previous[y][x].rightPipeCapacity) {
-						// TODO: Propagate water
 					}
 				}
 			}
@@ -207,7 +258,7 @@ export function Root() {
 			}
 		};
 
-		app.ticker.maxFPS = 0.2;
+		app.ticker.maxFPS = 0.1;
 		app.ticker.add(gameLoop);
 		window.addEventListener('keydown', keyDownListener, false);
 		return () => {
