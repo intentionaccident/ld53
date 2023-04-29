@@ -1,4 +1,5 @@
 import {RoomHandle} from "./RoomHandle";
+import {GameEvent} from "./GameEvent";
 
 export interface Ship {
 	gloopAmount: number;

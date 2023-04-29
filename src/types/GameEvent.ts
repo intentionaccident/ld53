@@ -1,5 +1,5 @@
 // TODO: Use Discriminating Unions for `GameEvent`s
-interface GameEvent {
+export interface GameEvent {
 	type: 'KeyPressed' | 'KeyReleased' | 'RotateIntersection' | 'CounterRotateIntersection',
 	key?: string,
 	x?: number,
