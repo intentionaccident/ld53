@@ -4,6 +4,21 @@ export const LINE_SIZE = 2;
 export const SLANT = 16;
 export const SLANTEDNESS = SLANT / TILE_HEIGHT;
 export const INTERSECTION_RADIUS = 8;
-export const THRUSTERS_GLOOP_CAPACITY = 30;
-export const NAVIGATION_GLOOP_CAPACITY = 5;
-export const REACTOR_GLOOP_CAPACITY = 10;
+
+export const SINK_CAPACITY = {
+	thrusters: 30,
+	navigation: 5,
+	reactor: 10
+}
+
+export const SINK_BUSY_TIME = {
+	thrusters: 10,
+	navigation: 5,
+	reactor: 30
+}
+
+export const SINK_REQUEST_TIMEOUT = {
+	thrusters: 60,
+	navigation: 60,
+	reactor:  60,
+}

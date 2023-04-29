@@ -28,6 +28,7 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics']):
 	intersection.interactive = true;
 	intersection.cursor = 'pointer';
 	feature.interactive = true;
+	feature.cursor = 'pointer';
 	verticalPipe.hitArea = new PIXI.Polygon([
 		-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
 		INTERSECTION_RADIUS, INTERSECTION_RADIUS,

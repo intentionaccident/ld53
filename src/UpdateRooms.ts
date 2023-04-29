@@ -1,8 +1,9 @@
-import { Ship } from "./types/Ship";
+import {Ship} from "./types/Ship";
+import {SINK_BUSY_TIME} from "./constants";
 
-export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
+export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandingGearFuel) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
-	for (let y = 0; y < ship.roomHandles.length; y++) 
+	for (let y = 0; y < ship.roomHandles.length; y++)
 	for (let x = 0; x < ship.roomHandles[y].length; x++){
 		ship.roomHandles[y][x].data = { ...previous[y][x] };
 
@@ -189,53 +190,65 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 				}
 			}
 		} else if (feature.type === 'sink') {
-			let waterToConsume = 1;
-			let candidates = [
-				// Bottom
-				{
-					x: x,
-					y: y,
-					pipe: 'bottomPipe',
-					pipeCapacity: 'bottomPipeCapacity',
-					isOpen: previous[y][x].bottomOpen
-				},
-				// Left
-				{
-					x: x - 1,
-					y: y,
-					pipe: 'rightPipe',
-					pipeCapacity: 'rightPipeCapacity',
-					isOpen: previous[y][x].leftOpen
-				},
-				// Top
-				{
-					x: x,
-					y: y - 1,
-					pipe: 'bottomPipe',
-					pipeCapacity: 'bottomPipeCapacity',
-					isOpen: previous[y][x].topOpen
-				},
-				// Right
-				{
-					x: x,
-					y: y,
-					pipe: 'rightPipe',
-					pipeCapacity: 'rightPipeCapacity',
-					isOpen: previous[y][x].rightOpen
-				},
-			];
-			while (candidates.length > 0 && waterToConsume > 0) {
-				candidates = candidates.filter(candidate =>
-					candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
-					&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
-					&& candidate.isOpen
-				);
-				if (candidates.length > 0) {
-					candidates = candidates.sort(
-						(a, b) => candidatePressure(a) - candidatePressure(b)
+			if (feature.state === 'requesting') {
+				let waterToConsume = 1;
+				let candidates = [
+					// Bottom
+					{
+						x: x,
+						y: y,
+						pipe: 'bottomPipe',
+						pipeCapacity: 'bottomPipeCapacity',
+						isOpen: previous[y][x].bottomOpen
+					},
+					// Left
+					{
+						x: x - 1,
+						y: y,
+						pipe: 'rightPipe',
+						pipeCapacity: 'rightPipeCapacity',
+						isOpen: previous[y][x].leftOpen
+					},
+					// Top
+					{
+						x: x,
+						y: y - 1,
+						pipe: 'bottomPipe',
+						pipeCapacity: 'bottomPipeCapacity',
+						isOpen: previous[y][x].topOpen
+					},
+					// Right
+					{
+						x: x,
+						y: y,
+						pipe: 'rightPipe',
+						pipeCapacity: 'rightPipeCapacity',
+						isOpen: previous[y][x].rightOpen
+					},
+				];
+				while (candidates.length > 0 && waterToConsume > 0) {
+					candidates = candidates.filter(candidate =>
+						candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+						&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
+						&& candidate.isOpen
 					);
-					ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] -= 1;
-					waterToConsume -= 1;
+					if (candidates.length > 0) {
+						candidates = candidates.sort(
+							(a, b) => candidatePressure(a) - candidatePressure(b)
+						);
+						ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] -= 1;
+						waterToConsume -= 1;
+						feature.storage += 1;
+					}
+				}
+				if (feature.storage >= feature.capacity) {
+					feature.state = 'busy';
+					feature.timeLeft = SINK_BUSY_TIME[feature.subtype];
+				}
+			} else if (feature.state === 'busy') {
+				feature.timeLeft -= delta;
+				if (feature.timeLeft <= 0) {
+					feature.state = 'done';
 				}
 			}
 		}

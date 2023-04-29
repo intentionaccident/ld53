@@ -9,7 +9,9 @@ export type SinkFeature = {
 	type: 'sink',
 	subtype: 'thrusters' | 'navigation' | 'reactor',
 	storage: number,
-	capacity: number
+	capacity: number,
+	state: 'idle' | 'requesting' | 'busy' | 'done' | 'releasing';
+	timeLeft: number,
 }
 
 export type EmptyFeature = {

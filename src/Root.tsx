@@ -13,7 +13,7 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
-import { NAVIGATION_GLOOP_CAPACITY, REACTOR_GLOOP_CAPACITY, THRUSTERS_GLOOP_CAPACITY } from "./constants";
+import {SINK_CAPACITY} from "./constants";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 
@@ -52,9 +52,9 @@ export const ship: Ship = {
 
 					feature: ({
 						'+': { type: 'source', queued: 0 },
-						't': { type: 'sink', subtype: 'thrusters', storage: 0, capacity: THRUSTERS_GLOOP_CAPACITY },
-						'n': { type: 'sink', subtype: 'navigation', storage: 0, capacity: NAVIGATION_GLOOP_CAPACITY },
-						'r': { type: 'sink', subtype: 'reactor', storage: 0, capacity: REACTOR_GLOOP_CAPACITY },
+						't': { type: 'sink', subtype: 'thrusters',  capacity: SINK_CAPACITY['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
+						'n': { type: 'sink', subtype: 'navigation', capacity: SINK_CAPACITY['navigation'], state: 'idle', storage: 0, timeLeft: 0 },
+						'r': { type: 'sink', subtype: 'reactor', capacity: SINK_CAPACITY['reactor'], state: 'idle', storage: 0, timeLeft: 0 },
 						'undefined': { type: 'empty' }
 					})[layout?.f]
 				},
@@ -108,7 +108,7 @@ export function Root() {
 
 			if (elapsedTimeBetweenGloopMovement > gloopMovementInterval) {
 				elapsedTimeBetweenGloopMovement = 0;
-				updateRooms(ship, setGloopAmount, setLandingGearFuel)
+				updateRooms(delta, ship, setGloopAmount, setLandingGearFuel)
 			}
 
 			for (const room of roomHandlesDrawQueue)
