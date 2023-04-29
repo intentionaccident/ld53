@@ -50,13 +50,54 @@ function DrawRoom(room: RoomHandle) {
 	const graphics = room.graphics.pipes;
 
 	graphics.clear();
-	// Draw intersection dot
-	graphics.beginFill(room.data.isSource ? 0x009999 : 0x999999);
+
+	room.data.leftOpen
+	if (room.data.isSource) {
+		graphics.beginFill(room.data.isSource ? 0x009999 : 0x999999);
+		graphics.lineStyle(4, 0x00FFFF, 1);
+		graphics.drawPolygon([
+			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
+			-tileSize / 2, 0,
+			0, 0,
+			(tileSize * slantedness) / 2, -tileSize / 2,
+		]);
+		graphics.endFill();
+	}
+
+	graphics.beginFill((
+		room.data.leftOpen
+		|| room.data.rightOpen
+		|| room.data.topOpen
+		|| room.data.bottomOpen
+	) ? 0x999999 : 0x990000);
 	graphics.lineStyle(4, 0x00FFFF, 1);
-	graphics.drawCircle(0, 0, 8);
+	graphics.drawCircle(0, 0, INTERSECTION_RADIUS);
 	graphics.endFill();
 
-	// Draw bottom pipe
+	if (room.data.leftOpen) {
+		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineTo(-INTERSECTION_RADIUS, 0);
+		graphics.endFill();
+	}
+
+	if (room.data.rightOpen) {
+		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineTo(INTERSECTION_RADIUS, 0);
+		graphics.endFill();
+	}
+
+	if (room.data.topOpen) {
+		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineTo(INTERSECTION_RADIUS * slantedness, -INTERSECTION_RADIUS);
+		graphics.endFill();
+	}
+
+	if (room.data.bottomOpen) {
+		graphics.lineStyle(4, 0x333333, 1);
+		graphics.lineTo(-INTERSECTION_RADIUS * slantedness, INTERSECTION_RADIUS);
+		graphics.endFill();
+	}
+
 	if (room.data.bottomPipeCapacity > 0) {
 		graphics.beginFill(0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
 		graphics.lineStyle(4, 0x333333, 1);
