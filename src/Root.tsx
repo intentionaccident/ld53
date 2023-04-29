@@ -152,7 +152,6 @@ export function Root() {
 						// top
 						if (y - 1 >= 0
 							&& previous[y][x].topOpen
-							&& previous[y - 1][x].bottomOpen
 							&& previous[y - 1][x].bottomPipe < previous[y - 1][x].bottomPipeCapacity
 							&& rooms[y - 1][x].bottomPipe < rooms[y - 1][x].bottomPipeCapacity
 							&& waterLeft > 0
@@ -164,7 +163,6 @@ export function Root() {
 						// right
 						if (x + 1 < 6
 							&& previous[y][x].rightOpen
-							&& previous[y][x + 1].leftOpen
 							&& previous[y][x].rightPipe < previous[y][x].rightPipeCapacity
 							&& rooms[y][x].rightPipe < rooms[y][x].rightPipeCapacity
 							&& waterLeft > 0
@@ -176,7 +174,6 @@ export function Root() {
 						// bottom
 						if (y + 1 < 4
 							&& previous[y][x].bottomOpen
-							&& previous[y+1][x].topOpen
 							&& previous[y][x].bottomPipe < previous[y][x].bottomPipeCapacity
 							&& rooms[y][x].bottomPipe < rooms[y][x].bottomPipeCapacity
 							&& waterLeft > 0
@@ -187,7 +184,6 @@ export function Root() {
 
 						// left
 						if (x - 1 >= 0
-							&& previous[y][x-1].rightOpen
 							&& previous[y][x].leftOpen
 							&& previous[y][x-1].rightPipe < previous[y][x-1].rightPipeCapacity
 							&& rooms[y][x-1].rightPipe < rooms[y][x-1].rightPipeCapacity
