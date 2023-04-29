@@ -92,6 +92,18 @@ function drawIntersection(room: RoomHandle) {
 	}
 }
 
+function lerpColor(fc: PIXI.Color, tc: PIXI.Color, t: number): PIXI.Color {
+	return new PIXI.Color([
+		fc.red + ((tc.red - fc.red) * t),
+		fc.green + ((tc.green - fc.green) * t),
+		fc.blue + ((tc.blue - fc.blue) * t)
+	])
+}
+
+function getPipeColor(fluid: number, capacity: number): PIXI.Color {
+	return lerpColor(new PIXI.Color(0x000000), new PIXI.Color(0x0000ff), fluid / capacity)
+}
+
 function drawSource(room: RoomHandle) {
 	const graphics = room.graphics.source
 
@@ -141,7 +153,7 @@ function drawVerticalPipe(room: RoomHandle) {
 	graphics.clear();
 
 	if (room.data.bottomPipeCapacity > 0) {
-		graphics.lineStyle(LINE_SIZE, 0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
+		graphics.lineStyle(LINE_SIZE, getPipeColor(room.data.bottomPipe, room.data.bottomPipeCapacity), 1);
 		graphics.lineTo(
 			0 - (tileSize - INTERSECTION_RADIUS) * slantedness, tileSize - INTERSECTION_RADIUS,
 		);
@@ -156,7 +168,8 @@ function drawHorizontalPipe(room: RoomHandle) {
 
 	// Draw right pipe
 	if (room.data.rightPipeCapacity > 0) {
-		graphics.lineStyle(LINE_SIZE, 0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
+		graphics.lineStyle(LINE_SIZE, getPipeColor(room.data.rightPipe, room.data.rightPipeCapacity), 1);
+
 		graphics.lineTo(
 			tileSize, 0
 		);
@@ -211,10 +224,10 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 		const intersection = new PIXI.Graphics();
 		const source = new PIXI.Graphics();
 		pipeGraphics.addChild(
+			source,
 			verticalPipe,
 			horizontalPipe,
 			intersection,
-			source
 		)
 
 		intersection.on('mousedown', (event) => console.log("intersaction", event))
