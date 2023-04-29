@@ -1,5 +1,5 @@
-import { LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH } from "../constants";
-import { RoomHandle } from "../types/RoomHandle";
+import {LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH} from "../constants";
+import {RoomHandle} from "../types/RoomHandle";
 
 export function drawSource(room: RoomHandle) {
 	const graphics = room.graphics.features;
@@ -49,6 +49,10 @@ export function drawSource(room: RoomHandle) {
 		} else if (feature.state === 'done') {
 			graphics.beginFill(0x2FFF00);
 			graphics.drawCircle((TILE_WIDTH / 2 - SLANT / 2) / 2, TILE_HEIGHT / 2 / 2, 7);
+			graphics.endFill();
+		} else if (feature.state === 'releasing') {
+			graphics.beginFill(0x2FFF00);
+			graphics.drawCircle((TILE_WIDTH / 2 - SLANT / 2) / 2, TILE_HEIGHT / 2 / 2, 3);
 			graphics.endFill();
 		}
 	}

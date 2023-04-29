@@ -2,7 +2,7 @@ export type RoomFeature = SourceFeature | SinkFeature | EmptyFeature;
 
 export type SourceFeature = {
 	type: 'source',
-	queued: number
+	storage: number
 }
 
 export type SinkFeature = {

@@ -138,8 +138,8 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 		}
 
 		const feature = ship.roomHandles[y][x].data.feature;
-		if (feature.type === 'source') {
-			let waterLeft = feature.queued - 2 >= 0 ? 2 : 0;
+		if (feature.type === 'source' || (feature.type === 'sink' && feature.state === 'releasing')) {
+			let waterLeft = Math.min(feature.storage, 2);
 			let candidates = [
 				// Bottom
 				{
@@ -186,10 +186,13 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 					);
 					ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] += 1;
 					waterLeft -= 1;
-					feature.queued -= 1;
+					feature.storage -= 1;
 				}
 			}
-		} else if (feature.type === 'sink') {
+		}
+
+		if (feature.type === 'sink') {
+			console.log('storage ' + feature.storage)
 			if (feature.state === 'requesting') {
 				let waterToConsume = 1;
 				let candidates = [
@@ -250,6 +253,8 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 				if (feature.timeLeft <= 0) {
 					feature.state = 'done';
 				}
+			} else if (feature.state === 'releasing' && feature.storage === 0) {
+				feature.state = 'idle';
 			}
 		}
 	}

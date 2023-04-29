@@ -51,7 +51,7 @@ export const ship: Ship = {
 					roomOpen: true,
 
 					feature: ({
-						'+': { type: 'source', queued: 0 },
+						'+': { type: 'source', storage: 0 },
 						't': { type: 'sink', subtype: 'thrusters', capacity: SINK_CAPACITY['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
 						'n': { type: 'sink', subtype: 'navigation', capacity: SINK_CAPACITY['navigation'], state: 'idle', storage: 0, timeLeft: 0 },
 						'r': { type: 'sink', subtype: 'reactor', capacity: SINK_CAPACITY['reactor'], state: 'idle', storage: 0, timeLeft: 0 },

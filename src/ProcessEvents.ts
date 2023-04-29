@@ -33,7 +33,7 @@ export function processEvents(ship: Ship, setGloopAmount) {
 			if (feature.type === 'source') {
 				if (ship.gloopAmount > 0) {
 					const addedAmount = Math.min(ship.gloopAmount, 10)
-					feature.queued += addedAmount;
+					feature.storage += addedAmount;
 					ship.gloopAmount -= addedAmount;
 					setGloopAmount(ship.gloopAmount);
 				}
