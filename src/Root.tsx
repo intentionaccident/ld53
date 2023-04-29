@@ -13,6 +13,7 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
+import {NAVIGATION_GLOOP_CAPACITY, REACTOR_GLOOP_CAPACITY, THRUSTERS_GLOOP_CAPACITY} from "./constants";
 
 export const app = new Application({
 	width: 640,
@@ -47,7 +48,9 @@ export const ship: Ship = {
 
 					feature: ({
 						'+': { type: 'source', queued: 0 },
-						'-': { type: 'sink', storage: 0, capacity: 10 },
+						't': { type: 'sink', subtype: 'thrusters', storage: 0, capacity: THRUSTERS_GLOOP_CAPACITY },
+						'n': { type: 'sink', subtype: 'navigation', storage: 0, capacity: NAVIGATION_GLOOP_CAPACITY },
+						'r': { type: 'sink', subtype: 'reactor', storage: 0, capacity: REACTOR_GLOOP_CAPACITY },
 						'undefined': { type: 'empty' }
 					})[layout.f]
 				},

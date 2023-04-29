@@ -4,3 +4,6 @@ export const LINE_SIZE = 2;
 export const SLANT = 16;
 export const SLANTEDNESS = SLANT / TILE_HEIGHT;
 export const INTERSECTION_RADIUS = 8;
+export const THRUSTERS_GLOOP_CAPACITY = 30;
+export const NAVIGATION_GLOOP_CAPACITY = 5;
+export const REACTOR_GLOOP_CAPACITY = 10;

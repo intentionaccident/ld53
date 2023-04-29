@@ -7,6 +7,7 @@ export type SourceFeature = {
 
 export type SinkFeature = {
 	type: 'sink',
+	subtype: 'thrusters' | 'navigation' | 'reactor',
 	storage: number,
 	capacity: number
 }
