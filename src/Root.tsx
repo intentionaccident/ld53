@@ -26,7 +26,6 @@ interface RoomHandle {
 	coordinate: PIXI.Point
 	data: Room
 	graphics: {
-		root: PIXI.Container
 		room: PIXI.Graphics
 		pipes: PIXI.Graphics
 	}
@@ -87,18 +86,21 @@ function DrawRoom(room: RoomHandle) {
 const shipContainer = new PIXI.Container();
 shipContainer.x = 128;
 shipContainer.y = 32;
-
 app.stage.addChild(shipContainer);
+
+const backgroundContainer = new PIXI.Container();
+shipContainer.addChild(backgroundContainer);
+
+const foregroundContainer = new PIXI.Container();
+shipContainer.addChild(foregroundContainer);
+
 
 const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 	Array.from({ length: 6 }, (_, x) => {
-		const roomContainer = new PIXI.Container();
-		shipContainer.addChild(roomContainer)
-		roomContainer.x = -y * tileSize * slantedness + x * tileSize;
-		roomContainer.y = y * tileSize;
-
 		const roomGraphics = new PIXI.Graphics();
-		roomContainer.addChild(roomGraphics)
+		roomGraphics.x = -y * tileSize * slantedness + x * tileSize;
+		roomGraphics.y = y * tileSize;
+		backgroundContainer.addChild(roomGraphics)
 
 		roomGraphics.clear();
 
@@ -113,9 +115,9 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 		roomGraphics.endFill();
 
 		const pipeGraphics = new PIXI.Graphics();
-		roomContainer.addChild(pipeGraphics)
-		pipeGraphics.x = tileSize / 2 - tileSize * slantedness / 2;
-		pipeGraphics.y = tileSize / 2;
+		foregroundContainer.addChild(pipeGraphics)
+		pipeGraphics.x = -y * tileSize * slantedness + x * tileSize + tileSize / 2 - tileSize * slantedness / 2;
+		pipeGraphics.y = y * tileSize + tileSize / 2;
 
 		return {
 			coordinate: new PIXI.Point(x, y),
@@ -136,7 +138,6 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 			graphics: {
 				pipes: pipeGraphics,
 				room: roomGraphics,
-				root: roomContainer,
 			}
 		} as RoomHandle;
 	})
