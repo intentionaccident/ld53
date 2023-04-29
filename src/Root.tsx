@@ -29,13 +29,20 @@ shipContainer.addChild(backgroundContainer);
 const foregroundContainer = new PIXI.Container();
 shipContainer.addChild(foregroundContainer);
 
+const shipLayout = [
+	[{}, {}, {}, {}, {}, {}],
+	[{}, {}, {}, {}, {}, {}],
+	[{}, {}, {}, {}, {}, {}],
+	[{}, {}, {}, {}, {}, {}],
+];
+
 const ship: Ship = {
 	gloopAmount: 100,
 	landingGearFuel: 0,
 	requiredLandingGearFuel: 50,
 	eventQueue: [],
-	roomHandles: Array.from({length: 4}, (_, y) =>
-		Array.from({length: 6}, (_, x) => {
+	roomHandles: shipLayout.map((layoutRow, y) =>
+		layoutRow.map((layout, x) => {
 			const roomGraphics = new PIXI.Graphics();
 			roomGraphics.x = -y * tileSize * slantedness + x * tileSize;
 			roomGraphics.y = y * tileSize;
