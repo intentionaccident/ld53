@@ -1,5 +1,5 @@
 import { RoomHandle } from "./RoomHandle";
-import { GameEvent } from "./GameEvent";
+import { GameEvent } from "./events/GameEvent";
 import * as PIXI from "pixi.js";
 
 export interface Ship {

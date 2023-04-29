@@ -16,6 +16,7 @@ import { shipLayout } from "./shipLayout";
 import {SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED} from "./constants";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
+import { GameEventType } from "./types/events/GameEventType";
 
 export const app = new Application({
 	width: 640,
@@ -77,17 +78,17 @@ const roomHandlesDrawQueue = ship.roomHandles.flat().reverse();
 
 for (const room of roomHandlesDrawQueue) {
 	room.graphics.intersection.on('rightdown', (event) => {
-		ship.eventQueue.push({ type: 'CounterRotateIntersection', x: room.coordinate.x, y: room.coordinate.y });
+		ship.eventQueue.push({ type: GameEventType.CounterRotateIntersection, x: room.coordinate.x, y: room.coordinate.y });
 	});
 	room.graphics.intersection.on('mousedown', (event) => {
 		if (event.button === 0) {
-			ship.eventQueue.push({ type: 'RotateIntersection', x: room.coordinate.x, y: room.coordinate.y });
+			ship.eventQueue.push({ type: GameEventType.RotateIntersection, x: room.coordinate.x, y: room.coordinate.y });
 		}
 	});
 	room.graphics.features.on('mousedown', (event) => console.log("source", event));
 	room.graphics.verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event));
 	room.graphics.features.on('mousedown', (event) => {
-		ship.eventQueue.push({ type: 'FeatureClicked', x: room.coordinate.x, y: room.coordinate.y });
+		ship.eventQueue.push({ type: GameEventType.FeatureClicked, x: room.coordinate.x, y: room.coordinate.y });
 	});
 }
 
@@ -97,7 +98,7 @@ export function Root() {
 
 	useEffect(() => {
 		const keyDownListener = (event) => {
-			ship.eventQueue.push({ type: 'KeyPressed', key: event.key });
+			ship.eventQueue.push({ type: GameEventType.KeyPressed, key: event.key });
 		};
 
 		const gameLoop = (delta) => {
