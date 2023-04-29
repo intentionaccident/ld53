@@ -61,9 +61,9 @@ const ship: Ship = {
 			const verticalPipe = new PIXI.Graphics();
 			const horizontalPipe = new PIXI.Graphics();
 			const intersection = new PIXI.Graphics();
-			const source = new PIXI.Graphics();
+			const feature = new PIXI.Graphics();
 			pipeGraphics.addChild(
-				source,
+				feature,
 				verticalPipe,
 				horizontalPipe,
 				intersection,
@@ -80,8 +80,8 @@ const ship: Ship = {
 			})
 			intersection.interactive = true;
 			intersection.cursor = 'pointer';
-			source.on('mousedown', (event) => console.log("source", event))
-			source.interactive = true
+			feature.on('mousedown', (event) => console.log("source", event))
+			feature.interactive = true
 			verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event))
 			verticalPipe.hitArea = new PIXI.Polygon([
 				-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
@@ -125,7 +125,7 @@ const ship: Ship = {
 					verticalPipe,
 					horizontalPipe,
 					intersection,
-					source,
+					source: feature,
 				}
 			} as RoomHandle;
 		})
