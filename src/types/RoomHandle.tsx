@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
-import { Room } from "../Root";
+
+import {Room} from "./Room";
 
 export interface RoomHandle {
 	coordinate: PIXI.Point;

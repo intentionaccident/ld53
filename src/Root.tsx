@@ -1,47 +1,22 @@
 import * as React from "react";
-import { Application } from "pixi.js";
-import { GameFrame } from "./GameFrame";
-import { UIRoot } from "./UIRoot";
-import { PixiRoot } from "./PixiRoot";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import * as PIXI from "pixi.js";
-import { RoomHandle } from "./types/RoomHandle";
-import { drawRoom } from "./draw/drawRoom";
-import { tileSize, slantedness, INTERSECTION_RADIUS } from "./constants";
+import {Application} from "pixi.js";
+import {GameFrame} from "./GameFrame";
+import {UIRoot} from "./UIRoot";
+import {PixiRoot} from "./PixiRoot";
+import {RoomHandle} from "./types/RoomHandle";
+import {drawRoom} from "./draw/drawRoom";
+import {INTERSECTION_RADIUS, slantedness, tileSize} from "./constants";
 import {processEvents} from "./ProcessEvents";
 import {updateRooms} from "./UpdateRooms";
+import {Ship} from "./types/Ship";
 
 const app = new Application({
 	width: 640,
 	height: 480,
 	antialias: true
 });
-
-
-// TODO: Use Discriminating Unions for `GameEvent`s
-interface GameEvent {
-	type: 'KeyPressed' | 'KeyReleased' | 'RotateIntersection' | 'CounterRotateIntersection',
-	key?: string,
-	x?: number,
-	y?: number,
-}
-
-type RoomFeature = 'source' | 'sink' | 'landingGear' | null;
-
-export interface Room {
-	bottomPipe: number;
-	bottomPipeCapacity: number;
-	rightPipe: number;
-	rightPipeCapacity: number;
-
-	topOpen: boolean;
-	bottomOpen: boolean;
-	leftOpen: boolean;
-	rightOpen: boolean;
-	roomOpen: boolean;
-
-	feature: RoomFeature;
-}
 
 const shipContainer = new PIXI.Container();
 shipContainer.x = 128;
@@ -53,14 +28,6 @@ shipContainer.addChild(backgroundContainer);
 
 const foregroundContainer = new PIXI.Container();
 shipContainer.addChild(foregroundContainer);
-
-export interface Ship {
-	gloopAmount: number;
-	landingGearFuel: number;
-	requiredLandingGearFuel: number;
-	roomHandles: RoomHandle[][];
-	eventQueue: GameEvent[];
-}
 
 const ship: Ship = {
 	gloopAmount: 100,

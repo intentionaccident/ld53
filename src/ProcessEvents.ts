@@ -1,4 +1,4 @@
-import {Ship} from "./Root";
+import {Ship} from "./types/Ship";
 
 export function processEvents(ship: Ship, setGloopAmount) {
 	while (ship.eventQueue.length > 0) {

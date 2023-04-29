@@ -1,4 +1,4 @@
-import {Ship} from "./Root";
+import {Ship} from "./types/Ship";
 
 export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
