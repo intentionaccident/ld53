@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Application, Graphics, Sprite, Texture } from "pixi.js";
+import {Application, Color, Graphics, Sprite, Texture} from "pixi.js";
 import { GameFrame } from "./GameFrame";
 import { UIRoot } from "./UIRoot";
 import { PixiRoot } from "./PixiRoot";
@@ -19,8 +19,10 @@ const INTERSECTION_RADIUS = 8;
 
 // TODO: Use Discriminating Unions for `GameEvent`s
 interface GameEvent {
-	type: 'KeyPressed' | 'KeyReleased',
-	key: string
+	type: 'KeyPressed' | 'KeyReleased' | 'RotateIntersection' | 'CounterRotateIntersection',
+	key?: string,
+	x?: number,
+	y?: number,
 }
 
 interface RoomHandle {
@@ -230,8 +232,17 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 			intersection,
 		)
 
-		intersection.on('mousedown', (event) => console.log("intersaction", event))
-		intersection.interactive = true
+		intersection.on('rightdown', (event) => {
+			eventQueue.push({type: 'CounterRotateIntersection', x, y});
+		});
+		intersection.on('mousedown', (event) => {
+			console.log(event)
+			if (event.button === 0) {
+				eventQueue.push({type: 'RotateIntersection', x, y});
+			}
+		})
+		intersection.interactive = true;
+		intersection.cursor = 'pointer';
 		source.on('mousedown', (event) => console.log("source", event))
 		source.interactive = true
 		verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event))
@@ -305,6 +316,20 @@ export function Root() {
 				if (event.type === 'KeyPressed' && event.key == ' ') {
 					gloopAmount += 10;
 					setGloopAmount(gloopAmount);
+				} else if (event.type === 'RotateIntersection') {
+					const room = roomHandles[event.y][event.x];
+					const previousTop = room.data.topOpen;
+					room.data.topOpen = room.data.leftOpen;
+					room.data.leftOpen = room.data.bottomOpen;
+					room.data.bottomOpen = room.data.rightOpen;
+					room.data.rightOpen = previousTop;
+				} else if (event.type === 'CounterRotateIntersection') {
+					const room = roomHandles[event.y][event.x];
+					const previousTop = room.data.topOpen;
+					room.data.topOpen = room.data.rightOpen;
+					room.data.rightOpen = room.data.bottomOpen;
+					room.data.bottomOpen = room.data.leftOpen;
+					room.data.leftOpen = previousTop;
 				}
 			}
 
