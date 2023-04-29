@@ -156,14 +156,10 @@ function drawHorizontalPipe(room: RoomHandle) {
 
 	// Draw right pipe
 	if (room.data.rightPipeCapacity > 0) {
-		graphics.beginFill(0x009999, room.data.rightPipe / room.data.rightPipeCapacity);
-		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
-		graphics.drawPolygon([
-			20, 0,
-			20, 10,
-			65, 10,
-			65, 0
-		]);
+		graphics.lineStyle(LINE_SIZE, 0x009999, room.data.bottomPipe / room.data.bottomPipeCapacity);
+		graphics.lineTo(
+			tileSize, 0
+		);
 		graphics.endFill();
 	}
 }
@@ -226,9 +222,21 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 		source.on('mousedown', (event) => console.log("source", event))
 		source.interactive = true
 		verticalPipe.on('mousedown', (event) => console.log("verticalPipe", event))
+		verticalPipe.hitArea = new PIXI.Polygon([
+			-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+			INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+			INTERSECTION_RADIUS - tileSize * slantedness, tileSize - INTERSECTION_RADIUS,
+			-INTERSECTION_RADIUS - tileSize * slantedness, tileSize - INTERSECTION_RADIUS,
+		])
 		verticalPipe.interactive = true
 
 		horizontalPipe.on('mousedown', (event) => console.log("horizontalPipe", event))
+		horizontalPipe.hitArea = new PIXI.Polygon([
+			INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
+			tileSize - INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
+			tileSize - INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+			INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+		])
 		horizontalPipe.interactive = true
 
 		return {
