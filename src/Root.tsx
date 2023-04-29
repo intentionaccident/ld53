@@ -81,14 +81,14 @@ function DrawRoom(room: Room, graphics: PIXI.Graphics) {
 	graphics.clear();
 
 	// Draw intersection dot
-	graphics.beginFill(room.isSource ? 0x009999: 0x999999);
+	graphics.beginFill(room.isSource ? 0x009999 : 0x999999);
 	graphics.lineStyle(4, 0x00FFFF, 1);
 	graphics.drawCircle(10, 0, 8);
 	graphics.endFill();
 
 	// Draw bottom pipe
 	if (room.bottomPipeCapacity > 0) {
-		graphics.beginFill(room.rightPipe > 0 ? 0x009999 : 0x999999);
+		graphics.beginFill(room.bottomPipe > 0 ? 0x009999 : 0x999999);
 		graphics.lineStyle(4, 0x333333, 1);
 		graphics.drawPolygon([
 			5, 10,
@@ -118,17 +118,12 @@ const roomGraphics: PIXI.Graphics[][] = Array.from({length: 4}, (_, y) =>
 		const graphics = new PIXI.Graphics();
 		graphics.x = offsetX + -y * tileSize * slantedness + x * tileSize + 32 + 8;
 		graphics.y = offsetY + y * tileSize + 32;
-		console.log(rooms)
 		DrawRoom(rooms[y][x], graphics);
 		app.stage.addChild(graphics);
 		return graphics;
 	})
 );
 const eventQueue: GameEvent[] = [];
-
-function UpdateRoom(previous: Room[][], room: Room, x: number, y: number) {
-	return {...room, rightPipe: room.rightPipe + (room.isSource ? 1 : 0)};
-}
 
 export function Root() {
 	const [lastPressedKey, setLastPressedKey] = useState('');
@@ -148,7 +143,67 @@ export function Root() {
 				}
 			}
 
-			rooms = rooms.map((row, y) => row.map((room, x) => UpdateRoom(rooms, room, x, y)));
+			const previous = rooms.map(row => [...row]);
+			for (let x = 0; x < 6; x++) {
+				for (let y = 0; y < 4; y++) {
+					rooms[y][x] = {...previous[y][x]};
+					if (previous[y][x].isSource) {
+						let waterLeft = 1;
+						// top
+						if (y - 1 >= 0
+							&& previous[y][x].topOpen
+							&& previous[y - 1][x].bottomOpen
+							&& previous[y - 1][x].bottomPipe < previous[y - 1][x].bottomPipeCapacity
+							&& rooms[y - 1][x].bottomPipe < rooms[y - 1][x].bottomPipeCapacity
+							&& waterLeft > 0
+						) {
+							rooms[y - 1][x].bottomPipe += 1;
+							waterLeft -= 1;
+						}
+
+						// right
+						if (x + 1 < 6
+							&& previous[y][x].rightOpen
+							&& previous[y][x + 1].leftOpen
+							&& previous[y][x].rightPipe < previous[y][x].rightPipeCapacity
+							&& rooms[y][x].rightPipe < rooms[y][x].rightPipeCapacity
+							&& waterLeft > 0
+						) {
+							rooms[y][x].rightPipe += 1;
+							waterLeft -= 1;
+						}
+
+						// bottom
+						if (y + 1 < 4
+							&& previous[y][x].bottomOpen
+							&& previous[y+1][x].topOpen
+							&& previous[y][x].bottomPipe < previous[y][x].bottomPipeCapacity
+							&& rooms[y][x].bottomPipe < rooms[y][x].bottomPipeCapacity
+							&& waterLeft > 0
+						) {
+							rooms[y][x].bottomPipe += 1;
+							waterLeft -= 1;
+						}
+
+						// left
+						if (x - 1 >= 0
+							&& previous[y][x-1].rightOpen
+							&& previous[y][x].leftOpen
+							&& previous[y][x-1].rightPipe < previous[y][x-1].rightPipeCapacity
+							&& rooms[y][x-1].rightPipe < rooms[y][x-1].rightPipeCapacity
+							&& waterLeft > 0
+						) {
+							rooms[y][x-1].rightPipe += 1;
+							waterLeft -= 1;
+						}
+					}
+
+					console.assert(previous[y][x].rightPipe <= previous[y][x].rightPipeCapacity);
+					if (previous[y][x].rightPipe === previous[y][x].rightPipeCapacity) {
+						// TODO: Propagate water
+					}
+				}
+			}
 			for (let x = 0; x < 6; x++) {
 				for (let y = 0; y < 4; y++) {
 					DrawRoom(rooms[y][x], roomGraphics[y][x]);
@@ -156,6 +211,7 @@ export function Root() {
 			}
 		};
 
+		app.ticker.maxFPS = 0.2;
 		app.ticker.add(gameLoop);
 		window.addEventListener('keydown', keyDownListener, false);
 		return () => {
