@@ -6,7 +6,7 @@ export function drawSource(room: RoomHandle) {
 
 	graphics.clear();
 
-	if (room.data.feature == 'source') {
+	if (room.data.feature.type === 'source') {
 		graphics.beginFill(0x009999);
 		graphics.lineStyle(4, 0x00FFFF, 1);
 		graphics.drawPolygon([
@@ -18,20 +18,8 @@ export function drawSource(room: RoomHandle) {
 		graphics.endFill();
 	}
 
-	if (room.data.feature == 'sink') {
+	if (room.data.feature.type === 'sink') {
 		graphics.beginFill(0x003333);
-		graphics.lineStyle(4, 0x00FFFF, 1);
-		graphics.drawPolygon([
-			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
-			-tileSize / 2, 0,
-			0, 0,
-			(tileSize * slantedness) / 2, -tileSize / 2,
-		]);
-		graphics.endFill();
-	}
-
-	if (room.data.feature == 'landingGear') {
-		graphics.beginFill(0x666666);
 		graphics.lineStyle(4, 0x00FFFF, 1);
 		graphics.drawPolygon([
 			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,

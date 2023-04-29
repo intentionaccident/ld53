@@ -117,9 +117,9 @@ const ship: Ship = {
 					roomOpen: true,
 
 					feature: x == 1 && y == 1
-						? 'source'
+						? {type: 'source'}
 						: (x == 4 && y == 3
-							? 'sink' : (x == 2 && y == 3) ? 'landingGear' : null)
+							? {type: 'sink', storage: 0, capacity: 10} : {type: 'empty'})
 				},
 				graphics: {
 					pipes: pipeGraphics,
