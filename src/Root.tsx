@@ -13,7 +13,7 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
-import {SINK_CAPACITY} from "./constants";
+import { SINK_CAPACITY } from "./constants";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 
@@ -40,9 +40,9 @@ export const ship: Ship = {
 				data: {
 					hidden,
 					bottomPipe: 0,
-					bottomPipeCapacity: y == 3 ? 0 : 5,
+					bottomPipeCapacity: ['+', '|'].includes(layout?.p) ? 5 : 0,
 					rightPipe: 0,
-					rightPipeCapacity: x == 5 ? 0 : 5,
+					rightPipeCapacity: ['+', '-'].includes(layout?.p) ? 5 : 0,
 
 					topOpen: ['+', '|', 'L', 'J'].includes(layout?.i),
 					bottomOpen: ['+', '|', '>', '<'].includes(layout?.i),
@@ -52,7 +52,7 @@ export const ship: Ship = {
 
 					feature: ({
 						'+': { type: 'source', queued: 0 },
-						't': { type: 'sink', subtype: 'thrusters',  capacity: SINK_CAPACITY['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
+						't': { type: 'sink', subtype: 'thrusters', capacity: SINK_CAPACITY['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
 						'n': { type: 'sink', subtype: 'navigation', capacity: SINK_CAPACITY['navigation'], state: 'idle', storage: 0, timeLeft: 0 },
 						'r': { type: 'sink', subtype: 'reactor', capacity: SINK_CAPACITY['reactor'], state: 'idle', storage: 0, timeLeft: 0 },
 						'undefined': { type: 'empty' }
