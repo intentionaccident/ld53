@@ -11,6 +11,7 @@ import {INTERSECTION_RADIUS, slantedness, tileSize} from "./constants";
 import {processEvents} from "./ProcessEvents";
 import {updateRooms} from "./UpdateRooms";
 import {Ship} from "./types/Ship";
+import {shipLayout} from "./shipLayout";
 
 const app = new Application({
 	width: 640,
@@ -28,13 +29,6 @@ shipContainer.addChild(backgroundContainer);
 
 const foregroundContainer = new PIXI.Container();
 shipContainer.addChild(foregroundContainer);
-
-const shipLayout = [
-	[{}, {}, {}, {}, {}, {}],
-	[{}, {}, {}, {}, {}, {}],
-	[{}, {}, {}, {}, {}, {}],
-	[{}, {}, {}, {}, {}, {}],
-];
 
 const ship: Ship = {
 	gloopAmount: 100,
@@ -117,16 +111,17 @@ const ship: Ship = {
 					rightPipe: 0,
 					rightPipeCapacity: x == 5 ? 0 : 5,
 
-					topOpen: y != 1,
-					bottomOpen: true,
-					leftOpen: x != 1,
-					rightOpen: true,
+					topOpen: ['+', '|'].includes(layout.i),
+					bottomOpen: ['+', '|', '>', '<'].includes(layout.i),
+					leftOpen: ['+', '-', '>'].includes(layout.i),
+					rightOpen: ['+', '-', '<'].includes(layout.i),
 					roomOpen: true,
 
-					feature: x == 1 && y == 1
-						? {type: 'source'}
-						: (x == 4 && y == 3
-							? {type: 'sink', storage: 0, capacity: 10} : {type: 'empty'})
+					feature:  ({
+						'+': {type: 'source'},
+						'-': {type: 'sink', storage: 0, capacity: 10},
+						'undefined': {type: 'empty'}
+					})[layout.f]
 				},
 				graphics: {
 					pipes: pipeGraphics,
