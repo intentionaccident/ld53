@@ -1,10 +1,13 @@
 import * as React from "react";
-import {Application, Color, Graphics, Sprite, Texture} from "pixi.js";
+import { Application } from "pixi.js";
 import { GameFrame } from "./GameFrame";
 import { UIRoot } from "./UIRoot";
 import { PixiRoot } from "./PixiRoot";
 import { useEffect, useState } from "react";
 import * as PIXI from "pixi.js";
+import { RoomHandle } from "./types/RoomHandle";
+import { drawRoom } from "./draw/drawRoom";
+import { tileSize, slantedness, INTERSECTION_RADIUS } from "./constants";
 
 const app = new Application({
 	width: 640,
@@ -12,10 +15,6 @@ const app = new Application({
 	antialias: true
 });
 
-const tileSize = 64;
-const LINE_SIZE = 4;
-const slantedness = 0.5;
-const INTERSECTION_RADIUS = 8;
 
 // TODO: Use Discriminating Unions for `GameEvent`s
 interface GameEvent {
@@ -25,22 +24,9 @@ interface GameEvent {
 	y?: number,
 }
 
-interface RoomHandle {
-	coordinate: PIXI.Point
-	data: Room
-	graphics: {
-		room: PIXI.Graphics
-		pipes: PIXI.Container
-		intersection: PIXI.Graphics
-		verticalPipe: PIXI.Graphics
-		horizontalPipe: PIXI.Graphics
-		source: PIXI.Graphics
-	}
-}
-
 type RoomFeature = 'source' | 'sink' | 'landingGear' | null;
 
-interface Room {
+export interface Room {
 	bottomPipe: number;
 	bottomPipeCapacity: number;
 	rightPipe: number;
@@ -53,137 +39,6 @@ interface Room {
 	roomOpen: boolean;
 
 	feature: RoomFeature;
-}
-
-function drawIntersection(room: RoomHandle) {
-	const graphics = room.graphics.intersection
-
-	graphics.clear();
-	graphics.beginFill((
-		room.data.leftOpen
-		|| room.data.rightOpen
-		|| room.data.topOpen
-		|| room.data.bottomOpen
-	) ? 0x999999 : 0x990000);
-	graphics.lineStyle(4, 0x00FFFF, 1);
-	graphics.drawCircle(0, 0, INTERSECTION_RADIUS);
-	graphics.endFill();
-
-	if (room.data.leftOpen) {
-		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
-		graphics.lineTo(-INTERSECTION_RADIUS, 0);
-		graphics.endFill();
-	}
-
-	if (room.data.rightOpen) {
-		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
-		graphics.lineTo(INTERSECTION_RADIUS, 0);
-		graphics.endFill();
-	}
-
-	if (room.data.topOpen) {
-		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
-		graphics.lineTo(INTERSECTION_RADIUS * slantedness, -INTERSECTION_RADIUS);
-		graphics.endFill();
-	}
-
-	if (room.data.bottomOpen) {
-		graphics.lineStyle(LINE_SIZE, 0x333333, 1);
-		graphics.lineTo(-INTERSECTION_RADIUS * slantedness, INTERSECTION_RADIUS);
-		graphics.endFill();
-	}
-}
-
-function lerpColor(fc: PIXI.Color, tc: PIXI.Color, t: number): PIXI.Color {
-	return new PIXI.Color([
-		fc.red + ((tc.red - fc.red) * t),
-		fc.green + ((tc.green - fc.green) * t),
-		fc.blue + ((tc.blue - fc.blue) * t)
-	])
-}
-
-function getPipeColor(fluid: number, capacity: number): PIXI.Color {
-	return lerpColor(new PIXI.Color(0x000000), new PIXI.Color(0x0000ff), fluid / capacity)
-}
-
-function drawSource(room: RoomHandle) {
-	const graphics = room.graphics.source
-
-	graphics.clear();
-
-	if (room.data.feature == 'source') {
-		graphics.beginFill(0x009999);
-		graphics.lineStyle(4, 0x00FFFF, 1);
-		graphics.drawPolygon([
-			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
-			-tileSize / 2, 0,
-			0, 0,
-			(tileSize * slantedness) / 2, -tileSize / 2,
-		]);
-		graphics.endFill();
-	}
-
-	if (room.data.feature == 'sink') {
-		graphics.beginFill(0x003333);
-		graphics.lineStyle(4, 0x00FFFF, 1);
-		graphics.drawPolygon([
-			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
-			-tileSize / 2, 0,
-			0, 0,
-			(tileSize * slantedness) / 2, -tileSize / 2,
-		]);
-		graphics.endFill();
-	}
-
-	if (room.data.feature == 'landingGear') {
-		graphics.beginFill(0x666666);
-		graphics.lineStyle(4, 0x00FFFF, 1);
-		graphics.drawPolygon([
-			(tileSize * slantedness - tileSize) / 2, -tileSize / 2,
-			-tileSize / 2, 0,
-			0, 0,
-			(tileSize * slantedness) / 2, -tileSize / 2,
-		]);
-		graphics.endFill();
-	}
-
-}
-
-function drawVerticalPipe(room: RoomHandle) {
-	const graphics = room.graphics.verticalPipe
-
-	graphics.clear();
-
-	if (room.data.bottomPipeCapacity > 0) {
-		graphics.lineStyle(LINE_SIZE, getPipeColor(room.data.bottomPipe, room.data.bottomPipeCapacity), 1);
-		graphics.lineTo(
-			0 - (tileSize - INTERSECTION_RADIUS) * slantedness, tileSize - INTERSECTION_RADIUS,
-		);
-		graphics.endFill();
-	}
-}
-
-function drawHorizontalPipe(room: RoomHandle) {
-	const graphics = room.graphics.horizontalPipe
-
-	graphics.clear();
-
-	// Draw right pipe
-	if (room.data.rightPipeCapacity > 0) {
-		graphics.lineStyle(LINE_SIZE, getPipeColor(room.data.rightPipe, room.data.rightPipeCapacity), 1);
-
-		graphics.lineTo(
-			tileSize, 0
-		);
-		graphics.endFill();
-	}
-}
-
-function DrawRoom(room: RoomHandle) {
-	drawSource(room)
-	drawIntersection(room)
-	drawVerticalPipe(room)
-	drawHorizontalPipe(room)
 }
 
 const shipContainer = new PIXI.Container();
@@ -233,12 +88,12 @@ const roomHandles: RoomHandle[][] = Array.from({ length: 4 }, (_, y) =>
 		)
 
 		intersection.on('rightdown', (event) => {
-			eventQueue.push({type: 'CounterRotateIntersection', x, y});
+			eventQueue.push({ type: 'CounterRotateIntersection', x, y });
 		});
 		intersection.on('mousedown', (event) => {
 			console.log(event)
 			if (event.button === 0) {
-				eventQueue.push({type: 'RotateIntersection', x, y});
+				eventQueue.push({ type: 'RotateIntersection', x, y });
 			}
 		})
 		intersection.interactive = true;
@@ -636,7 +491,7 @@ export function Root() {
 			}
 
 			for (const room of roomHandlesDrawQueue)
-				DrawRoom(room)
+				drawRoom(room)
 		};
 
 		app.ticker.add(gameLoop);
