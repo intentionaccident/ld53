@@ -20,7 +20,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y,
 							pipe: 'bottomPipe',
 							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x].bottomOpen
+							isOpen: previous[y][x].rightOpen && previous[y][x].bottomOpen
 						},
 						// Left-side left
 						{
@@ -28,7 +28,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y,
 							pipe: 'rightPipe',
 							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y][x].leftOpen
+							isOpen: previous[y][x].rightOpen && previous[y][x].leftOpen
 						},
 						// Left-side up
 						{
@@ -36,7 +36,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y - 1,
 							pipe: 'bottomPipe',
 							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x].topOpen
+							isOpen: previous[y][x].rightOpen && previous[y][x].topOpen
 						},
 
 						// Right-side bottom
@@ -45,7 +45,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y,
 							pipe: 'bottomPipe',
 							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x + 1].bottomOpen
+							isOpen: previous[y][x + 1].rightOpen && previous[y][x + 1].bottomOpen
 						},
 						// Right-side right
 						{
@@ -53,7 +53,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y,
 							pipe: 'rightPipe',
 							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y][x + 1].rightOpen
+							isOpen: previous[y][x + 1].rightOpen && previous[y][x + 1].rightOpen
 						},
 						// Right-side up
 						{
@@ -61,7 +61,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y - 1,
 							pipe: 'bottomPipe',
 							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x + 1].topOpen
+							isOpen: previous[y][x + 1].rightOpen && previous[y][x + 1].topOpen
 						},
 					] : [
 						// Top-side left
@@ -70,7 +70,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y,
 							pipe: 'rightPipe',
 							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y][x].leftOpen
+							isOpen: previous[y][x].bottomOpen && previous[y][x].leftOpen
 						},
 						// Top-side up
 						{
@@ -78,7 +78,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y - 1,
 							pipe: 'bottomPipe',
 							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x].topOpen
+							isOpen: previous[y][x].bottomOpen && previous[y][x].topOpen
 						},
 						// Top-side right
 						{
@@ -86,7 +86,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y,
 							pipe: 'rightPipe',
 							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y][x].rightOpen
+							isOpen: previous[y][x].bottomOpen && previous[y][x].rightOpen
 						},
 
 						// Bottom-side bottom
@@ -95,7 +95,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y + 1,
 							pipe: 'bottomPipe',
 							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y + 1][x].bottomOpen
+							isOpen: previous[y + 1][x].topOpen && previous[y + 1][x].bottomOpen
 						},
 						// Bottom-side left
 						{
@@ -103,7 +103,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y + 1,
 							pipe: 'rightPipe',
 							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y + 1][x].leftOpen
+							isOpen: previous[y + 1][x].topOpen && previous[y + 1][x].leftOpen
 						},
 						// Bottom-side right
 						{
@@ -111,7 +111,7 @@ export function updateRooms(ship: Ship, setGloopAmount, setLandingGearFuel) {
 							y: y + 1,
 							pipe: 'rightPipe',
 							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y + 1][x].rightOpen
+							isOpen: previous[y + 1][x].topOpen && previous[y + 1][x].rightOpen
 						},
 					];
 

@@ -1,5 +1,5 @@
 export type RoomLayout = {
-	i: '-' | '+' | '|' | '>' | '<' | 'L' | 'J'
+	i?: '-' | '+' | '|' | '>' | '<' | 'L' | 'J'
 	f?: '+' | '-'
 };
 export const shipLayout: RoomLayout[][] = [
