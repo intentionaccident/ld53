@@ -23,6 +23,11 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	room.sprite.x = -SLANT;
 	graphics.background.addChild(room.root);
 
+	const dirty = new PIXI.Graphics();
+	dirty.x = TILE_WIDTH * coord.x - SLANT * coord.y;
+	dirty.y = TILE_HEIGHT * coord.y;
+	graphics.background.addChild(dirty);
+
 	const pipeGraphics = new PIXI.Container();
 	graphics.foreground.addChild(pipeGraphics);
 	pipeGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y + TILE_WIDTH / 2 - SLANT / 2;
@@ -73,5 +78,6 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		horizontalPipe,
 		intersection,
 		features: feature,
+		dirty
 	};
 }

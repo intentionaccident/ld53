@@ -14,4 +14,5 @@ export interface Room {
 	feature: RoomFeature;
 	bottomPipeReceivedThisFrame: boolean;
 	rightPipeReceivedThisFrame: boolean;
+	isDirty: boolean;
 }

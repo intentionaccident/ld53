@@ -12,7 +12,8 @@ export interface RoomHandle {
 	coordinate: PIXI.Point;
 	data: Room;
 	graphics: {
-		room: DualRender
+		room: DualRender;
+		dirty: PIXI.Graphics;
 		pipes: PIXI.Container;
 		intersection: DualRender
 		verticalPipe: DualRender;

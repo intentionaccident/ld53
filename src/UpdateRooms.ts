@@ -1,6 +1,7 @@
 import {Ship} from "./types/Ship";
-import {SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
+import {MAX_CONCURRENT_DIRTY_ROOMS, MAX_DONE_SINKS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
 import {IntersectionDirection} from "./types/IntersectionDirection";
+import {RoomHandle} from "./types/RoomHandle";
 
 export function updateRooms(ship: Ship) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
@@ -9,7 +10,17 @@ export function updateRooms(ship: Ship) {
 	const doneSinks = sinks.filter(s => s.state === 'done');
 	const requestingSinks = sinks.filter(r => r.state === 'requesting');
 	const busySinks = sinks.filter(r => r.state === 'busy');
-	if (doneSinks.length > 3) {
+	const dirtyRooms = ship.roomHandles.flatMap(a => a).filter(r => r.data.isDirty);
+
+	if (dirtyRooms.length < MAX_CONCURRENT_DIRTY_ROOMS) {
+		function anyIntersectionIsOpen(r: RoomHandle) {
+			return r.data.intersectionStates.filter(s => s).length;
+		}
+		const candidates = ship.roomHandles.flatMap(a => a).filter(anyIntersectionIsOpen);
+		const room = candidates[Math.floor(Math.random() * candidates.length)];
+		room.data.isDirty = true;
+	}
+	if (doneSinks.length > MAX_DONE_SINKS) {
 		const sink = doneSinks[Math.floor(Math.random() * idleSinks.length)];
 		sink.state = 'releasing';
 	}
@@ -24,7 +35,10 @@ export function updateRooms(ship: Ship) {
 	}
 
 	type PipeCandidate = {
-		x: number, y: number, pipe: 'bottomPipe' | 'rightPipe', pipeCapacity: 'bottomPipeCapacity' | 'rightPipeCapacity'
+		x: number, y: number,
+		pipe: 'bottomPipe' | 'rightPipe',
+		pipeCapacity: 'bottomPipeCapacity' | 'rightPipeCapacity',
+		movedThrough: { x: number, y: number }
 	}
 
 	function openIntersectionPipes(x: number, y: number): PipeCandidate[] {
@@ -69,6 +83,13 @@ export function updateRooms(ship: Ship) {
 		return candidates;
 	}
 
+	function onGloopMovedThroughIntersection(x: number, y: number) {
+		if (ship.roomHandles[y][x].data.isDirty) {
+			ship.roomHandles[y][x].data.isDirty = false;
+			ship.score += 1;
+		}
+	}
+
 	for (let y = 0; y < ship.roomHandles.length; y++)
 		for (let x = 0; x < ship.roomHandles[y].length; x++) {
 			ship.roomHandles[y][x].data = {...previous[y][x]};
@@ -79,7 +100,7 @@ export function updateRooms(ship: Ship) {
 			for (let [pipe, pipeCapacity] of [['rightPipe', 'rightPipeCapacity'], ['bottomPipe', 'bottomPipeCapacity']]) {
 				console.assert(previous[y][x][pipe] <= previous[y][x][pipeCapacity]);
 				if (previous[y][x][pipe] > 0 && !ship.roomHandles[y][x].data[pipe + 'ReceivedThisFrame']) {
-					let candidates = [];
+					let candidates: PipeCandidate[] = [];
 
 					if (pipe === 'rightPipe') {
 						// Left side
@@ -91,7 +112,7 @@ export function updateRooms(ship: Ship) {
 									y: y,
 									pipe: 'bottomPipe',
 									pipeCapacity: 'bottomPipeCapacity',
-									isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Bottom]
+									movedThrough: {x, y}
 								});
 							}
 							// Left-side left
@@ -101,7 +122,7 @@ export function updateRooms(ship: Ship) {
 									y: y,
 									pipe: 'rightPipe',
 									pipeCapacity: 'rightPipeCapacity',
-									isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Left]
+									movedThrough: {x, y}
 								});
 							}
 							// Left-side up
@@ -111,6 +132,7 @@ export function updateRooms(ship: Ship) {
 									y: y - 1,
 									pipe: 'bottomPipe',
 									pipeCapacity: 'bottomPipeCapacity',
+									movedThrough: {x, y}
 								});
 							}
 						}
@@ -124,6 +146,7 @@ export function updateRooms(ship: Ship) {
 									y: y,
 									pipe: 'bottomPipe',
 									pipeCapacity: 'bottomPipeCapacity',
+									movedThrough: {x: x + 1, y}
 								});
 							}
 							// Right-side right
@@ -133,6 +156,7 @@ export function updateRooms(ship: Ship) {
 									y: y,
 									pipe: 'rightPipe',
 									pipeCapacity: 'rightPipeCapacity',
+									movedThrough: {x: x + 1, y}
 								});
 							}
 							// Right-side up
@@ -142,6 +166,7 @@ export function updateRooms(ship: Ship) {
 									y: y - 1,
 									pipe: 'bottomPipe',
 									pipeCapacity: 'bottomPipeCapacity',
+									movedThrough: {x: x + 1, y}
 								});
 							}
 						}
@@ -154,7 +179,8 @@ export function updateRooms(ship: Ship) {
 									x: x - 1,
 									y: y,
 									pipe: 'rightPipe',
-									pipeCapacity: 'rightPipeCapacity'
+									pipeCapacity: 'rightPipeCapacity',
+									movedThrough: {x, y}
 								});
 							}
 							// Top-side up
@@ -163,7 +189,8 @@ export function updateRooms(ship: Ship) {
 									x: x,
 									y: y - 1,
 									pipe: 'bottomPipe',
-									pipeCapacity: 'bottomPipeCapacity'
+									pipeCapacity: 'bottomPipeCapacity',
+									movedThrough: {x, y}
 								});
 							}
 							// Top-side right
@@ -172,7 +199,8 @@ export function updateRooms(ship: Ship) {
 									x: x,
 									y: y,
 									pipe: 'rightPipe',
-									pipeCapacity: 'rightPipeCapacity'
+									pipeCapacity: 'rightPipeCapacity',
+									movedThrough: {x, y}
 								});
 							}
 						}
@@ -186,9 +214,7 @@ export function updateRooms(ship: Ship) {
 									y: y + 1,
 									pipe: 'bottomPipe',
 									pipeCapacity: 'bottomPipeCapacity',
-									isOpen: !outOfBounds(x, y + 1)
-										&& previous[y + 1][x].intersectionStates[IntersectionDirection.Top]
-										&& previous[y + 1][x].intersectionStates[IntersectionDirection.Bottom]
+									movedThrough: {x, y: y + 1}
 								});
 							}
 							// Bottom-side left
@@ -198,6 +224,7 @@ export function updateRooms(ship: Ship) {
 									y: y + 1,
 									pipe: 'rightPipe',
 									pipeCapacity: 'rightPipeCapacity',
+									movedThrough: {x, y: y + 1}
 								});
 							}
 							// Bottom-side right
@@ -206,7 +233,8 @@ export function updateRooms(ship: Ship) {
 									x: x,
 									y: y + 1,
 									pipe: 'rightPipe',
-									pipeCapacity: 'rightPipeCapacity'
+									pipeCapacity: 'rightPipeCapacity',
+									movedThrough: {x, y: y + 1}
 								});
 							}
 						}
@@ -229,6 +257,7 @@ export function updateRooms(ship: Ship) {
 						ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] += 1;
 						ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe + 'ReceivedThisFrame'] = true;
 						ship.roomHandles[y][x].data[pipe] -= 1;
+						onGloopMovedThroughIntersection(candidate.movedThrough.x, candidate.movedThrough.y);
 					}
 				}
 			}
