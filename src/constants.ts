@@ -17,7 +17,7 @@ export const SINK_BUSY_TICKS = {
 	reactor: 25
 }
 
-const sinkRequestTimeout = 90;
+const sinkRequestTimeout = parseFloat('inf');
 export const SINK_REQUEST_TIMEOUT = {
 	thrusters: sinkRequestTimeout,
 	navigation: sinkRequestTimeout,
@@ -32,4 +32,4 @@ export const SINK_RELEASE_SPEED = {
 	reactor:  sinkReleaseSpeed,
 }
 
-export const DEFAULT_PIPE_CAPACITY = 5;
+export const DEFAULT_PIPE_CAPACITY = 2;
