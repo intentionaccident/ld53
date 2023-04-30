@@ -101,6 +101,7 @@ export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) 
 						}
 
 						room.data.intersectionStates = [...Array(4)].map((_, i) => i < state)
+						updateIntersectionTexture(room, assets)
 						continue
 					} case RoomEditTarget.Feature: {
 						if (room.data.feature.type === 'empty') {

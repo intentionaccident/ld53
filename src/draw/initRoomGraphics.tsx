@@ -44,6 +44,14 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	intersection.sprite.x = -10;
 	intersection.sprite.y = -8;
 
+	intersection.root.interactive = true;
+	intersection.root.hitArea = new PIXI.Polygon([
+		INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+		INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
+		-INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
+		-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
+	]);
+
 	const clampsRoot = new PIXI.Container()
 	intersection.sprite.addChild(clampsRoot)
 	const clamps = [
