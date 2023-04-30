@@ -1,12 +1,31 @@
-import { Ship } from "./types/Ship";
-import { SINK_BUSY_TIME } from "./constants";
-import { IntersectionDirection } from "./types/IntersectionDirection";
+import {Ship} from "./types/Ship";
+import {SINK_BUSY_TIME, SINK_REQUEST_TIMEOUT} from "./constants";
+import {IntersectionDirection} from "./types/IntersectionDirection";
+import {detectAvif} from "pixi.js";
 
 export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandingGearFuel) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
+	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
+	const idleSinks = sinks.filter(s => s.state === 'idle');
+	const doneSinks = sinks.filter(s => s.state === 'done');
+	const currentlyRequestingOrBusySinks = sinks.filter(r => r.state === 'requesting' || r.state === 'busy');
+	if (doneSinks.length > 3) {
+		const sink = doneSinks[Math.floor(Math.random() * idleSinks.length)];
+		sink.state = 'releasing';
+	}
+	if (currentlyRequestingOrBusySinks.length === 0 && idleSinks.length > 0) {
+		const sink = idleSinks[Math.floor(Math.random() * idleSinks.length)];
+		sink.state = 'requesting';
+		sink.timeLeft = SINK_REQUEST_TIMEOUT[sink.subtype];
+	}
+
+	function outOfBounds(x: number, y: number): boolean {
+		return y < 0 || y >= ship.roomHandles.length || x < 0 || x >= ship.roomHandles[y].length;
+	}
+
 	for (let y = 0; y < ship.roomHandles.length; y++)
 		for (let x = 0; x < ship.roomHandles[y].length; x++) {
-			ship.roomHandles[y][x].data = { ...previous[y][x] };
+			ship.roomHandles[y][x].data = {...previous[y][x]};
 
 			const candidatePressure = candidate =>
 				ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] / ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity];
@@ -47,7 +66,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y,
 								pipe: 'bottomPipe',
 								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Bottom]
+								isOpen: !outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Bottom]
 							},
 							// Right-side right
 							{
@@ -55,7 +74,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y,
 								pipe: 'rightPipe',
 								pipeCapacity: 'rightPipeCapacity',
-								isOpen: previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Right]
+								isOpen: !outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Right]
 							},
 							// Right-side up
 							{
@@ -63,7 +82,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y - 1,
 								pipe: 'bottomPipe',
 								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Top]
+								isOpen: !outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Top]
 							},
 						] : [
 							// Top-side left
@@ -97,7 +116,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y + 1,
 								pipe: 'bottomPipe',
 								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Bottom]
+								isOpen: !outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Bottom]
 							},
 							// Bottom-side left
 							{
@@ -105,7 +124,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y + 1,
 								pipe: 'rightPipe',
 								pipeCapacity: 'rightPipeCapacity',
-								isOpen: previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Left]
+								isOpen: !outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Left]
 							},
 							// Bottom-side right
 							{
@@ -113,13 +132,13 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y + 1,
 								pipe: 'rightPipe',
 								pipeCapacity: 'rightPipeCapacity',
-								isOpen: previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Right]
+								isOpen: !outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Right]
 							},
 						];
 
 					// Let's limit our gloop movement to max 1 per room for now
 					candidates = candidates.filter(candidate =>
-						candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+						!outOfBounds(candidate.x, candidate.y)
 						&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] < ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity]
 						&& candidatePressure(candidate) < (ship.roomHandles[y][x].data[pipe] / ship.roomHandles[y][x].data[pipeCapacity])
 						&& candidate.isOpen
@@ -177,7 +196,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 				];
 				while (candidates.length > 0 && gloopLeft > 0) {
 					candidates = candidates.filter(candidate =>
-						candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+						!outOfBounds(candidate.x, candidate.y)
 						&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] < ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity]
 						&& candidate.isOpen
 					);
@@ -231,7 +250,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 					];
 					while (candidates.length > 0 && gloopToConsume > 0) {
 						candidates = candidates.filter(candidate =>
-							candidate.x >= 0 && candidate.x < 6 && candidate.y >= 0 && candidate.y < 4
+							!outOfBounds(candidate.x, candidate.y)
 							&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
 							&& candidate.isOpen
 						);
@@ -244,9 +263,16 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 							feature.storage += 1;
 						}
 					}
+					feature.timeLeft -= delta;
 					if (feature.storage >= feature.capacity) {
 						feature.state = 'busy';
 						feature.timeLeft = SINK_BUSY_TIME[feature.subtype];
+					} else if (feature.timeLeft <= 0) {
+						if (feature.storage > 0) {
+							feature.state = 'releasing';
+						} else {
+							feature.state = 'idle';
+						}
 					}
 				} else if (feature.state === 'busy') {
 					feature.timeLeft -= delta;

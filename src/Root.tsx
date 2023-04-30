@@ -73,7 +73,9 @@ export const ship: Ship = {
 			return room
 		})
 	),
-	graphics: shipGraphics
+	graphics: shipGraphics,
+	currentLevel: 0,
+	levelProgress: 0
 }
 
 let elapsedTimeBetweenGloopMovement = 0;
