@@ -62,8 +62,8 @@ export const Game = () => {
 							bottomPipeReceivedThisFrame: false,
 							rightPipeReceivedThisFrame: false,
 							isDirty: false,
-							rightPipeFramesSinceWater: parseFloat('inf'),
-							bottomPipeFramesSinceWater: parseFloat('inf'),
+							rightPipeFramesSinceWater: Number.POSITIVE_INFINITY,
+							bottomPipeFramesSinceWater: Number.POSITIVE_INFINITY,
 						},
 						graphics
 					} as RoomHandle;

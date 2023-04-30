@@ -7,6 +7,7 @@ import { saveLevel } from "../saveLevel";
 import { createFeature } from "../createFeature";
 import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
 import { AssetLibrary } from "../types/AssetLibrary";
+import {dijkstra} from "../dijkstra";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -43,6 +44,11 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
 					}))
 				}
 			})
+			return
+		} case 'd': {
+			const source = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'source')[0];
+			console.log(dijkstra(ship.roomHandles, {x: source.coordinate.x, y: source.coordinate.y}));
+			return
 		}
 	}
 }

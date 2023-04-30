@@ -17,7 +17,7 @@ export const SINK_BUSY_TICKS = {
 	reactor: 25
 }
 
-const sinkRequestTimeout = parseFloat('inf');
+const sinkRequestTimeout = Number.POSITIVE_INFINITY;
 export const SINK_REQUEST_TIMEOUT = {
 	thrusters: sinkRequestTimeout,
 	navigation: sinkRequestTimeout,
