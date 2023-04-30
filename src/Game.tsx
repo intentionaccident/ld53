@@ -5,7 +5,7 @@ import { AssetContext } from "./AssetContext";
 import { PixiRoot } from "./PixiRoot";
 import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
-import {DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, ROOM_UPDATE_INTERVAL} from "./constants";
+import { DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, ROOM_UPDATE_INTERVAL } from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
@@ -90,7 +90,7 @@ export const Game = () => {
 		}
 
 		const gameLoop = (delta) => {
-			processEvents(ship, { setGloopAmount });
+			processEvents(ship, { setGloopAmount }, assets);
 
 			ship.timeLeft -= app.ticker.elapsedMS / 1000;
 			setTimeLeft(ship.timeLeft);

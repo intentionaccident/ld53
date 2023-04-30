@@ -1,10 +1,12 @@
 import { Ship } from "../types/Ship";
-import {DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT} from "../constants";
+import { DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT } from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
-import {saveLevel} from "../saveLevel";
-import {createFeature} from "../createFeature";
+import { saveLevel } from "../saveLevel";
+import { createFeature } from "../createFeature";
+import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
+import { AssetLibrary } from "../types/AssetLibrary";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -31,7 +33,7 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
 	}
 }
 
-export function processEvents(ship: Ship, hooks: UIHooks) {
+export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) {
 	while (ship.eventQueue.length) {
 		const event = ship.eventQueue.pop();
 		switch (event.type) {
@@ -42,9 +44,11 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
 				if (event.clockwise) {
 					room.data.intersectionStates.push(room.data.intersectionStates.shift())
-					return
+				} else {
+					room.data.intersectionStates.unshift(room.data.intersectionStates.pop())
 				}
-				room.data.intersectionStates.unshift(room.data.intersectionStates.pop())
+				updateIntersectionTexture(room, assets)
+
 				continue
 			} case GameEventType.ActivateFeature: {
 				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
