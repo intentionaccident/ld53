@@ -33,4 +33,6 @@ export enum AssetNames {
 	PipeVerticalAnimationFrame1 = "pipe-vertical3",
 	PipeVerticalAnimationFrame2 = "pipe-vertical4",
 	PipeVerticalAnimationFrame3 = "pipe-vertical5",
+
+	Engine = "engines",
 }

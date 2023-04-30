@@ -1,8 +1,10 @@
 import * as PIXI from "pixi.js";
 import { Ship } from "./types/Ship";
 import { ProgressBar } from "./types/ProgressBar";
+import { AssetLibrary } from "./types/AssetLibrary";
+import { AssetNames } from "./types/AssetNames";
 
-export function initShipGraphics(app: PIXI.Application): Ship['graphics'] {
+export function initShipGraphics(app: PIXI.Application, assets: AssetLibrary): Ship['graphics'] {
 	const shipContainer = new PIXI.Container();
 	shipContainer.x = 64 + 32;
 	shipContainer.y = 16;
@@ -10,6 +12,11 @@ export function initShipGraphics(app: PIXI.Application): Ship['graphics'] {
 
 	const backgroundContainer = new PIXI.Container();
 	shipContainer.addChild(backgroundContainer);
+
+	const engine = new PIXI.Sprite(assets[AssetNames.Engine].asset)
+	engine.x = 440
+	engine.y = -4
+	shipContainer.addChild(engine)
 
 	const foregroundContainer = new PIXI.Container();
 	shipContainer.addChild(foregroundContainer);

@@ -8,7 +8,8 @@ import { Game } from "./Game";
 export const app = new Application({
 	width: 640,
 	height: 480,
-	antialias: true
+	antialias: true,
+	backgroundColor: 0xffffff
 });
 
 export const Root: React.FC = () => {

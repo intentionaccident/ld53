@@ -30,7 +30,7 @@ export const Game = () => {
 	const { app } = React.useContext(AppContext);
 
 	React.useEffect(() => {
-		const shipGraphics = initShipGraphics(app)
+		const shipGraphics = initShipGraphics(app, assets)
 
 		const ship: Ship = {
 			gloopAmount: GLOOP_AMOUNT,
