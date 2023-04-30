@@ -4,5 +4,6 @@ export enum GameEventType {
 	KeyPressed,
 	RotateIntersection,
 	ActivateSink,
-	ActivateFeature
+	ActivateFeature,
+	FlushPipe
 }

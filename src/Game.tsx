@@ -5,7 +5,7 @@ import { AssetContext } from "./AssetContext";
 import { PixiRoot } from "./PixiRoot";
 import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
-import {DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, GLOOP_AMOUNT, ROOM_UPDATE_INTERVAL} from "./constants";
+import { DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, GLOOP_AMOUNT, ROOM_UPDATE_INTERVAL } from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
@@ -19,6 +19,7 @@ import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
+import { AnimationInstance } from "./types/AnimationInstance";
 
 export const Game = () => {
 	const [gloopAmount, setGloopAmount] = React.useState(100);
@@ -34,6 +35,7 @@ export const Game = () => {
 		const ship: Ship = {
 			gloopAmount: GLOOP_AMOUNT,
 			eventQueue: [],
+			animationQueue: [],
 			roomHandles: shipLayout.map((layoutRow, y) =>
 				layoutRow.map((layout, x) => {
 					const coordinate = new PIXI.Point(x, y)
@@ -101,9 +103,33 @@ export const Game = () => {
 			setScore(ship.score);
 			elapsedTimeBetweenRoomUpdate += delta;
 
-			if (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
-				elapsedTimeBetweenRoomUpdate = 0;
-				updateRooms(ship)
+			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
+				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
+				for (const animation of ship.animationQueue) {
+					if (animation.activePipes.length < animation.template.path.length) {
+						const newPipe = animation.template.path[animation.activePipes.length];
+						animation.activePipes.push(newPipe)
+						const room = ship.roomHandles[newPipe.coord.x][newPipe.coord.y]
+						if (newPipe.vertical) {
+							room.data.bottomPipe = 1
+						} else {
+							room.data.rightPipe = 1
+						}
+					} else {
+						animation.overflow++;
+					}
+
+					if (animation.activePipes.length + animation.overflow > animation.template.gloop) {
+						const removedPipe = animation.activePipes.shift()
+						const room = ship.roomHandles[removedPipe.coord.x][removedPipe.coord.y]
+						if (removedPipe.vertical) {
+							room.data.bottomPipe = 0
+						} else {
+							room.data.rightPipe = 0
+						}
+					}
+				}
+				ship.animationQueue = ship.animationQueue.filter((animation) => animation.activePipes.length)
 			}
 
 			for (const room of roomHandlesDrawQueue)

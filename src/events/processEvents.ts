@@ -29,6 +29,20 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
 		} case 's': {
 			console.log(saveLevel(ship));
 			return
+		} case 'f': {
+			ship.eventQueue.push({
+				type: GameEventType.FlushPipe,
+				animationTemplate: {
+					gloop: 10,
+					path: [...Array(10)].map(_ => ({
+						coord: {
+							x: Math.random() * 10 | 0,
+							y: Math.random() * 10 | 0
+						},
+						vertical: Math.random() > 0.5
+					}))
+				}
+			})
 		}
 	}
 }
@@ -119,6 +133,13 @@ export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) 
 						continue
 					}
 				}
+				continue
+			} case GameEventType.FlushPipe: {
+				ship.animationQueue.push({
+					template: event.animationTemplate,
+					activePipes: [],
+					overflow: 0
+				})
 				continue
 			} default: {
 				console.warn("unprocessed event", event)
