@@ -3,7 +3,13 @@ import * as PIXI from "pixi.js";
 import { PixiRoot } from "./PixiRoot"
 import { UIRoot } from "./UIRoot"
 import { updateRooms } from "./UpdateRooms"
-import { SOURCE_RELEASE_SPEED, SINK_CAPACITY, SINK_RELEASE_SPEED, ROOM_UPDATE_INTERVAL } from "./constants"
+import {
+	SOURCE_RELEASE_SPEED,
+	SINK_CAPACITY,
+	SINK_RELEASE_SPEED,
+	ROOM_UPDATE_INTERVAL,
+	DEFAULT_PIPE_CAPACITY
+} from "./constants"
 import { drawRoom } from "./draw/drawRoom"
 import { drawRoomBackground } from "./draw/drawRoomBackground"
 import { initRoomGraphics } from "./draw/initRoomGraphics"
@@ -44,9 +50,9 @@ export const Game = () => {
 						data: {
 							hidden,
 							bottomPipe: 0,
-							bottomPipeCapacity: ['+', '|'].includes(layout?.p) ? 5 : 0,
+							bottomPipeCapacity: ['+', '|'].includes(layout?.p) ? DEFAULT_PIPE_CAPACITY : 0,
 							rightPipe: 0,
-							rightPipeCapacity: ['+', '-'].includes(layout?.p) ? 5 : 0,
+							rightPipeCapacity: ['+', '-'].includes(layout?.p) ? DEFAULT_PIPE_CAPACITY : 0,
 
 							intersectionStates: [
 								['┼', '┤', '┴', '┘', '├', '│', '└', '╵'].includes(layout?.i),
