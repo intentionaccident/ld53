@@ -90,7 +90,7 @@ export const Game = () => {
 		const gameLoop = (delta) => {
 			processEvents(ship, { setGloopAmount });
 
-			ship.timeLeft -= delta;
+			ship.timeLeft -= app.ticker.elapsedMS / 1000;
 			setTimeLeft(ship.timeLeft);
 			setGloopAmount(ship.gloopAmount);
 			setScore(ship.score);
