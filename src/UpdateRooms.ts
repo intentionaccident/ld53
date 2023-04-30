@@ -1,5 +1,5 @@
 import {Ship} from "./types/Ship";
-import {SINK_BUSY_TIME, SINK_REQUEST_TIMEOUT} from "./constants";
+import {SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
 import {IntersectionDirection} from "./types/IntersectionDirection";
 import {detectAvif} from "pixi.js";
 
@@ -16,7 +16,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 	if (currentlyRequestingOrBusySinks.length === 0 && idleSinks.length > 0) {
 		const sink = idleSinks[Math.floor(Math.random() * idleSinks.length)];
 		sink.state = 'requesting';
-		sink.timeLeft = SINK_REQUEST_TIMEOUT[sink.subtype];
+		sink.ticksLeft = SINK_REQUEST_TIMEOUT[sink.subtype];
 	}
 
 	function outOfBounds(x: number, y: number): boolean {
@@ -263,11 +263,11 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 							feature.storage += 1;
 						}
 					}
-					feature.timeLeft -= delta;
+					feature.ticksLeft -= 1;
 					if (feature.storage >= feature.capacity) {
 						feature.state = 'busy';
-						feature.timeLeft = SINK_BUSY_TIME[feature.subtype];
-					} else if (feature.timeLeft <= 0) {
+						feature.ticksLeft = SINK_BUSY_TICKS[feature.subtype];
+					} else if (feature.ticksLeft <= 0) {
 						if (feature.storage > 0) {
 							feature.state = 'releasing';
 						} else {
@@ -275,8 +275,8 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 						}
 					}
 				} else if (feature.state === 'busy') {
-					feature.timeLeft -= delta;
-					if (feature.timeLeft <= 0) {
+					feature.ticksLeft -= 1;
+					if (feature.ticksLeft <= 0) {
 						feature.state = 'done';
 					}
 				} else if (feature.state === 'releasing' && feature.storage === 0) {

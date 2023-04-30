@@ -4,14 +4,14 @@ export const LINE_SIZE = 2;
 export const SLANT = 16;
 export const SLANTEDNESS = SLANT / TILE_HEIGHT;
 export const INTERSECTION_RADIUS = 8;
-
+export const ROOM_UPDATE_INTERVAL = 25;
 export const SINK_CAPACITY = {
 	thrusters: 30,
 	navigation: 5,
 	reactor: 10
 }
 
-export const SINK_BUSY_TIME = {
+export const SINK_BUSY_TICKS = {
 	thrusters: 10,
 	navigation: 5,
 	reactor: 30

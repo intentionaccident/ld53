@@ -12,7 +12,7 @@ export type SinkFeature = {
 	storage: number,
 	capacity: number,
 	state: 'idle' | 'requesting' | 'busy' | 'done' | 'releasing';
-	timeLeft: number,
+	ticksLeft: number,
 	releaseSpeed: number
 }
 

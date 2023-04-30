@@ -13,7 +13,7 @@ import { Ship } from "./types/Ship";
 import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { initShipGraphics } from "./initShipGraphics";
 import { shipLayout } from "./shipLayout";
-import { SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED } from "./constants";
+import {ROOM_UPDATE_INTERVAL, SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED} from "./constants";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
 import { GameEventType } from "./events/types/GameEventType";
@@ -78,8 +78,7 @@ export const ship: Ship = {
 	levelProgress: 0
 }
 
-let elapsedTimeBetweenGloopMovement = 0;
-const gloopMovementInterval = 25;
+let elapsedTimeBetweenRoomUpdate = 0;
 const roomHandlesDrawQueue = ship.roomHandles.flat().reverse();
 
 for (const room of roomHandlesDrawQueue) {
@@ -99,10 +98,10 @@ export function Root() {
 		const gameLoop = (delta) => {
 			processEvents(ship, { setGloopAmount });
 
-			elapsedTimeBetweenGloopMovement += delta;
+			elapsedTimeBetweenRoomUpdate += delta;
 
-			if (elapsedTimeBetweenGloopMovement > gloopMovementInterval) {
-				elapsedTimeBetweenGloopMovement = 0;
+			if (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
+				elapsedTimeBetweenRoomUpdate = 0;
 				updateRooms(delta, ship, setGloopAmount, setLandingGearFuel)
 			}
 

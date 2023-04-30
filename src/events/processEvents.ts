@@ -58,7 +58,7 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
 				if (feature.type === 'sink' && feature.state === 'idle') {
 					feature.state = 'requesting';
-					feature.timeLeft = SINK_REQUEST_TIMEOUT[feature.subtype];
+					feature.ticksLeft = SINK_REQUEST_TIMEOUT[feature.subtype];
 				}
 				continue;
 			} case GameEventType.RoomEdit: {
