@@ -5,7 +5,7 @@ import { AssetContext } from "./AssetContext";
 import { PixiRoot } from "./PixiRoot";
 import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
-import { DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, ROOM_UPDATE_INTERVAL } from "./constants";
+import {DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, GLOOP_AMOUNT, ROOM_UPDATE_INTERVAL} from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
@@ -32,7 +32,7 @@ export const Game = () => {
 		const shipGraphics = initShipGraphics(app)
 
 		const ship: Ship = {
-			gloopAmount: 100,
+			gloopAmount: GLOOP_AMOUNT,
 			eventQueue: [],
 			roomHandles: shipLayout.map((layoutRow, y) =>
 				layoutRow.map((layout, x) => {

@@ -291,7 +291,6 @@ export function updateRooms(ship: Ship) {
 						candidates = candidates.filter(candidate =>
 							!outOfBounds(candidate.x, candidate.y)
 							&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
-							&& !ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe + 'UpdatedThisFrame']
 						);
 						if (candidates.length > 0) {
 							candidates = candidates.sort(

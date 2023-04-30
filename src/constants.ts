@@ -38,3 +38,5 @@ export const DELIVERY_TIME_LIMIT = 5 * 60;
 
 export const MAX_CONCURRENT_DIRTY_ROOMS = 2;
 export const MAX_DONE_SINKS = 9999;
+
+export const GLOOP_AMOUNT = 40;
