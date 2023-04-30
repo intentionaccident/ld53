@@ -330,5 +330,13 @@ export function updateRooms(ship: Ship) {
 	for (let x = 0; x < ship.roomHandles[y].length; x++) {
 		ship.roomHandles[y][x].data.bottomPipeReceivedThisFrame = false;
 		ship.roomHandles[y][x].data.rightPipeReceivedThisFrame = false;
+
+		for (const pipe of ['bottom', 'right']) {
+			if (ship.roomHandles[y][x].data[pipe + 'Pipe'] === 0) {
+				ship.roomHandles[y][x].data[pipe + 'PipeFramesSinceWater'] += 1;
+			} else {
+				ship.roomHandles[y][x].data[pipe + 'PipeFramesSinceWater'] = 0;
+			}
+		}
 	}
 }

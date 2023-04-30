@@ -15,4 +15,7 @@ export interface Room {
 	bottomPipeReceivedThisFrame: boolean;
 	rightPipeReceivedThisFrame: boolean;
 	isDirty: boolean;
+
+	bottomPipeFramesSinceWater: number;
+	rightPipeFramesSinceWater: number;
 }

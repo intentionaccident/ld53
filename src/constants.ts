@@ -32,7 +32,7 @@ export const SINK_RELEASE_SPEED = {
 	reactor:  sinkReleaseSpeed,
 }
 
-export const DEFAULT_PIPE_CAPACITY = 2;
+export const DEFAULT_PIPE_CAPACITY = 1;
 
 export const DELIVERY_TIME_LIMIT = 5 * 60;
 

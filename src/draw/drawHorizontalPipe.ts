@@ -6,7 +6,7 @@ import { getPipeColor } from "./getPipeColor";
 
 export function drawHorizontalPipe(room: RoomHandle, assetLibrary: AssetLibrary) {
 	room.graphics.horizontalPipe.sprite.texture
-		= room.data.rightPipe > 0
+		= room.data.rightPipeFramesSinceWater < 2
 			? assetLibrary[AssetNames.PipeHorizontalFull].asset
 			: assetLibrary[AssetNames.PipeHorizontalEmpty].asset
 	room.graphics.horizontalPipe.sprite.visible = room.data.rightPipeCapacity > 0;

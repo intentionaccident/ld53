@@ -58,7 +58,10 @@ export const Game = () => {
 
 							feature: createFeature(layout?.f),
 							bottomPipeReceivedThisFrame: false,
-							rightPipeReceivedThisFrame: false
+							rightPipeReceivedThisFrame: false,
+							isDirty: false,
+							rightPipeFramesSinceWater: parseFloat('inf'),
+							bottomPipeFramesSinceWater: parseFloat('inf'),
 						},
 						graphics
 					} as RoomHandle;
