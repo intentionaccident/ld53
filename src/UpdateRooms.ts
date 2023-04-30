@@ -268,6 +268,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 							ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] -= 1;
 							gloopToConsume -= 1;
 							feature.storage += 1;
+							feature.ticksLeft = SINK_REQUEST_TIMEOUT[feature.subtype];
 						}
 					}
 					feature.ticksLeft -= 1;

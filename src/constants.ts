@@ -17,7 +17,7 @@ export const SINK_BUSY_TICKS = {
 	reactor: 25
 }
 
-const sinkRequestTimeout = 60;
+const sinkRequestTimeout = 90;
 export const SINK_REQUEST_TIMEOUT = {
 	thrusters: sinkRequestTimeout,
 	navigation: sinkRequestTimeout,
