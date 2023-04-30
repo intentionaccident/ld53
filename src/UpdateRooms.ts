@@ -1,19 +1,19 @@
 import {Ship} from "./types/Ship";
 import {SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
 import {IntersectionDirection} from "./types/IntersectionDirection";
-import {detectAvif} from "pixi.js";
 
 export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandingGearFuel) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
 	const idleSinks = sinks.filter(s => s.state === 'idle');
 	const doneSinks = sinks.filter(s => s.state === 'done');
-	const currentlyRequestingOrBusySinks = sinks.filter(r => r.state === 'requesting' || r.state === 'busy');
+	const requestingSinks = sinks.filter(r => r.state === 'requesting');
+	const busySinks = sinks.filter(r => r.state === 'busy');
 	if (doneSinks.length > 3) {
 		const sink = doneSinks[Math.floor(Math.random() * idleSinks.length)];
 		sink.state = 'releasing';
 	}
-	if (currentlyRequestingOrBusySinks.length === 0 && idleSinks.length > 0) {
+	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleSinks.length > 0) {
 		const sink = idleSinks[Math.floor(Math.random() * idleSinks.length)];
 		sink.state = 'requesting';
 		sink.ticksLeft = SINK_REQUEST_TIMEOUT[sink.subtype];
@@ -276,6 +276,8 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 					}
 				} else if (feature.state === 'busy') {
 					feature.ticksLeft -= 1;
+					ship.levelProgress += 0.01;
+					ship.graphics.progressBar.set(ship.levelProgress);
 					if (feature.ticksLeft <= 0) {
 						feature.state = 'done';
 					}

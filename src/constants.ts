@@ -6,15 +6,15 @@ export const SLANTEDNESS = SLANT / TILE_HEIGHT;
 export const INTERSECTION_RADIUS = 8;
 export const ROOM_UPDATE_INTERVAL = 25;
 export const SINK_CAPACITY = {
-	thrusters: 30,
+	thrusters: 15,
 	navigation: 5,
-	reactor: 10
+	reactor: 30
 }
 
 export const SINK_BUSY_TICKS = {
-	thrusters: 10,
-	navigation: 5,
-	reactor: 30
+	thrusters: 15,
+	navigation: 10,
+	reactor: 25
 }
 
 const sinkRequestTimeout = 60;

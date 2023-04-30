@@ -6,18 +6,10 @@ export class ProgressBar {
 	public graphics: PIXI.Graphics;
 	public constructor() {
 		this.graphics = new PIXI.Graphics();
-		this.redraw();
+		this.set(0);
 	}
 
 	public set(progress: number) {
-
-	}
-
-	public value() {
-
-	}
-
-	private redraw() {
 		const g = this.graphics;
 
 		g.clear();
@@ -31,6 +23,7 @@ export class ProgressBar {
 		// fg
 		g.beginFill(0xffffff)
 		g.lineStyle(LINE_SIZE, 0x333333);
-		g.drawRect(0, 0, 30, 10);
+		progress = Math.min(1, progress);
+		g.drawRect(0, 0, progress * 100, 10);
 	}
 }
