@@ -56,9 +56,9 @@ export const Game = () => {
 
 							intersectionStates: [
 								['┼', '┤', '┴', '┘', '├', '│', '└', '╵'].includes(layout?.i),
+								['┼', '┴', '├', '└', '┬', '─', '┌', '╶'].includes(layout?.i),
 								['┼', '┤', '├', '│', '┬', '┐', '┌', '╷'].includes(layout?.i),
 								['┼', '┤', '┴', '┘', '┬', '┐', '─', '╴'].includes(layout?.i),
-								['┼', '┴', '├', '└', '┬', '─', '┌', '╶'].includes(layout?.i),
 							],
 							roomOpen: true,
 
