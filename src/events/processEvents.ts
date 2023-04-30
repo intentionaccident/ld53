@@ -35,18 +35,11 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 				continue;
 			} case GameEventType.RotateIntersection: {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
-				const previousTop = room.data.topOpen;
 				if (event.clockwise) {
-					room.data.topOpen = room.data.leftOpen;
-					room.data.leftOpen = room.data.bottomOpen;
-					room.data.bottomOpen = room.data.rightOpen;
-					room.data.rightOpen = previousTop;
-				} else {
-					room.data.topOpen = room.data.rightOpen;
-					room.data.rightOpen = room.data.bottomOpen;
-					room.data.bottomOpen = room.data.leftOpen;
-					room.data.leftOpen = previousTop;
+					room.data.intersectionStates.push(room.data.intersectionStates.shift())
+					return
 				}
+				room.data.intersectionStates.unshift(room.data.intersectionStates.pop())
 				continue
 			} case GameEventType.FeatureClicked: {
 				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
@@ -77,6 +70,26 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 						room.data.rightPipeCapacity = room.data.rightPipeCapacity > 0 ? 0 : 5
 						continue
 					} case RoomEditTarget.Intersection: {
+						let state = room.data.intersectionStates.filter(s => s).length
+						const bar = room.data.intersectionStates[0] !== room.data.intersectionStates[1]
+						if (event.edit.reverse) {
+							if (state === 3) {
+								room.data.intersectionStates = [true, false, true, false]
+								continue
+							}
+
+							if (state !== 2 || !bar) {
+								state = (state + 4) % 5
+							}
+						} else {
+							if (state === 2 && !bar) {
+								room.data.intersectionStates = [true, false, true, false]
+								continue
+							}
+							state = (state + 1) % 5
+						}
+
+						room.data.intersectionStates = [...Array(4)].map((_, i) => i < state)
 						continue
 					} case RoomEditTarget.Feature: {
 						continue

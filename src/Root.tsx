@@ -47,10 +47,12 @@ export const ship: Ship = {
 					rightPipe: 0,
 					rightPipeCapacity: ['+', '-'].includes(layout?.p) ? 5 : 0,
 
-					topOpen: ['┼', '┤', '┴', '┘', '├', '│', '└', '╵'].includes(layout?.i),
-					bottomOpen: ['┼', '┤', '├', '│', '┬', '┐', '┌', '╷'].includes(layout?.i),
-					leftOpen: ['┼', '┤', '┴', '┘', '┬', '┐', '─', '╴'].includes(layout?.i),
-					rightOpen: ['┼', '┴', '├', '└', '┬', '─', '┌', '╶'].includes(layout?.i),
+					intersectionStates: [
+						['┼', '┤', '┴', '┘', '├', '│', '└', '╵'].includes(layout?.i),
+						['┼', '┤', '├', '│', '┬', '┐', '┌', '╷'].includes(layout?.i),
+						['┼', '┤', '┴', '┘', '┬', '┐', '─', '╴'].includes(layout?.i),
+						['┼', '┴', '├', '└', '┬', '─', '┌', '╶'].includes(layout?.i),
+					],
 					roomOpen: true,
 
 					feature: ({

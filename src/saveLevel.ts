@@ -1,26 +1,27 @@
-import {Ship} from "./types/Ship";
-import {Simulate} from "react-dom/test-utils";
+import { Ship } from "./types/Ship";
+import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
 export function saveLevel(ship: Ship): string {
-	function toChar(up: boolean, left: boolean, down: boolean, right: boolean) {
-			if (up && left && down && right) return '┼';
-			if (up && left && down && !right) return '┤';
-			if (up && left && !down && right) return '┴';
-			if (up && left && !down && !right) return '┘';
-			if (up && !left && down && right) return '├';
-			if (up && !left && down && !right) return '│';
-			if (up && !left && !down && right) return '└';
-			if (up && !left && !down && !right) return '╵';
-			if (!up && left && down && right) return '┬';
-			if (!up && left && down && !right) return '┐';
-			if (!up && left && !down && right) return '─';
-			if (!up && left && !down && !right) return '╴';
-			if (!up && !left && down && right) return '┌';
-			if (!up && !left && down && !right) return '╷';
-			if (!up && !left && !down && right) return '╶';
-			if (!up && !left && !down && !right) return undefined;
-			console.error('Unreachable');
+	function toChar(intersectionStates: boolean[]) {
+		const [up, right, down, left] = intersectionStates;
+		if (up && left && down && right) return '┼';
+		if (up && left && down && !right) return '┤';
+		if (up && left && !down && right) return '┴';
+		if (up && left && !down && !right) return '┘';
+		if (up && !left && down && right) return '├';
+		if (up && !left && down && !right) return '│';
+		if (up && !left && !down && right) return '└';
+		if (up && !left && !down && !right) return '╵';
+		if (!up && left && down && right) return '┬';
+		if (!up && left && down && !right) return '┐';
+		if (!up && left && !down && right) return '─';
+		if (!up && left && !down && !right) return '╴';
+		if (!up && !left && down && right) return '┌';
+		if (!up && !left && down && !right) return '╷';
+		if (!up && !left && !down && right) return '╶';
+		if (!up && !left && !down && !right) return undefined;
+		console.error('Unreachable');
 	}
 
 	return 'export const shipLayout: RoomLayout[][] = ' + JSON.stringify(ship.roomHandles.map(rows =>
@@ -48,7 +49,7 @@ export function saveLevel(ship: Ship): string {
 			return d.hidden
 				? null
 				: {
-					i: toChar(d.topOpen, d.leftOpen, d.bottomOpen, d.rightOpen),
+					i: toChar(d.intersectionStates),
 					f: f,
 					p: p
 				};

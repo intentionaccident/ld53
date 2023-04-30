@@ -7,10 +7,8 @@ export interface Room {
 	rightPipe: number;
 	rightPipeCapacity: number;
 
-	topOpen: boolean;
-	bottomOpen: boolean;
-	leftOpen: boolean;
-	rightOpen: boolean;
+	intersectionStates: boolean[]
+
 	roomOpen: boolean;
 
 	feature: RoomFeature;
