@@ -3,6 +3,7 @@ import { SINK_REQUEST_TIMEOUT } from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
+import {saveLevel} from "../saveLevel";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -21,6 +22,9 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
 					ship.roomHandles[y][x].data.bottomPipe = 0;
 				}
 			}
+			return
+		} case 's': {
+			console.log(saveLevel(ship));
 			return
 		}
 	}

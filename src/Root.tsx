@@ -90,7 +90,6 @@ export function Root() {
 	const [landingGearFuelValue, setLandingGearFuel] = useState(0);
 
 	useEffect(() => {
-		console.log(saveLevel(ship));
 		const keyDownListener = (event) => {
 			ship.eventQueue.push({ type: GameEventType.KeyPressed, key: event.key });
 		};
