@@ -22,7 +22,6 @@ import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 
 export const Game = () => {
 	const [gloopAmountValue, setGloopAmount] = React.useState(100);
-	const [landingGearFuelValue, setLandingGearFuel] = React.useState(0);
 	const [ship, setShip] = React.useState<Ship>(null);
 
 	const { assets } = React.useContext(AssetContext);
@@ -33,8 +32,6 @@ export const Game = () => {
 
 		const ship: Ship = {
 			gloopAmount: 100,
-			landingGearFuel: 0,
-			requiredLandingGearFuel: 50,
 			eventQueue: [],
 			roomHandles: shipLayout.map((layoutRow, y) =>
 				layoutRow.map((layout, x) => {
@@ -96,7 +93,7 @@ export const Game = () => {
 
 			if (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
 				elapsedTimeBetweenRoomUpdate = 0;
-				updateRooms(delta, ship, setGloopAmount, setLandingGearFuel)
+				updateRooms(delta, ship, setGloopAmount)
 			}
 
 			for (const room of roomHandlesDrawQueue)
@@ -115,8 +112,6 @@ export const Game = () => {
 		<PixiRoot />
 		<UIRoot
 			gloopAmount={gloopAmountValue}
-			landingGearFuel={landingGearFuelValue}
-			requiredLandingGearFuel={ship?.requiredLandingGearFuel}
 		/>
 	</>
 }

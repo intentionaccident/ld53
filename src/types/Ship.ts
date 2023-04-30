@@ -5,8 +5,6 @@ import {ProgressBar} from "./ProgressBar";
 
 export interface Ship {
 	gloopAmount: number;
-	landingGearFuel: number;
-	requiredLandingGearFuel: number;
 	roomHandles: RoomHandle[][];
 	eventQueue: GameEvent[];
 	graphics: {
