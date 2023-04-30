@@ -42,7 +42,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, clockwise: true, coord: room.coordinate });
 	});
 
-	room.graphics.verticalPipe.root.on('mousedown', (event) => {
+	room.graphics.verticalPipe.base.root.on('mousedown', (event) => {
 		if (!event.ctrlKey) {
 			return;
 		}
@@ -56,7 +56,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			}
 		});
 	});
-	room.graphics.horizontalPipe.root.on('mousedown', (event) => {
+	room.graphics.horizontalPipe.base.root.on('mousedown', (event) => {
 		if (!event.ctrlKey) {
 			return;
 		}

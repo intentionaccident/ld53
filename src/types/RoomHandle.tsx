@@ -21,8 +21,14 @@ export interface RoomHandle {
 			clampsRoot: PIXI.Container
 			interactive: PIXI.Sprite
 		}
-		verticalPipe: DualRender;
-		horizontalPipe: DualRender;
+		verticalPipe: {
+			base: DualRender
+			animation: PIXI.AnimatedSprite
+		}
+		horizontalPipe: {
+			base: DualRender
+			animation: PIXI.AnimatedSprite
+		}
 		features: PIXI.Graphics;
 	};
 }

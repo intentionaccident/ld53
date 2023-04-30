@@ -37,8 +37,13 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	verticalPipe.sprite.x = -INTERSECTION_RADIUS * 3 * SLANTEDNESS - INTERSECTION_RADIUS / 2
 	verticalPipe.sprite.y = INTERSECTION_RADIUS;
 	const horizontalPipe = createDualRender(assetLibrary[AssetNames.PipeHorizontalEmpty].asset)
-	horizontalPipe.sprite.x = INTERSECTION_RADIUS - INTERSECTION_RADIUS / 2 * SLANTEDNESS
-	horizontalPipe.sprite.y = -INTERSECTION_RADIUS / 2;
+	const horizontalPipeAnimation = new PIXI.AnimatedSprite([
+		assetLibrary[AssetNames.PipeHorizontalAnimationFrame1].asset,
+		assetLibrary[AssetNames.PipeHorizontalAnimationFrame2].asset,
+		assetLibrary[AssetNames.PipeHorizontalAnimationFrame3].asset,
+	])
+	horizontalPipeAnimation.x = horizontalPipe.sprite.x = INTERSECTION_RADIUS - INTERSECTION_RADIUS / 2 * SLANTEDNESS
+	horizontalPipeAnimation.y = horizontalPipe.sprite.y = -INTERSECTION_RADIUS / 2;
 
 	const intersection = createDualRender(assetLibrary[AssetNames.CrossIntersection].asset)
 	intersection.sprite.x = -10;
@@ -102,8 +107,14 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	return {
 		pipes: pipeGraphics,
 		room,
-		verticalPipe,
-		horizontalPipe,
+		verticalPipe: {
+			base: verticalPipe,
+			animation: horizontalPipeAnimation,
+		},
+		horizontalPipe: {
+			base: horizontalPipe,
+			animation: horizontalPipeAnimation,
+		},
 		intersection: {
 			base: intersection,
 			clampsRoot,

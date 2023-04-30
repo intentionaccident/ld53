@@ -25,6 +25,12 @@ export enum AssetNames {
 
 	PipeHorizontalEmpty = "pipe-horizontal1",
 	PipeHorizontalFull = "pipe-horizontal2",
+	PipeHorizontalAnimationFrame1 = "pipe-horizontal3",
+	PipeHorizontalAnimationFrame2 = "pipe-horizontal4",
+	PipeHorizontalAnimationFrame3 = "pipe-horizontal5",
 	PipeVerticalEmpty = "pipe-vertical1",
 	PipeVerticalFull = "pipe-vertical2",
+	PipeVerticalAnimationFrame1 = "pipe-vertical3",
+	PipeVerticalAnimationFrame2 = "pipe-vertical4",
+	PipeVerticalAnimationFrame3 = "pipe-vertical5",
 }

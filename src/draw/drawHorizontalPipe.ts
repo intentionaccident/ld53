@@ -5,13 +5,13 @@ import { RoomHandle } from "../types/RoomHandle";
 import { getPipeColor } from "./getPipeColor";
 
 export function drawHorizontalPipe(room: RoomHandle, assetLibrary: AssetLibrary) {
-	room.graphics.horizontalPipe.sprite.texture
+	room.graphics.horizontalPipe.base.sprite.texture
 		= room.data.rightPipeFramesSinceWater < 2
 			? assetLibrary[AssetNames.PipeHorizontalFull].asset
 			: assetLibrary[AssetNames.PipeHorizontalEmpty].asset
-	room.graphics.horizontalPipe.sprite.visible = room.data.rightPipeCapacity > 0;
+	room.graphics.horizontalPipe.base.sprite.visible = room.data.rightPipeCapacity > 0;
 
-	const graphics = room.graphics.horizontalPipe.primitive;
+	const graphics = room.graphics.horizontalPipe.base.primitive;
 
 	graphics.clear();
 
