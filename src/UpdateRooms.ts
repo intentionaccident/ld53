@@ -66,7 +66,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y,
 								pipe: 'bottomPipe',
 								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: !outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Bottom]
+								isOpen: !outOfBounds(x + 1, y) && previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Bottom]
 							},
 							// Right-side right
 							{
@@ -74,7 +74,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y,
 								pipe: 'rightPipe',
 								pipeCapacity: 'rightPipeCapacity',
-								isOpen: !outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Right]
+								isOpen: !outOfBounds(x + 1, y) && previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Right]
 							},
 							// Right-side up
 							{
@@ -82,7 +82,7 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 								y: y - 1,
 								pipe: 'bottomPipe',
 								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: !outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Top]
+								isOpen: !outOfBounds(x + 1, y) && previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Top]
 							},
 						] : [
 							// Top-side left
