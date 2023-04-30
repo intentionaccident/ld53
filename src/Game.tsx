@@ -56,7 +56,9 @@ export const Game = () => {
 							],
 							roomOpen: true,
 
-							feature: createFeature(layout?.f)
+							feature: createFeature(layout?.f),
+							bottomPipeReceivedThisFrame: false,
+							rightPipeReceivedThisFrame: false
 						},
 						graphics
 					} as RoomHandle;

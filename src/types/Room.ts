@@ -12,4 +12,6 @@ export interface Room {
 	roomOpen: boolean;
 
 	feature: RoomFeature;
+	bottomPipeReceivedThisFrame: boolean;
+	rightPipeReceivedThisFrame: boolean;
 }

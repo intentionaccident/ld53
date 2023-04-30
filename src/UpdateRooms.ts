@@ -78,7 +78,7 @@ export function updateRooms(ship: Ship) {
 
 			for (let [pipe, pipeCapacity] of [['rightPipe', 'rightPipeCapacity'], ['bottomPipe', 'bottomPipeCapacity']]) {
 				console.assert(previous[y][x][pipe] <= previous[y][x][pipeCapacity]);
-				if (previous[y][x][pipe] > 0) {
+				if (previous[y][x][pipe] > 0 && !ship.roomHandles[y][x].data[pipe + 'ReceivedThisFrame']) {
 					let candidates = [];
 
 					if (pipe === 'rightPipe') {
@@ -227,6 +227,7 @@ export function updateRooms(ship: Ship) {
 						);
 						const candidate = candidates[Math.floor(Math.random() * candidates.length)];
 						ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] += 1;
+						ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe + 'ReceivedThisFrame'] = true;
 						ship.roomHandles[y][x].data[pipe] -= 1;
 					}
 				}
@@ -246,6 +247,7 @@ export function updateRooms(ship: Ship) {
 							(a, b) => candidatePressure(a) - candidatePressure(b)
 						);
 						ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe] += 1;
+						ship.roomHandles[candidates[0].y][candidates[0].x].data[candidates[0].pipe + 'ReceivedThisFrame'] = true;
 						gloopLeft -= 1;
 						feature.storage -= 1;
 					}
@@ -260,6 +262,7 @@ export function updateRooms(ship: Ship) {
 						candidates = candidates.filter(candidate =>
 							!outOfBounds(candidate.x, candidate.y)
 							&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
+							&& !ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe + 'UpdatedThisFrame']
 						);
 						if (candidates.length > 0) {
 							candidates = candidates.sort(
@@ -294,4 +297,10 @@ export function updateRooms(ship: Ship) {
 				}
 			}
 		}
+
+	for (let y = 0; y < ship.roomHandles.length; y++)
+	for (let x = 0; x < ship.roomHandles[y].length; x++) {
+		ship.roomHandles[y][x].data.bottomPipeReceivedThisFrame = false;
+		ship.roomHandles[y][x].data.rightPipeReceivedThisFrame = false;
+	}
 }
