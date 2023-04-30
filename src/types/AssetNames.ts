@@ -1,4 +1,5 @@
 
 export enum AssetNames {
-	Template = "template"
+	Template = "template",
+	IntersectionSingle = "intersection1",
 }

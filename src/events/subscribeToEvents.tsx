@@ -4,7 +4,7 @@ import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 import { Ship } from "../types/Ship";
 
 export function subscribeToEvents(ship: Ship, room: RoomHandle) {
-	room.graphics.intersection.on('rightdown', (event) => {
+	room.graphics.intersection.root.on('rightdown', (event) => {
 		if (event.ctrlKey) {
 			ship.eventQueue.push({
 				type: GameEventType.RoomEdit, coord: room.coordinate, edit: {
@@ -16,7 +16,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		}
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, coord: room.coordinate });
 	});
-	room.graphics.intersection.on('mousedown', (event) => {
+	room.graphics.intersection.root.on('mousedown', (event) => {
 		if (event.button !== 0) {
 			return
 		}
