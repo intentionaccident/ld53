@@ -1,11 +1,12 @@
 import { useRef, useEffect } from "react";
 import * as React from "react";
-import * as PIXI from 'pixi.js'
+import { AppContext } from "./AppContext";
 
-export const PixiRoot = (props: { app: PIXI.Application }) => {
+export const PixiRoot = () => {
+	const { app } = React.useContext(AppContext)
 	const ref = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		const view = props.app.view as any as Node;
+		const view = app.view as any as Node;
 		view.addEventListener('contextmenu', (event) => {
 			event.preventDefault();
 		});

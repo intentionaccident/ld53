@@ -2,12 +2,17 @@ import * as PIXI from "pixi.js";
 import { RoomHandle } from "../types/RoomHandle";
 import { INTERSECTION_RADIUS, SLANT, TILE_HEIGHT, TILE_WIDTH } from "../constants";
 import { Ship } from "../types/Ship";
+import { AssetLibrary } from "../types/AssetLibrary";
+import { AssetNames } from "../types/AssetNames";
 
-export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics']): RoomHandle['graphics'] {
+export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], assetLibrary: AssetLibrary): RoomHandle['graphics'] {
 	const roomGraphics = new PIXI.Graphics();
-	roomGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y;
-	roomGraphics.y = TILE_HEIGHT * coord.y;
-	graphics.background.addChild(roomGraphics);
+	console.log(assetLibrary)
+	const roomSprite = new PIXI.Sprite(assetLibrary[AssetNames.Template].asset)
+	roomSprite.x = roomGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y;
+	roomSprite.y = roomGraphics.y = TILE_HEIGHT * coord.y;
+	roomGraphics.visible = false
+	graphics.background.addChild(roomGraphics, roomSprite);
 
 	const pipeGraphics = new PIXI.Container();
 	graphics.foreground.addChild(pipeGraphics);

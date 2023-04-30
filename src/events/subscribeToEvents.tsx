@@ -3,7 +3,7 @@ import { GameEventType } from "./types/GameEventType";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 import { Ship } from "../types/Ship";
 
-export function subscribeToEvent(ship: Ship, room: RoomHandle) {
+export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 	room.graphics.intersection.on('rightdown', (event) => {
 		if (event.ctrlKey) {
 			ship.eventQueue.push({

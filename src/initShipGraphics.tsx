@@ -1,9 +1,8 @@
 import * as PIXI from "pixi.js";
 import { Ship } from "./types/Ship";
-import { app } from "./Root";
-import {ProgressBar} from "./types/ProgressBar";
+import { ProgressBar } from "./types/ProgressBar";
 
-export function initShipGraphics(): Ship['graphics'] {
+export function initShipGraphics(app: PIXI.Application): Ship['graphics'] {
 	const shipContainer = new PIXI.Container();
 	shipContainer.x = 64 + 32;
 	shipContainer.y = 16;
