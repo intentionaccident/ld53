@@ -15,8 +15,8 @@ export interface RoomHandle {
 		room: DualRender
 		pipes: PIXI.Container;
 		intersection: DualRender
-		verticalPipe: PIXI.Graphics;
-		horizontalPipe: PIXI.Graphics;
+		verticalPipe: DualRender;
+		horizontalPipe: DualRender;
 		features: PIXI.Graphics;
 	};
 }

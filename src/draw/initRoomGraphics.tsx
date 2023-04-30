@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { DualRender, RoomHandle } from "../types/RoomHandle";
-import { INTERSECTION_RADIUS, SLANT, TILE_HEIGHT, TILE_WIDTH } from "../constants";
+import { INTERSECTION_RADIUS, SLANT, SLANTEDNESS, TILE_HEIGHT, TILE_WIDTH } from "../constants";
 import { Ship } from "../types/Ship";
 import { AssetLibrary } from "../types/AssetLibrary";
 import { AssetNames } from "../types/AssetNames";
@@ -28,36 +28,43 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	pipeGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y + TILE_WIDTH / 2 - SLANT / 2;
 	pipeGraphics.y = TILE_HEIGHT * coord.y + TILE_HEIGHT / 2;
 
-	const verticalPipe = new PIXI.Graphics();
-	const horizontalPipe = new PIXI.Graphics();
+	const verticalPipe = createDualRender(assetLibrary[AssetNames.PipeVerticalEmpty].asset)
+	verticalPipe.sprite.x = -INTERSECTION_RADIUS * 3 * SLANTEDNESS - INTERSECTION_RADIUS / 2
+	verticalPipe.sprite.y = INTERSECTION_RADIUS;
+	const horizontalPipe = createDualRender(assetLibrary[AssetNames.PipeHorizontalEmpty].asset)
+	horizontalPipe.sprite.x = INTERSECTION_RADIUS - INTERSECTION_RADIUS / 2 * SLANTEDNESS
+	horizontalPipe.sprite.y = -INTERSECTION_RADIUS / 2;
 
 	const intersection = createDualRender(assetLibrary[AssetNames.IntersectionSingle].asset)
+	intersection.sprite.x = -INTERSECTION_RADIUS;
+	intersection.sprite.y = -INTERSECTION_RADIUS;
+
 	const feature = new PIXI.Graphics();
 	pipeGraphics.addChild(
 		feature,
-		verticalPipe,
-		horizontalPipe,
-		intersection.root
+		verticalPipe.root,
+		horizontalPipe.root,
+		intersection.root,
 	);
 
 	intersection.sprite.interactive = true;
 	feature.interactive = true;
 	feature.cursor = 'pointer';
-	verticalPipe.hitArea = new PIXI.Polygon([
+	verticalPipe.root.hitArea = new PIXI.Polygon([
 		-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
 		INTERSECTION_RADIUS, INTERSECTION_RADIUS,
 		INTERSECTION_RADIUS - SLANT, TILE_HEIGHT - INTERSECTION_RADIUS,
 		-INTERSECTION_RADIUS - SLANT, TILE_HEIGHT - INTERSECTION_RADIUS,
 	]);
-	verticalPipe.interactive = true;
+	verticalPipe.root.interactive = true;
 
-	horizontalPipe.hitArea = new PIXI.Polygon([
+	horizontalPipe.root.hitArea = new PIXI.Polygon([
 		INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
 		TILE_WIDTH - INTERSECTION_RADIUS, -INTERSECTION_RADIUS,
 		TILE_WIDTH - INTERSECTION_RADIUS, INTERSECTION_RADIUS,
 		INTERSECTION_RADIUS, INTERSECTION_RADIUS,
 	]);
-	horizontalPipe.interactive = true;
+	horizontalPipe.root.interactive = true;
 
 	return {
 		pipes: pipeGraphics,

@@ -1,23 +1,24 @@
 import * as React from "react"
 import * as PIXI from "pixi.js";
-import {PixiRoot} from "./PixiRoot"
-import {UIRoot} from "./UIRoot"
-import {updateRooms} from "./UpdateRooms"
-import {DEFAULT_PIPE_CAPACITY, ROOM_UPDATE_INTERVAL} from "./constants"
-import {drawRoom} from "./draw/drawRoom"
-import {drawRoomBackground} from "./draw/drawRoomBackground"
-import {initRoomGraphics} from "./draw/initRoomGraphics"
-import {processEvents} from "./events/processEvents"
-import {GameEventType} from "./events/types/GameEventType"
-import {initShipGraphics} from "./initShipGraphics"
-import {shipLayout} from "./shipLayout"
-import {RoomHandle} from "./types/RoomHandle"
-import {Ship} from "./types/Ship"
-import {setRoomVisibility} from "./utils/setRoomVisibility"
-import {subscribeToEvents} from "./events/subscribeToEvents"
-import {AssetContext} from "./AssetContext"
-import {AppContext} from "./AppContext";
-import {createFeature} from "./createFeature";
+import { AppContext } from "./AppContext";
+import { AssetContext } from "./AssetContext";
+import { PixiRoot } from "./PixiRoot";
+import { UIRoot } from "./UIRoot";
+import { updateRooms } from "./UpdateRooms";
+import { DEFAULT_PIPE_CAPACITY, ROOM_UPDATE_INTERVAL } from "./constants";
+import { createFeature } from "./createFeature";
+import { drawRoom } from "./draw/drawRoom";
+import { drawRoomBackground } from "./draw/drawRoomBackground";
+import { initRoomGraphics } from "./draw/initRoomGraphics";
+import { processEvents } from "./events/processEvents";
+import { subscribeToEvents } from "./events/subscribeToEvents";
+import { GameEventType } from "./events/types/GameEventType";
+import { initShipGraphics } from "./initShipGraphics";
+import { shipLayout } from "./shipLayout";
+import { RoomHandle } from "./types/RoomHandle";
+import { Ship } from "./types/Ship";
+import { setRoomVisibility } from "./utils/setRoomVisibility";
+import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 
 export const Game = () => {
 	const [gloopAmountValue, setGloopAmount] = React.useState(100);
@@ -66,6 +67,7 @@ export const Game = () => {
 					if (hidden) {
 						setRoomVisibility(room, false)
 					}
+					updateIntersectionTexture(room, assets)
 					return room
 				})
 			),
@@ -98,7 +100,7 @@ export const Game = () => {
 			}
 
 			for (const room of roomHandlesDrawQueue)
-				drawRoom(room)
+				drawRoom(room, assets)
 		};
 
 		app.ticker.add(gameLoop);
@@ -118,3 +120,4 @@ export const Game = () => {
 		/>
 	</>
 }
+
