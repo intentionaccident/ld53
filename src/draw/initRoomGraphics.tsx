@@ -45,7 +45,7 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	intersection.sprite.y = -8;
 
 	const clampsRoot = new PIXI.Container()
-	intersection.root.addChild(clampsRoot)
+	intersection.sprite.addChild(clampsRoot)
 	const clamps = [
 		AssetNames.ClampUp,
 		AssetNames.ClampRight,
@@ -53,12 +53,16 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		AssetNames.ClampLeft
 	].map(clamp => {
 		const clampSprite = new PIXI.Sprite(assetLibrary[clamp].asset)
+		clampSprite.x = -1;
+		clampSprite.y = -1;
 		clampsRoot.addChild(clampSprite)
 		return clampSprite
 	})
 
 	const interactiveIntersection = new PIXI.Sprite(assetLibrary[AssetNames.InteractiveIntersection].asset)
-	intersection.root.addChild(interactiveIntersection)
+	interactiveIntersection.x = 5;
+	interactiveIntersection.y = 5;
+	intersection.sprite.addChild(interactiveIntersection)
 
 	const feature = new PIXI.Graphics();
 	pipeGraphics.addChild(
