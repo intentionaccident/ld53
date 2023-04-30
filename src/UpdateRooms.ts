@@ -23,6 +23,52 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 		return y < 0 || y >= ship.roomHandles.length || x < 0 || x >= ship.roomHandles[y].length;
 	}
 
+	type PipeCandidate = {
+		x: number, y: number, pipe: 'bottomPipe' | 'rightPipe', pipeCapacity: 'bottomPipeCapacity' | 'rightPipeCapacity'
+	}
+
+	function openIntersectionPipes(x: number, y: number): PipeCandidate[] {
+		const candidates = [];
+		// Bottom
+		if (previous[y][x].intersectionStates[IntersectionDirection.Bottom]) {
+			candidates.push({
+				x: x,
+				y: y,
+				pipe: 'bottomPipe',
+				pipeCapacity: 'bottomPipeCapacity'
+			});
+		}
+		// Left
+		if (previous[y][x].intersectionStates[IntersectionDirection.Left]) {
+			candidates.push({
+				x: x - 1,
+				y: y,
+				pipe: 'rightPipe',
+				pipeCapacity: 'rightPipeCapacity',
+			});
+		}
+		// Top
+		if (previous[y][x].intersectionStates[IntersectionDirection.Top]) {
+			candidates.push({
+				x: x,
+				y: y - 1,
+				pipe: 'bottomPipe',
+				pipeCapacity: 'bottomPipeCapacity'
+			});
+		}
+		// Right
+		if (previous[y][x].intersectionStates[IntersectionDirection.Right]) {
+			candidates.push({
+				x: x,
+				y: y,
+				pipe: 'rightPipe',
+				pipeCapacity: 'rightPipeCapacity'
+			});
+		}
+
+		return candidates;
+	}
+
 	for (let y = 0; y < ship.roomHandles.length; y++)
 		for (let x = 0; x < ship.roomHandles[y].length; x++) {
 			ship.roomHandles[y][x].data = {...previous[y][x]};
@@ -189,45 +235,11 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 			const feature = ship.roomHandles[y][x].data.feature;
 			if (feature.type === 'source' || (feature.type === 'sink' && feature.state === 'releasing')) {
 				let gloopLeft = Math.min(feature.storage, feature.releaseSpeed);
-				let candidates = [
-					// Bottom
-					{
-						x: x,
-						y: y,
-						pipe: 'bottomPipe',
-						pipeCapacity: 'bottomPipeCapacity',
-						isOpen: previous[y][x].intersectionStates[IntersectionDirection.Bottom]
-					},
-					// Left
-					{
-						x: x - 1,
-						y: y,
-						pipe: 'rightPipe',
-						pipeCapacity: 'rightPipeCapacity',
-						isOpen: previous[y][x].intersectionStates[IntersectionDirection.Left]
-					},
-					// Top
-					{
-						x: x,
-						y: y - 1,
-						pipe: 'bottomPipe',
-						pipeCapacity: 'bottomPipeCapacity',
-						isOpen: previous[y][x].intersectionStates[IntersectionDirection.Top]
-					},
-					// Right
-					{
-						x: x,
-						y: y,
-						pipe: 'rightPipe',
-						pipeCapacity: 'rightPipeCapacity',
-						isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right]
-					},
-				];
+				let candidates = openIntersectionPipes(x, y);
 				while (candidates.length > 0 && gloopLeft > 0) {
 					candidates = candidates.filter(candidate =>
 						!outOfBounds(candidate.x, candidate.y)
 						&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] < ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity]
-						&& candidate.isOpen
 					);
 					if (candidates.length > 0) {
 						candidates = candidates.sort(
@@ -243,45 +255,11 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 			if (feature.type === 'sink') {
 				if (feature.state === 'requesting') {
 					let gloopToConsume = 1;
-					let candidates = [
-						// Bottom
-						{
-							x: x,
-							y: y,
-							pipe: 'bottomPipe',
-							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x].intersectionStates[IntersectionDirection.Bottom]
-						},
-						// Left
-						{
-							x: x - 1,
-							y: y,
-							pipe: 'rightPipe',
-							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y][x].intersectionStates[IntersectionDirection.Left]
-						},
-						// Top
-						{
-							x: x,
-							y: y - 1,
-							pipe: 'bottomPipe',
-							pipeCapacity: 'bottomPipeCapacity',
-							isOpen: previous[y][x].intersectionStates[IntersectionDirection.Top]
-						},
-						// Right
-						{
-							x: x,
-							y: y,
-							pipe: 'rightPipe',
-							pipeCapacity: 'rightPipeCapacity',
-							isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right]
-						},
-					];
+					let candidates = openIntersectionPipes(x, y);
 					while (candidates.length > 0 && gloopToConsume > 0) {
 						candidates = candidates.filter(candidate =>
 							!outOfBounds(candidate.x, candidate.y)
 							&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] > 0
-							&& candidate.isOpen
 						);
 						if (candidates.length > 0) {
 							candidates = candidates.sort(
