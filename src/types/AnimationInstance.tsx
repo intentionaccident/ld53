@@ -3,6 +3,6 @@ import { Pipe } from "../Pipe";
 
 export interface AnimationInstance {
 	template: AnimationTemplate;
-	overflow: number;
+	flow: number;
 	activePipes: Pipe[];
 }

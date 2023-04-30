@@ -7,7 +7,7 @@ import { saveLevel } from "../saveLevel";
 import { createFeature } from "../createFeature";
 import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
 import { AssetLibrary } from "../types/AssetLibrary";
-import {dijkstraGraph, dijkstraPath} from "../dijkstraGraph";
+import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -46,8 +46,8 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
 		} case 'd': {
 			const source = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'source')[0];
 			const sink = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'sink' && r.data.feature.subtype === 'reactor')[0];
-			const graph = dijkstraGraph(ship.roomHandles, {x: source.coordinate.x, y: source.coordinate.y});
-			const path = dijkstraPath(graph, {x: sink.coordinate.x, y: sink.coordinate.y});
+			const graph = dijkstraGraph(ship.roomHandles, { x: source.coordinate.x, y: source.coordinate.y });
+			const path = dijkstraPath(graph, { x: sink.coordinate.x, y: sink.coordinate.y });
 			ship.eventQueue.push({
 				type: GameEventType.FlushPipe,
 				animationTemplate: {
@@ -152,7 +152,7 @@ export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) 
 				ship.animationQueue.push({
 					template: event.animationTemplate,
 					activePipes: [],
-					overflow: 0
+					flow: 0
 				})
 				continue
 			} default: {

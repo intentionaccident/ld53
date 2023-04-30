@@ -106,8 +106,8 @@ export const Game = () => {
 			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
 				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
 				for (const animation of ship.animationQueue) {
-					if (animation.activePipes.length < animation.template.path.length) {
-						const newPipe = animation.template.path[animation.activePipes.length];
+					if (animation.flow < animation.template.path.length) {
+						const newPipe = animation.template.path[animation.flow];
 						animation.activePipes.push(newPipe)
 						const room = ship.roomHandles[newPipe.y][newPipe.x]
 						if (newPipe.vertical) {
@@ -115,11 +115,11 @@ export const Game = () => {
 						} else {
 							room.data.rightPipeFramesSinceWater = 0
 						}
-					} else {
-						animation.overflow++;
 					}
 
-					if (animation.activePipes.length + animation.overflow > animation.template.gloop) {
+					animation.flow++
+
+					if (animation.flow > animation.template.gloop) {
 						const removedPipe = animation.activePipes.shift()
 						const room = ship.roomHandles[removedPipe.y][removedPipe.x]
 						if (removedPipe.vertical) {
