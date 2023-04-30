@@ -1,4 +1,6 @@
 
 export enum RoomEditTarget {
-	Pipe
+	Pipe,
+	Intersection,
+	Feature,
 }

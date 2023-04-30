@@ -1,8 +1,8 @@
-import { Ship } from "./types/Ship";
-import { SINK_REQUEST_TIMEOUT } from "./constants";
-import { GameEventType } from "./types/events/GameEventType";
-import { KeyPressedEvent } from "./types/events/KeyPressedEvent";
-import { RoomEditTarget } from "./types/events/RoomEditTarget";
+import { Ship } from "../types/Ship";
+import { SINK_REQUEST_TIMEOUT } from "../constants";
+import { GameEventType } from "./types/GameEventType";
+import { KeyPressedEvent } from "./types/KeyPressedEvent";
+import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -75,6 +75,10 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 							continue
 						}
 						room.data.rightPipeCapacity = room.data.rightPipeCapacity > 0 ? 0 : 5
+						continue
+					} case RoomEditTarget.Intersection: {
+						continue
+					} case RoomEditTarget.Feature: {
 						continue
 					}
 				}

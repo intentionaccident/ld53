@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { GameEventType } from "./GameEventType";
+import { GameEventType } from "../GameEventType";
 import { RoomEdit } from "./RoomEdit";
 
 export interface RoomEditEvent {
