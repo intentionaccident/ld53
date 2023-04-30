@@ -43,7 +43,7 @@ export function saveLevel(ship: Ship): string {
 				p = '+';
 			} else if (d.bottomPipeCapacity > 0) {
 				p = '|';
-			} else if (d.rightPipe > 0) {
+			} else if (d.rightPipeCapacity > 0) {
 				p = '-';
 			}
 			return d.hidden
