@@ -21,8 +21,9 @@ import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 
 export const Game = () => {
-	const [gloopAmountValue, setGloopAmount] = React.useState(100);
-	const [ship, setShip] = React.useState<Ship>(null);
+	const [gloopAmount, setGloopAmount] = React.useState(100);
+	const [score, setScore] = React.useState(0);
+	const [timeLeft, setTimeLeft] = React.useState(0);
 
 	const { assets } = React.useContext(AssetContext);
 	const { app } = React.useContext(AppContext);
@@ -75,8 +76,6 @@ export const Game = () => {
 			score: 0
 		}
 
-		setShip(ship);
-
 		const keyDownListener = (event) => {
 			ship.eventQueue.push({ type: GameEventType.KeyPressed, key: event.key });
 		};
@@ -91,11 +90,15 @@ export const Game = () => {
 		const gameLoop = (delta) => {
 			processEvents(ship, { setGloopAmount });
 
+			ship.timeLeft -= delta;
+			setTimeLeft(ship.timeLeft);
+			setGloopAmount(ship.gloopAmount);
+			setScore(ship.score);
 			elapsedTimeBetweenRoomUpdate += delta;
 
 			if (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
 				elapsedTimeBetweenRoomUpdate = 0;
-				updateRooms(delta, ship, setGloopAmount)
+				updateRooms(ship)
 			}
 
 			for (const room of roomHandlesDrawQueue)
@@ -113,7 +116,9 @@ export const Game = () => {
 	return <>
 		<PixiRoot />
 		<UIRoot
-			ship={ship}
+			gloopAmount={gloopAmount}
+			score={score}
+			timeLeft={timeLeft}
 		/>
 	</>
 }

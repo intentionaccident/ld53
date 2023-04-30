@@ -2,7 +2,7 @@ import {Ship} from "./types/Ship";
 import {SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
 import {IntersectionDirection} from "./types/IntersectionDirection";
 
-export function updateRooms(delta: number, ship: Ship, setGloopAmount) {
+export function updateRooms(ship: Ship) {
 	const previous = ship.roomHandles.map(row => row.map(row => row.data))
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
 	const idleSinks = sinks.filter(s => s.state === 'idle');

@@ -1,11 +1,15 @@
 import * as React from 'react'
 import styles from "./UIRoot.sass"
-import {Ship} from "./types/Ship";
 
-export const UIRoot = (props: { ship: Ship }) => {
+export const UIRoot = (props: { gloopAmount: number, score: number, timeLeft: number }) => {
+	const timeLeftMessage = props.timeLeft > 0
+		? <>
+			Gloop: {props.gloopAmount}<br/>
+			Score: {props.score}<br/>
+			Time left: {props.timeLeft}
+		</>
+		: <h1>GAME OVER!</h1>;
 	return <div className={styles.uiRoot}>
-		Gloop: {props.ship?.gloopAmount}<br/>
-		Score: {props.ship?.score}<br/>
-		Time left: {props.ship?.timeLeft}
+		{timeLeftMessage}
 	</div>
 }
