@@ -109,7 +109,7 @@ export const Game = () => {
 					if (animation.activePipes.length < animation.template.path.length) {
 						const newPipe = animation.template.path[animation.activePipes.length];
 						animation.activePipes.push(newPipe)
-						const room = ship.roomHandles[newPipe.coord.x][newPipe.coord.y]
+						const room = ship.roomHandles[newPipe.y][newPipe.x]
 						if (newPipe.vertical) {
 							room.data.bottomPipeFramesSinceWater = 0
 						} else {
@@ -121,7 +121,7 @@ export const Game = () => {
 
 					if (animation.activePipes.length + animation.overflow > animation.template.gloop) {
 						const removedPipe = animation.activePipes.shift()
-						const room = ship.roomHandles[removedPipe.coord.x][removedPipe.coord.y]
+						const room = ship.roomHandles[removedPipe.y][removedPipe.x]
 						if (removedPipe.vertical) {
 							room.data.bottomPipeFramesSinceWater = 3
 						} else {

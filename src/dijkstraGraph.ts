@@ -1,12 +1,13 @@
 import {RoomHandle} from "./types/RoomHandle";
 import {IntersectionDirection} from "./types/IntersectionDirection";
+import {Pipe} from "./Pipe";
 
-type Graph = {
+export type Graph = {
 	start: Node
 	distance: number[][],
 	previous: (Node | null)[][]
 };
-type Node = {
+export type Node = {
 	x: number,
 	y: number
 }
@@ -32,7 +33,7 @@ type Node = {
 18
 19      return dist[], prev[]
 */
-export function dijkstra(roomHandles: RoomHandle[][], start: Node): Graph {
+export function dijkstraGraph(roomHandles: RoomHandle[][], start: Node): Graph {
 	function neighbours(node: Node): Node[] {
 		function outOfBounds(node: Node): boolean {
 			return node.y < 0 || node.y >= roomHandles.length || node.x < 0 || node.x >= roomHandles[node.y].length;
@@ -94,9 +95,9 @@ export function dijkstra(roomHandles: RoomHandle[][], start: Node): Graph {
 	const previous: (Node | null)[][] = roomHandles.map(row => row.map(_ => null));
 	const queue: Node[] = [];
 	for (let y = 0; y < roomHandles.length; y++)
-	for (let x = 0; x < roomHandles[y].length; x++) {
-		queue.push({x, y});
-	}
+		for (let x = 0; x < roomHandles[y].length; x++) {
+			queue.push({x, y});
+		}
 	distance[start.y][start.x] = 0;
 	while (queue.length > 0) {
 		// u ← vertex in Q with min dist[u]
@@ -127,9 +128,9 @@ export function dijkstra(roomHandles: RoomHandle[][], start: Node): Graph {
 // 4      while u is defined:                       // Construct the shortest path with a stack S
 // 5          insert u at the beginning of S        // Push the vertex onto the stack
 // 6          u ← prev[u]                           // Traverse from target to source
-function path(graph: Graph, to: Node) {
+export function dijkstraPath(graph: Graph, to: Node) {
 	// 1  S ← empty sequence
-	const path = []
+	const path: Pipe[] = []
 	// 2  u ← target
 	let node: Node | null = to;
 	// 3  if prev[u] is defined or u = source:
@@ -140,9 +141,22 @@ function path(graph: Graph, to: Node) {
 		// 4      while u is defined:
 		while (node != null) {
 			// 5          insert u at the beginning of S
-			path.push(node);
+			const nextNode = node;
 			// 6          u ← prev[u]
 			node = graph.previous[node.y][node.x];
+			const prevNode = node;
+
+			if (prevNode != null) {
+				const nodeThatHasPipe = (
+					nextNode.y == prevNode.y - 1
+					|| nextNode.x == prevNode.x - 1
+				) ? nextNode : prevNode;
+				path.push({
+					x: nodeThatHasPipe.x,
+					y: nodeThatHasPipe.y,
+					vertical: nextNode.y != prevNode.y
+				});
+			}
 		}
 	}
 
