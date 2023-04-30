@@ -3,6 +3,10 @@ import { RoomHandle } from "../types/RoomHandle";
 import { IntersectionDirection } from "../types/IntersectionDirection";
 
 export function drawIntersection(room: RoomHandle) {
+	for (let i = 0; i < 4; i++) {
+		room.graphics.intersection.clamps[i].visible = room.data.intersectionStates[i];
+	}
+
 	const graphics = room.graphics.intersection.base.primitive;
 
 	graphics.clear();
