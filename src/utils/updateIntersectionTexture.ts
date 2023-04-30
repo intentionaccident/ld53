@@ -10,25 +10,30 @@ const textureMap = {
 
 export function updateIntersectionTexture(room: RoomHandle, assets: AssetLibrary) {
 	const type = room.data.intersectionStates.filter(s => s).length
-	const isBar = room.data.intersectionStates[0] === room.data.intersectionStates[1]
+	const firstConnection = room.data.intersectionStates.indexOf(true);
 	room.graphics.intersection.base.sprite.visible = true
 	switch (type) {
 		case 0:
 			room.graphics.intersection.base.sprite.visible = false
 			return
 		case 1:
+			room.graphics.intersection.base.sprite.texture = assets[textureMap[type][firstConnection]].asset
+			return
 		case 3:
-			console.log(room.data.intersectionStates.indexOf(true))
-			room.graphics.intersection.base.sprite.texture = assets[textureMap[type][room.data.intersectionStates.indexOf(true)]].asset
+			room.graphics.intersection.base.sprite.texture = assets[textureMap[type][room.data.intersectionStates.indexOf(false)]].asset
 			return
 		case 2:
-			if (isBar) {
+			if (room.data.intersectionStates[(firstConnection + 2) % room.data.intersectionStates.length]) {
 				room.graphics.intersection.base.sprite.texture = room.data.intersectionStates[0]
 					? assets[AssetNames.BarIntersectionUp].asset
 					: assets[AssetNames.BarIntersectionRight].asset
 				return
 			}
-			room.graphics.intersection.base.sprite.texture = assets[textureMap[type][room.data.intersectionStates.indexOf(true)]].asset
+			if (!firstConnection && room.data.intersectionStates[3]) {
+				room.graphics.intersection.base.sprite.texture = assets[AssetNames.BendIntersectionLeft].asset
+				return
+			}
+			room.graphics.intersection.base.sprite.texture = assets[textureMap[type][firstConnection]].asset
 			return
 		case 4:
 			room.graphics.intersection.base.sprite.texture = assets[AssetNames.CrossIntersection].asset
