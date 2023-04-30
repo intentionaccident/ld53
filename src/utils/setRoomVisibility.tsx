@@ -1,5 +1,5 @@
 import { RoomHandle } from "../types/RoomHandle";
 
 export function setRoomVisibility(room: RoomHandle, isVisible: boolean) {
-	room.graphics.room.visible = room.graphics.pipes.visible = isVisible;
+	room.graphics.room.root.visible = room.graphics.pipes.visible = isVisible;
 }

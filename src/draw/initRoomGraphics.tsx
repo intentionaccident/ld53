@@ -6,13 +6,16 @@ import { AssetLibrary } from "../types/AssetLibrary";
 import { AssetNames } from "../types/AssetNames";
 
 export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], assetLibrary: AssetLibrary): RoomHandle['graphics'] {
-	const roomGraphics = new PIXI.Graphics();
+	const roomRoot = new PIXI.Container();
+	const roomPrimitive = new PIXI.Graphics();
 	console.log(assetLibrary)
 	const roomSprite = new PIXI.Sprite(assetLibrary[AssetNames.Template].asset)
-	roomSprite.x = roomGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y;
-	roomSprite.y = roomGraphics.y = TILE_HEIGHT * coord.y;
-	roomGraphics.visible = false
-	graphics.background.addChild(roomGraphics, roomSprite);
+	roomRoot.x = TILE_WIDTH * coord.x - SLANT * coord.y;
+	roomRoot.y = TILE_HEIGHT * coord.y;
+	roomSprite.x = -SLANT;
+	roomPrimitive.visible = false
+	graphics.background.addChild(roomRoot);
+	roomRoot.addChild(roomPrimitive, roomSprite);
 
 	const pipeGraphics = new PIXI.Container();
 	graphics.foreground.addChild(pipeGraphics);
@@ -52,7 +55,11 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 
 	return {
 		pipes: pipeGraphics,
-		room: roomGraphics,
+		room: {
+			root: roomRoot,
+			primitive: roomPrimitive,
+			texture: roomSprite,
+		},
 		verticalPipe,
 		horizontalPipe,
 		intersection,

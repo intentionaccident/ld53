@@ -6,7 +6,11 @@ export interface RoomHandle {
 	coordinate: PIXI.Point;
 	data: Room;
 	graphics: {
-		room: PIXI.Graphics;
+		room: {
+			root: PIXI.Container
+			texture: PIXI.Sprite
+			primitive: PIXI.Graphics
+		}
 		pipes: PIXI.Container;
 		intersection: PIXI.Graphics;
 		verticalPipe: PIXI.Graphics;
