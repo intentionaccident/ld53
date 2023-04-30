@@ -3,9 +3,13 @@ import { RoomHandle } from "../types/RoomHandle";
 import { IntersectionDirection } from "../types/IntersectionDirection";
 
 export function drawIntersection(room: RoomHandle) {
+	const allOn = room.data.intersectionStates.filter(s => s).length == 4;
+
 	for (let i = 0; i < 4; i++) {
-		room.graphics.intersection.clamps[i].visible = room.data.intersectionStates[i];
+		room.graphics.intersection.clamps[i].visible =
+			allOn ? false : room.data.intersectionStates[i];
 	}
+	room.graphics.intersection.interactive.visible = !allOn;
 
 	const graphics = room.graphics.intersection.base.primitive;
 
