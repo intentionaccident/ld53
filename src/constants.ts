@@ -31,3 +31,5 @@ export const SINK_RELEASE_SPEED = {
 	navigation: sinkReleaseSpeed,
 	reactor:  sinkReleaseSpeed,
 }
+
+export const DEFAULT_PIPE_CAPACITY = 5;

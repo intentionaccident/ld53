@@ -1,5 +1,5 @@
 import { Ship } from "../types/Ship";
-import { SINK_REQUEST_TIMEOUT } from "../constants";
+import {DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT} from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
@@ -70,10 +70,10 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 				switch (event.edit.target) {
 					case RoomEditTarget.Pipe: {
 						if (event.edit.vertical) {
-							room.data.bottomPipeCapacity = room.data.bottomPipeCapacity > 0 ? 0 : 5
+							room.data.bottomPipeCapacity = room.data.bottomPipeCapacity > 0 ? 0 : DEFAULT_PIPE_CAPACITY
 							continue
 						}
-						room.data.rightPipeCapacity = room.data.rightPipeCapacity > 0 ? 0 : 5
+						room.data.rightPipeCapacity = room.data.rightPipeCapacity > 0 ? 0 : DEFAULT_PIPE_CAPACITY
 						continue
 					} case RoomEditTarget.Intersection: {
 						let state = room.data.intersectionStates.filter(s => s).length
