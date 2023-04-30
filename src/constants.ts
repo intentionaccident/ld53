@@ -33,3 +33,5 @@ export const SINK_RELEASE_SPEED = {
 }
 
 export const DEFAULT_PIPE_CAPACITY = 2;
+
+export const DELIVERY_TIME_LIMIT = 5 * 60;

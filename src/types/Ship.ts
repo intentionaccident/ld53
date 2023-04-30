@@ -14,5 +14,7 @@ export interface Ship {
 		progressBar: ProgressBar;
 	},
 	currentLevel: number,
-	levelProgress: number
+	levelProgress: number,
+	score: number,
+	timeLeft: number
 }

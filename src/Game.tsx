@@ -5,7 +5,7 @@ import { AssetContext } from "./AssetContext";
 import { PixiRoot } from "./PixiRoot";
 import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
-import { DEFAULT_PIPE_CAPACITY, ROOM_UPDATE_INTERVAL } from "./constants";
+import {DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, ROOM_UPDATE_INTERVAL} from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
@@ -70,7 +70,9 @@ export const Game = () => {
 			),
 			graphics: shipGraphics,
 			currentLevel: 0,
-			levelProgress: 0
+			levelProgress: 0,
+			timeLeft: DELIVERY_TIME_LIMIT,
+			score: 0
 		}
 
 		setShip(ship);
@@ -111,7 +113,7 @@ export const Game = () => {
 	return <>
 		<PixiRoot />
 		<UIRoot
-			gloopAmount={gloopAmountValue}
+			ship={ship}
 		/>
 	</>
 }
