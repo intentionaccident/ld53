@@ -4,7 +4,8 @@ export const LINE_SIZE = 2;
 export const SLANT = 16;
 export const SLANTEDNESS = SLANT / TILE_HEIGHT;
 export const INTERSECTION_RADIUS = 8;
-export const ROOM_UPDATE_INTERVAL = 10;
+export const ROOM_UPDATE_INTERVAL = 25;
+export const ANIMATION_UPDATE_INTERVAL = 10;
 export const SINK_CAPACITY = {
 	thrusters: 15,
 	navigation: 5,
@@ -37,6 +38,5 @@ export const DEFAULT_PIPE_CAPACITY = 1;
 export const DELIVERY_TIME_LIMIT = 5 * 60;
 
 export const MAX_CONCURRENT_DIRTY_ROOMS = 2;
-export const MAX_DONE_SINKS = 9999;
 
 export const GLOOP_AMOUNT = 40;

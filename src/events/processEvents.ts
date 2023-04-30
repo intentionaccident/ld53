@@ -8,6 +8,7 @@ import { createFeature } from "../createFeature";
 import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
 import { AssetLibrary } from "../types/AssetLibrary";
 import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
+import {SinkFeature} from "../types/RoomFeature";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -81,11 +82,32 @@ export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) 
 			} case GameEventType.ActivateFeature: {
 				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
 				if (feature.type === 'source') {
-					if (ship.gloopAmount > 0) {
-						const addedAmount = Math.min(ship.gloopAmount, 10)
-						feature.storage += addedAmount;
-						ship.gloopAmount -= addedAmount;
-						hooks.setGloopAmount(ship.gloopAmount);
+					const requestingSinks = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'sink' && r.data.feature.state === 'requesting');
+					const source = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'source')[0];
+					const graph = dijkstraGraph(ship.roomHandles, {x: source.coordinate.x, y: source.coordinate.y});
+					const paths = requestingSinks.map(sink => {
+						return {
+							sink,
+							path: dijkstraPath(graph, {x: sink.coordinate.x, y: sink.coordinate.y})
+						}
+					}).filter(path => path.path.length > 0);
+					paths.sort((a, b) => a.path.length - b.path.length);
+					console.log(paths);
+					if (paths.length > 0) {
+						const sinkPath = paths[0];
+						const sink = sinkPath.sink.data.feature as SinkFeature;
+						if (ship.gloopAmount >= sink.capacity) {
+							sink.storage += sink.capacity;
+							ship.gloopAmount -= sink.capacity;
+							hooks.setGloopAmount(ship.gloopAmount);
+						}
+						ship.eventQueue.push({
+							type: GameEventType.FlushPipe,
+							animationTemplate: {
+								gloop: sink.capacity,
+								path: sinkPath.path
+							}
+						});
 					}
 				} else if (feature.type === 'sink' && feature.state === 'done') {
 					feature.state = 'releasing';

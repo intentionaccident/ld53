@@ -5,7 +5,13 @@ import { AssetContext } from "./AssetContext";
 import { PixiRoot } from "./PixiRoot";
 import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
-import { DEFAULT_PIPE_CAPACITY, DELIVERY_TIME_LIMIT, GLOOP_AMOUNT, ROOM_UPDATE_INTERVAL } from "./constants";
+import {
+	DEFAULT_PIPE_CAPACITY,
+	DELIVERY_TIME_LIMIT,
+	GLOOP_AMOUNT,
+	ANIMATION_UPDATE_INTERVAL,
+	ROOM_UPDATE_INTERVAL
+} from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
 import { drawRoomBackground } from "./draw/drawRoomBackground";
@@ -59,8 +65,6 @@ export const Game = () => {
 							roomOpen: true,
 
 							feature: createFeature(layout?.f),
-							bottomPipeReceivedThisFrame: false,
-							rightPipeReceivedThisFrame: false,
 							isDirty: false,
 							rightPipeFramesSinceWater: Number.POSITIVE_INFINITY,
 							bottomPipeFramesSinceWater: Number.POSITIVE_INFINITY,
@@ -87,6 +91,7 @@ export const Game = () => {
 			ship.eventQueue.push({ type: GameEventType.KeyPressed, key: event.key });
 		};
 
+		let elapsedTimeBetweenAnimationUpdate = 0;
 		let elapsedTimeBetweenRoomUpdate = 0;
 		const roomHandlesDrawQueue = ship.roomHandles.flat().reverse();
 
@@ -101,10 +106,11 @@ export const Game = () => {
 			setTimeLeft(ship.timeLeft);
 			setGloopAmount(ship.gloopAmount);
 			setScore(ship.score);
+			elapsedTimeBetweenAnimationUpdate += delta;
 			elapsedTimeBetweenRoomUpdate += delta;
 
-			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
-				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
+			while (elapsedTimeBetweenAnimationUpdate > ANIMATION_UPDATE_INTERVAL) {
+				elapsedTimeBetweenAnimationUpdate -= ANIMATION_UPDATE_INTERVAL;
 				for (const animation of ship.animationQueue) {
 					if (animation.flow < animation.template.path.length) {
 						const newPipe = animation.template.path[animation.flow];
@@ -130,6 +136,11 @@ export const Game = () => {
 					}
 				}
 				ship.animationQueue = ship.animationQueue.filter((animation) => animation.activePipes.length)
+			}
+
+			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
+				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
+				updateRooms(ship);
 			}
 
 			for (const room of roomHandlesDrawQueue)
