@@ -33,115 +33,144 @@ export function updateRooms(delta: number, ship: Ship, setGloopAmount, setLandin
 			for (let [pipe, pipeCapacity] of [['rightPipe', 'rightPipeCapacity'], ['bottomPipe', 'bottomPipeCapacity']]) {
 				console.assert(previous[y][x][pipe] <= previous[y][x][pipeCapacity]);
 				if (previous[y][x][pipe] > 0) {
-					let candidates =
-						pipe == 'rightPipe' ? [
+					let candidates = [];
+
+					if (pipe === 'rightPipe') {
+						// Left side
+						if (previous[y][x].intersectionStates[IntersectionDirection.Right]) {
 							// Left-side bottom
-							{
-								x: x,
-								y: y,
-								pipe: 'bottomPipe',
-								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Bottom]
-							},
+							if (previous[y][x].intersectionStates[IntersectionDirection.Bottom]) {
+								candidates.push({
+									x: x,
+									y: y,
+									pipe: 'bottomPipe',
+									pipeCapacity: 'bottomPipeCapacity',
+									isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Bottom]
+								});
+							}
 							// Left-side left
-							{
-								x: x - 1,
-								y: y,
-								pipe: 'rightPipe',
-								pipeCapacity: 'rightPipeCapacity',
-								isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Left]
-							},
+							if (previous[y][x].intersectionStates[IntersectionDirection.Left]) {
+								candidates.push({
+									x: x - 1,
+									y: y,
+									pipe: 'rightPipe',
+									pipeCapacity: 'rightPipeCapacity',
+									isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Left]
+								});
+							}
 							// Left-side up
-							{
-								x: x,
-								y: y - 1,
-								pipe: 'bottomPipe',
-								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x].intersectionStates[IntersectionDirection.Top]
-							},
+							if (previous[y][x].intersectionStates[IntersectionDirection.Top]) {
+								candidates.push({
+									x: x,
+									y: y - 1,
+									pipe: 'bottomPipe',
+									pipeCapacity: 'bottomPipeCapacity',
+								});
+							}
+						}
 
+						// Right side
+						if (!outOfBounds(x + 1, y) && previous[y][x + 1].intersectionStates[IntersectionDirection.Left]) {
 							// Right-side bottom
-							{
-								x: x + 1,
-								y: y,
-								pipe: 'bottomPipe',
-								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: !outOfBounds(x + 1, y) && previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Bottom]
-							},
+							if (previous[y][x + 1].intersectionStates[IntersectionDirection.Bottom]) {
+								candidates.push({
+									x: x + 1,
+									y: y,
+									pipe: 'bottomPipe',
+									pipeCapacity: 'bottomPipeCapacity',
+								});
+							}
 							// Right-side right
-							{
-								x: x + 1,
-								y: y,
-								pipe: 'rightPipe',
-								pipeCapacity: 'rightPipeCapacity',
-								isOpen: !outOfBounds(x + 1, y) && previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Right]
-							},
+							if (previous[y][x + 1].intersectionStates[IntersectionDirection.Right]) {
+								candidates.push({
+									x: x + 1,
+									y: y,
+									pipe: 'rightPipe',
+									pipeCapacity: 'rightPipeCapacity',
+								});
+							}
 							// Right-side up
-							{
-								x: x + 1,
-								y: y - 1,
-								pipe: 'bottomPipe',
-								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: !outOfBounds(x + 1, y) && previous[y][x].intersectionStates[IntersectionDirection.Right] && previous[y][x + 1].intersectionStates[IntersectionDirection.Top]
-							},
-						] : [
+							if (previous[y][x + 1].intersectionStates[IntersectionDirection.Top]) {
+								candidates.push({
+									x: x + 1,
+									y: y - 1,
+									pipe: 'bottomPipe',
+									pipeCapacity: 'bottomPipeCapacity',
+								});
+							}
+						}
+					} else {
+						// Top side
+						if (previous[y][x].intersectionStates[IntersectionDirection.Bottom]) {
 							// Top-side left
-							{
-								x: x - 1,
-								y: y,
-								pipe: 'rightPipe',
-								pipeCapacity: 'rightPipeCapacity',
-								isOpen: previous[y][x].intersectionStates[IntersectionDirection.Bottom] && previous[y][x].intersectionStates[IntersectionDirection.Left]
-							},
+							if (previous[y][x].intersectionStates[IntersectionDirection.Left]) {
+								candidates.push({
+									x: x - 1,
+									y: y,
+									pipe: 'rightPipe',
+									pipeCapacity: 'rightPipeCapacity'
+								});
+							}
 							// Top-side up
-							{
-								x: x,
-								y: y - 1,
-								pipe: 'bottomPipe',
-								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: previous[y][x].intersectionStates[IntersectionDirection.Bottom] && previous[y][x].intersectionStates[IntersectionDirection.Top]
-							},
+							if (previous[y][x].intersectionStates[IntersectionDirection.Top]) {
+								candidates.push({
+									x: x,
+									y: y - 1,
+									pipe: 'bottomPipe',
+									pipeCapacity: 'bottomPipeCapacity'
+								});
+							}
 							// Top-side right
-							{
-								x: x,
-								y: y,
-								pipe: 'rightPipe',
-								pipeCapacity: 'rightPipeCapacity',
-								isOpen: previous[y][x].intersectionStates[IntersectionDirection.Bottom] && previous[y][x].intersectionStates[IntersectionDirection.Right]
-							},
+							if (previous[y][x].intersectionStates[IntersectionDirection.Right]) {
+								candidates.push({
+									x: x,
+									y: y,
+									pipe: 'rightPipe',
+									pipeCapacity: 'rightPipeCapacity'
+								});
+							}
+						}
 
+						// Bottom side
+						if (!outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top]) {
 							// Bottom-side bottom
-							{
-								x: x,
-								y: y + 1,
-								pipe: 'bottomPipe',
-								pipeCapacity: 'bottomPipeCapacity',
-								isOpen: !outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Bottom]
-							},
+							if (previous[y + 1][x].intersectionStates[IntersectionDirection.Bottom]) {
+								candidates.push({
+									x: x,
+									y: y + 1,
+									pipe: 'bottomPipe',
+									pipeCapacity: 'bottomPipeCapacity',
+									isOpen: !outOfBounds(x, y + 1)
+										&& previous[y + 1][x].intersectionStates[IntersectionDirection.Top]
+										&& previous[y + 1][x].intersectionStates[IntersectionDirection.Bottom]
+								});
+							}
 							// Bottom-side left
-							{
-								x: x - 1,
-								y: y + 1,
-								pipe: 'rightPipe',
-								pipeCapacity: 'rightPipeCapacity',
-								isOpen: !outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Left]
-							},
+							if (previous[y + 1][x].intersectionStates[IntersectionDirection.Left]) {
+								candidates.push({
+									x: x - 1,
+									y: y + 1,
+									pipe: 'rightPipe',
+									pipeCapacity: 'rightPipeCapacity',
+								});
+							}
 							// Bottom-side right
-							{
-								x: x,
-								y: y + 1,
-								pipe: 'rightPipe',
-								pipeCapacity: 'rightPipeCapacity',
-								isOpen: !outOfBounds(x, y + 1) && previous[y + 1][x].intersectionStates[IntersectionDirection.Top] && previous[y + 1][x].intersectionStates[IntersectionDirection.Right]
-							},
-						];
+							if (previous[y + 1][x].intersectionStates[IntersectionDirection.Right]) {
+								candidates.push({
+									x: x,
+									y: y + 1,
+									pipe: 'rightPipe',
+									pipeCapacity: 'rightPipeCapacity'
+								});
+							}
+						}
+					}
 
 					// Let's limit our gloop movement to max 1 per room for now
 					candidates = candidates.filter(candidate =>
 						!outOfBounds(candidate.x, candidate.y)
 						&& ship.roomHandles[candidate.y][candidate.x].data[candidate.pipe] < ship.roomHandles[candidate.y][candidate.x].data[candidate.pipeCapacity]
 						&& candidatePressure(candidate) < (ship.roomHandles[y][x].data[pipe] / ship.roomHandles[y][x].data[pipeCapacity])
-						&& candidate.isOpen
 					);
 					if (candidates.length > 0) {
 						candidates = candidates.sort(
