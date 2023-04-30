@@ -4,6 +4,7 @@ import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 import {saveLevel} from "../saveLevel";
+import {createFeature} from "../createFeature";
 
 export interface UIHooks {
 	setGloopAmount(_: number): void
@@ -98,6 +99,18 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 						room.data.intersectionStates = [...Array(4)].map((_, i) => i < state)
 						continue
 					} case RoomEditTarget.Feature: {
+						if (room.data.feature.type === 'empty') {
+							room.data.feature = createFeature('t');
+						} else if (room.data.feature.type === 'sink' && room.data.feature.subtype === 'thrusters') {
+							room.data.feature = createFeature('n');
+						} else if (room.data.feature.type === 'sink' && room.data.feature.subtype === 'navigation') {
+							room.data.feature = createFeature('r');
+						} else if (room.data.feature.type === 'sink' && room.data.feature.subtype === 'reactor') {
+							room.data.feature = createFeature('+');
+						} else {
+							room.data.feature = createFeature(undefined);
+						}
+						room.data.feature
 						continue
 					}
 				}

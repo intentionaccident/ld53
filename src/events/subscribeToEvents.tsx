@@ -30,6 +30,15 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			return
 		}
 
+		if (event.shiftKey) {
+			ship.eventQueue.push({
+				type: GameEventType.RoomEdit, coord: room.coordinate, edit: {
+					target: RoomEditTarget.Feature
+				}
+			});
+			return
+		}
+
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, clockwise: true, coord: room.coordinate });
 	});
 
@@ -62,15 +71,6 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 	});
 
 	room.graphics.features.on('mousedown', (event) => {
-		if (event.ctrlKey) {
-			ship.eventQueue.push({
-				type: GameEventType.RoomEdit, coord: room.coordinate, edit: {
-					target: RoomEditTarget.Feature
-				}
-			});
-			return
-		}
-
 		if (event.shiftKey) {
 			ship.eventQueue.push({ type: GameEventType.ActivateSink, coord: room.coordinate });
 			return

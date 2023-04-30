@@ -1,28 +1,23 @@
 import * as React from "react"
 import * as PIXI from "pixi.js";
-import { PixiRoot } from "./PixiRoot"
-import { UIRoot } from "./UIRoot"
-import { updateRooms } from "./UpdateRooms"
-import {
-	SOURCE_RELEASE_SPEED,
-	SINK_CAPACITY,
-	SINK_RELEASE_SPEED,
-	ROOM_UPDATE_INTERVAL,
-	DEFAULT_PIPE_CAPACITY
-} from "./constants"
-import { drawRoom } from "./draw/drawRoom"
-import { drawRoomBackground } from "./draw/drawRoomBackground"
-import { initRoomGraphics } from "./draw/initRoomGraphics"
-import { processEvents } from "./events/processEvents"
-import { GameEventType } from "./events/types/GameEventType"
-import { initShipGraphics } from "./initShipGraphics"
-import { shipLayout } from "./shipLayout"
-import { RoomHandle } from "./types/RoomHandle"
-import { Ship } from "./types/Ship"
-import { setRoomVisibility } from "./utils/setRoomVisibility"
-import { subscribeToEvents } from "./events/subscribeToEvents"
-import { AssetContext } from "./AssetContext"
-import { AppContext } from "./AppContext";
+import {PixiRoot} from "./PixiRoot"
+import {UIRoot} from "./UIRoot"
+import {updateRooms} from "./UpdateRooms"
+import {DEFAULT_PIPE_CAPACITY, ROOM_UPDATE_INTERVAL} from "./constants"
+import {drawRoom} from "./draw/drawRoom"
+import {drawRoomBackground} from "./draw/drawRoomBackground"
+import {initRoomGraphics} from "./draw/initRoomGraphics"
+import {processEvents} from "./events/processEvents"
+import {GameEventType} from "./events/types/GameEventType"
+import {initShipGraphics} from "./initShipGraphics"
+import {shipLayout} from "./shipLayout"
+import {RoomHandle} from "./types/RoomHandle"
+import {Ship} from "./types/Ship"
+import {setRoomVisibility} from "./utils/setRoomVisibility"
+import {subscribeToEvents} from "./events/subscribeToEvents"
+import {AssetContext} from "./AssetContext"
+import {AppContext} from "./AppContext";
+import {createFeature} from "./createFeature";
 
 export const Game = () => {
 	const [gloopAmountValue, setGloopAmount] = React.useState(100);
@@ -62,13 +57,7 @@ export const Game = () => {
 							],
 							roomOpen: true,
 
-							feature: ({
-								'+': { type: 'source', releaseSpeed: SOURCE_RELEASE_SPEED, storage: 0 },
-								't': { type: 'sink', subtype: 'thrusters', capacity: SINK_CAPACITY['thrusters'], releaseSpeed: SINK_RELEASE_SPEED['thrusters'], state: 'idle', storage: 0, timeLeft: 0 },
-								'n': { type: 'sink', subtype: 'navigation', capacity: SINK_CAPACITY['navigation'], releaseSpeed: SINK_RELEASE_SPEED['navigation'], state: 'idle', storage: 0, timeLeft: 0 },
-								'r': { type: 'sink', subtype: 'reactor', capacity: SINK_CAPACITY['reactor'], releaseSpeed: SINK_RELEASE_SPEED['reactor'], state: 'idle', storage: 0, timeLeft: 0 },
-								'undefined': { type: 'empty' }
-							})[layout?.f]
+							feature: createFeature(layout?.f)
 						},
 						graphics
 					} as RoomHandle;
