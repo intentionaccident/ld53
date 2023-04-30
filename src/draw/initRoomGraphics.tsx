@@ -40,9 +40,25 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	horizontalPipe.sprite.x = INTERSECTION_RADIUS - INTERSECTION_RADIUS / 2 * SLANTEDNESS
 	horizontalPipe.sprite.y = -INTERSECTION_RADIUS / 2;
 
-	const intersection = createDualRender(assetLibrary[AssetNames.IntersectionSingle].asset)
+	const intersection = createDualRender(assetLibrary[AssetNames.CrossIntersection].asset)
 	intersection.sprite.x = -10;
 	intersection.sprite.y = -8;
+
+	const clampsRoot = new PIXI.Container()
+	intersection.root.addChild(clampsRoot)
+	const clamps = [
+		AssetNames.ClampUp,
+		AssetNames.ClampRight,
+		AssetNames.ClampDown,
+		AssetNames.ClampLeft
+	].map(clamp => {
+		const clampSprite = new PIXI.Sprite(assetLibrary[clamp].asset)
+		clampsRoot.addChild(clampSprite)
+		return clampSprite
+	})
+
+	const interactiveIntersection = new PIXI.Sprite(assetLibrary[AssetNames.InteractiveIntersection].asset)
+	intersection.root.addChild(interactiveIntersection)
 
 	const feature = new PIXI.Graphics();
 	pipeGraphics.addChild(
@@ -76,7 +92,12 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		room,
 		verticalPipe,
 		horizontalPipe,
-		intersection,
+		intersection: {
+			base: intersection,
+			clampsRoot,
+			clamps,
+			interactive: interactiveIntersection
+		},
 		features: feature,
 		dirty
 	};

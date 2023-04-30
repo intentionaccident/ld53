@@ -3,7 +3,7 @@ import { RoomHandle } from "../types/RoomHandle";
 import { IntersectionDirection } from "../types/IntersectionDirection";
 
 export function drawIntersection(room: RoomHandle) {
-	const graphics = room.graphics.intersection.primitive;
+	const graphics = room.graphics.intersection.base.primitive;
 
 	graphics.clear();
 	graphics.beginFill((room.data.intersectionStates.find(i => i)) ? 0x999999 : 0x990000);
