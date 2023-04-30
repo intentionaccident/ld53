@@ -41,7 +41,7 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 				}
 				room.data.intersectionStates.unshift(room.data.intersectionStates.pop())
 				continue
-			} case GameEventType.FeatureClicked: {
+			} case GameEventType.ActivateFeature: {
 				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
 				if (feature.type === 'source') {
 					if (ship.gloopAmount > 0) {
@@ -50,13 +50,15 @@ export function processEvents(ship: Ship, hooks: UIHooks) {
 						ship.gloopAmount -= addedAmount;
 						hooks.setGloopAmount(ship.gloopAmount);
 					}
-				} else if (feature.type === 'sink') {
-					if (feature.state === 'idle') {
-						feature.state = 'requesting';
-						feature.timeLeft = SINK_REQUEST_TIMEOUT[feature.subtype];
-					} else if (feature.state === 'done') {
-						feature.state = 'releasing';
-					}
+				} else if (feature.type === 'sink' && feature.state === 'done') {
+					feature.state = 'releasing';
+				}
+				continue;
+			} case GameEventType.ActivateSink: {
+				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
+				if (feature.type === 'sink' && feature.state === 'idle') {
+					feature.state = 'requesting';
+					feature.timeLeft = SINK_REQUEST_TIMEOUT[feature.subtype];
 				}
 				continue;
 			} case GameEventType.RoomEdit: {

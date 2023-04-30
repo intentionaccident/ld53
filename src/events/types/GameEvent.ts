@@ -1,11 +1,13 @@
 import { KeyPressedEvent } from "./KeyPressedEvent";
 import { RoomEditEvent } from "./roomEdit/RoomEditEvent";
 import { RotateIntersectionEvent } from "./RotateIntersectionEvent";
-import { FeatureClickedEvent } from "./FeatureClickedEvent";
+import { ActivateSinkEvent } from "./ActivateSinkEvent";
+import {ActivateFeatureEvent} from "./ActivateFeatureEvent";
 
 export type GameEvent = RoomEditEvent
 	| KeyPressedEvent
-	| FeatureClickedEvent
-	| RotateIntersectionEvent;
+	| ActivateSinkEvent
+	| RotateIntersectionEvent
+	| ActivateFeatureEvent;
 
 

@@ -32,7 +32,6 @@ export function subscribeToEvent(ship: Ship, room: RoomHandle) {
 
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, clockwise: true, coord: room.coordinate });
 	});
-	room.graphics.features.on('mousedown', (event) => console.log("source", event));
 
 	room.graphics.verticalPipe.on('mousedown', (event) => {
 		if (!event.ctrlKey) {
@@ -72,7 +71,12 @@ export function subscribeToEvent(ship: Ship, room: RoomHandle) {
 			return
 		}
 
-		ship.eventQueue.push({ type: GameEventType.FeatureClicked, coord: room.coordinate });
+		if (event.shiftKey) {
+			ship.eventQueue.push({ type: GameEventType.ActivateSink, coord: room.coordinate });
+			return
+		}
+
+		ship.eventQueue.push({ type: GameEventType.ActivateFeature, coord: room.coordinate });
 	});
 
 	room.graphics.features.on('rightdown', (event) => {

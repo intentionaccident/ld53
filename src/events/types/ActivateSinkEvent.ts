@@ -2,7 +2,7 @@ import { GameEventType } from "./GameEventType";
 import * as PIXI from "pixi.js";
 
 
-export interface FeatureClickedEvent {
-	type: GameEventType.FeatureClicked;
+export interface ActivateSinkEvent {
+	type: GameEventType.ActivateSink;
 	coord: PIXI.IPointData;
 }
