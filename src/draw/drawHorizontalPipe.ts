@@ -9,6 +9,7 @@ export function drawHorizontalPipe(room: RoomHandle, assetLibrary: AssetLibrary)
 		= room.data.rightPipe > 0
 			? assetLibrary[AssetNames.PipeHorizontalFull].asset
 			: assetLibrary[AssetNames.PipeHorizontalEmpty].asset
+	room.graphics.horizontalPipe.sprite.visible = room.data.rightPipeCapacity > 0;
 
 	const graphics = room.graphics.horizontalPipe.primitive;
 

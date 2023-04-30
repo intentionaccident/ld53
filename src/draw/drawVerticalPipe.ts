@@ -9,6 +9,7 @@ export function drawVerticalPipe(room: RoomHandle, assetLibrary: AssetLibrary) {
 		= room.data.bottomPipe > 0
 			? assetLibrary[AssetNames.PipeVerticalFull].asset
 			: assetLibrary[AssetNames.PipeVerticalEmpty].asset
+	room.graphics.verticalPipe.sprite.visible = room.data.bottomPipeCapacity > 0;
 
 	const graphics = room.graphics.verticalPipe.primitive;
 
