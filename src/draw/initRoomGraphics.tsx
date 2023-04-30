@@ -36,8 +36,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	horizontalPipe.sprite.y = -INTERSECTION_RADIUS / 2;
 
 	const intersection = createDualRender(assetLibrary[AssetNames.IntersectionSingle].asset)
-	intersection.sprite.x = -11;
-	intersection.sprite.y = -9;
+	intersection.sprite.x = -10;
+	intersection.sprite.y = -8;
 
 	const feature = new PIXI.Graphics();
 	pipeGraphics.addChild(
