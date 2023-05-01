@@ -7,3 +7,4 @@ export interface RotateIntersectionEvent {
 	clockwise?: boolean;
 	coord: PIXI.IPointData;
 }
+

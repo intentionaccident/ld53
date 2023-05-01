@@ -15,6 +15,7 @@ export interface RoomHandle {
 		room: {
 			base: DualRender
 			gloopPort: PIXI.Sprite
+			gloopSyphon: PIXI.Sprite
 		}
 		dirty: PIXI.Graphics;
 		pipes: PIXI.Container;
@@ -35,4 +36,5 @@ export interface RoomHandle {
 		features: PIXI.Graphics;
 		progress: PIXI.Graphics;
 	};
+	gloopButtonActive: boolean
 }

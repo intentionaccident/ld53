@@ -1,17 +1,18 @@
 import { Ship } from "../types/Ship";
-import {DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS} from "../constants";
+import { DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS } from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 import { saveLevel } from "../saveLevel";
 import { createFeature } from "../createFeature";
 import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
-import {SoundAssetLibrary} from "../types/SoundAssetLibrary";
-import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
+import { TextureAssetLibrary } from "../types/TextureAssetLibrary";
 import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
 import { SinkFeature, SourceFeature } from "../types/RoomFeature";
 import { RoomIntersectionEdit } from "./types/roomEdit/RoomIntersectionEdit";
 import { RoomHandle } from "../types/RoomHandle";
+import { HoverTarget } from "./types/HoverTarget";
+import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
 
 function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
 	let state = room.data.intersectionStates.filter(s => s).length
@@ -181,6 +182,16 @@ export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, so
 					flow: 0
 				})
 				continue
+			} case GameEventType.HoverButton: {
+				const room = ship.roomHandles[event.coord.y][event.coord.x];
+				console.log(room.coordinate)
+				switch (event.target) {
+					case HoverTarget.GloopButton: {
+						room.gloopButtonActive = event.active
+						continue
+					}
+				}
+				continue;
 			} default: {
 				console.warn("unprocessed event", event)
 				continue;

@@ -43,6 +43,8 @@ export enum TextureAssetNames {
 	GloopPortTripleOne = "gloop-port7",
 	GloopPortTripleTwo = "gloop-port8",
 	GloopPortTripleFull = "gloop-port9",
+	GloopPortSyphonEmpty = "gloop-syphon1",
+	GloopPortSyphonFull = "gloop-syphon2",
 
 	Engine = "engines",
 }

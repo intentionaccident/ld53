@@ -4,7 +4,7 @@ import { INTERSECTION_RADIUS, SLANT, SLANTEDNESS, TILE_HEIGHT, TILE_WIDTH } from
 import { Ship } from "../types/Ship";
 import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
 import { TextureAssetNames } from "../types/TextureAssetNames";
-import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
+import { TextureAssetLibrary } from "../types/TextureAssetLibrary";
 
 function createDualRender(texture: PIXI.Texture): DualRender {
 	const root = new PIXI.Container();
@@ -24,11 +24,6 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	room.sprite.x = -SLANT;
 	graphics.background.addChild(room.root);
 
-	const gloopPort = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortTripleEmpty].asset)
-	room.root.addChild(gloopPort)
-	gloopPort.x = -SLANT;
-	gloopPort.visible = false;
-
 	const dirty = new PIXI.Graphics();
 	dirty.x = TILE_WIDTH * coord.x - SLANT * coord.y;
 	dirty.y = TILE_HEIGHT * coord.y;
@@ -38,6 +33,20 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	graphics.foreground.addChild(pipeGraphics);
 	pipeGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y + TILE_WIDTH / 2 - SLANT / 2;
 	pipeGraphics.y = TILE_HEIGHT * coord.y + TILE_HEIGHT / 2;
+
+	const gloopPort = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortTripleEmpty].asset)
+	const gloopSyphon = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortSyphonEmpty].asset)
+	gloopSyphon.x = gloopPort.x = -TILE_WIDTH / 2 - SLANT / 2;
+	gloopSyphon.y = gloopPort.y = -TILE_HEIGHT / 2;
+	gloopSyphon.visible = gloopPort.visible = false;
+
+	gloopPort.hitArea = new PIXI.Polygon([
+		-SLANT + TILE_WIDTH / 2, TILE_HEIGHT / 2,
+		-SLANT + TILE_WIDTH, TILE_HEIGHT / 2,
+		-SLANT * 1.5 + TILE_WIDTH, TILE_HEIGHT,
+		-SLANT * 1.5 + TILE_WIDTH / 2, TILE_HEIGHT
+	]);
+	gloopPort.interactive = true
 
 	const verticalPipe = createDualRender(assetLibrary[TextureAssetNames.PipeVerticalEmpty].asset)
 	verticalPipe.sprite.x = -INTERSECTION_RADIUS * 3 * SLANTEDNESS - INTERSECTION_RADIUS / 2
@@ -89,6 +98,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		feature,
 		verticalPipe.root,
 		horizontalPipe.root,
+		gloopPort,
+		gloopSyphon,
 		intersection.root,
 		progress
 	);
@@ -116,7 +127,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		pipes: pipeGraphics,
 		room: {
 			base: room,
-			gloopPort: gloopPort,
+			gloopPort,
+			gloopSyphon,
 		},
 		verticalPipe: {
 			base: verticalPipe,

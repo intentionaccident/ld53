@@ -2,6 +2,7 @@ import { RoomHandle } from "../types/RoomHandle";
 import { GameEventType } from "./types/GameEventType";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 import { Ship } from "../types/Ship";
+import { HoverTarget } from "./types/HoverTarget";
 
 export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 	room.graphics.intersection.base.root.on('rightdown', (event) => {
@@ -95,7 +96,6 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			return
 		}
 
-		ship.eventQueue.push({ type: GameEventType.ActivateFeature, coord: room.coordinate });
 	});
 
 	room.graphics.features.on('rightdown', (event) => {
@@ -109,4 +109,23 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			return
 		}
 	});
+
+	console.log(room.coordinate)
+	room.graphics.room.gloopPort.on("mouseover", () => {
+		console.log(room.coordinate)
+
+		ship.eventQueue.push({
+			type: GameEventType.HoverButton, coord: room.coordinate, active: true, target: HoverTarget.GloopButton
+		});
+	})
+
+	room.graphics.room.gloopPort.on("mouseout", () => {
+		ship.eventQueue.push({
+			type: GameEventType.HoverButton, coord: room.coordinate, active: false, target: HoverTarget.GloopButton
+		});
+	})
+
+	room.graphics.room.gloopPort.on("mousedown", () => {
+		ship.eventQueue.push({ type: GameEventType.ActivateFeature, coord: room.coordinate });
+	})
 }

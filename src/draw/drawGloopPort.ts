@@ -1,6 +1,6 @@
 import { RoomHandle } from "../types/RoomHandle";
-import {TextureAssetNames} from "../types/TextureAssetNames";
-import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
+import { TextureAssetNames } from "../types/TextureAssetNames";
+import { TextureAssetLibrary } from "../types/TextureAssetLibrary";
 
 const gloopMap = [
 	[],
@@ -12,16 +12,22 @@ const gloopMap = [
 export function drawGloopPort(room: RoomHandle, assets: TextureAssetLibrary) {
 	const graphics = room.graphics.room.gloopPort;
 	if (room.data.feature.type !== "sink" && room.data.feature.type !== "source") {
-		graphics.visible = false;
+		room.graphics.room.gloopSyphon.visible = graphics.visible = false;
 		return;
+	}
+
+	if (room.data.feature.storage > 0) {
+		room.graphics.room.gloopSyphon.texture = room.gloopButtonActive
+			? assets[TextureAssetNames.GloopPortSyphonFull].asset
+			: assets[TextureAssetNames.GloopPortSyphonEmpty].asset
 	}
 
 	const asset = gloopMap[room.data.feature.capacity]?.[room.data.feature.storage];
 	if (asset == null) {
-		graphics.visible = false;
+		room.graphics.room.gloopSyphon.visible = graphics.visible = false;
 		return;
 	}
 
-	graphics.visible = true;
+	room.graphics.room.gloopSyphon.visible = graphics.visible = true;
 	graphics.texture = assets[asset].asset;
 }
