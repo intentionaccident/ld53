@@ -23,6 +23,11 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	room.sprite.x = -SLANT;
 	graphics.background.addChild(room.root);
 
+	const gloopPort = new PIXI.Sprite(assetLibrary[AssetNames.GloopPortTripleEmpty].asset)
+	room.root.addChild(gloopPort)
+	gloopPort.x = -SLANT;
+	gloopPort.visible = false;
+
 	const dirty = new PIXI.Graphics();
 	dirty.x = TILE_WIDTH * coord.x - SLANT * coord.y;
 	dirty.y = TILE_HEIGHT * coord.y;
@@ -106,7 +111,10 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 
 	return {
 		pipes: pipeGraphics,
-		room,
+		room: {
+			base: room,
+			gloopPort: gloopPort,
+		},
 		verticalPipe: {
 			base: verticalPipe,
 			animation: horizontalPipeAnimation,

@@ -12,7 +12,10 @@ export interface RoomHandle {
 	coordinate: PIXI.Point;
 	data: Room;
 	graphics: {
-		room: DualRender;
+		room: {
+			base: DualRender
+			gloopPort: PIXI.Sprite
+		}
 		dirty: PIXI.Graphics;
 		pipes: PIXI.Container;
 		intersection: {

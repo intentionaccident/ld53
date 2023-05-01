@@ -2,7 +2,7 @@ import { LINE_SIZE, TILE_WIDTH, SLANT, TILE_HEIGHT } from "../constants";
 import { RoomHandle } from "../types/RoomHandle";
 
 export function drawRoomBackground(room: RoomHandle) {
-	const graphics = room.graphics.room.primitive;
+	const graphics = room.graphics.room.base.primitive;
 
 	graphics.clear();
 
