@@ -32,7 +32,12 @@ export function updateAnimations(ship: Ship, setScore, soundAssets: SoundAssetLi
 			];
 			for (const candidate of dirtyRoomCandidates) {
 				if (!outOfBounds(candidate) && ship.roomHandles[candidate.y][candidate.x].data.isDirty) {
-					ship.roomHandles[candidate.y][candidate.x].data.isDirty = false;
+					const room = ship.roomHandles[candidate.y][candidate.x]
+					room.data.isDirty = false;
+					room.graphics.room.boxArrivalAnimation.visible = false;
+					room.graphics.room.boxFillingAnimation.visible = true;
+					room.graphics.room.boxFillingAnimation.play()
+
 					ship.score += 1;
 					setScore(ship.score);
 				}
