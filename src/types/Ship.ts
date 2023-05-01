@@ -3,6 +3,7 @@ import { GameEvent } from "../events/types/GameEvent";
 import * as PIXI from "pixi.js";
 import { ProgressBar } from "./ProgressBar";
 import { AnimationInstance } from "./AnimationInstance";
+import {ScoreBoard} from "../draw/drawScore";
 
 export interface Ship {
 	roomHandles: RoomHandle[][];
@@ -13,7 +14,7 @@ export interface Ship {
 		background: PIXI.Container;
 		foreground: PIXI.Container;
 		progressBar: ProgressBar;
-		scoreBar: PIXI.Graphics;
+		scoreBar: ScoreBoard;
 	},
 	currentLevel: number,
 	levelProgress: number,

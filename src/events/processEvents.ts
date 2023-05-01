@@ -45,6 +45,14 @@ function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
+		case 'p': {
+			ship.score += 1;
+			return
+		}
+		case 'P': {
+			ship.score += 10;
+			return
+		}
 		case 'n': {
 			ship.levelProgress = 1;
 			ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);

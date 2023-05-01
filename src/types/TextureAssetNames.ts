@@ -55,4 +55,6 @@ export enum TextureAssetNames {
 	Moon = "moon",
 	Saturn = "saturn",
 	Earth = "earth",
+
+	BoxIcon = "box-icon",
 }

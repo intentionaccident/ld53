@@ -18,7 +18,6 @@ import { updateAnimations } from "./updateAnimations";
 import { initializeLevel } from "./initializeLevel";
 import { SinkFeature } from "./types/RoomFeature";
 import {drawSource} from "./draw/drawSource";
-import {drawScore} from "./draw/drawScore";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -69,7 +68,7 @@ export const Game = () => {
 
 			setTimeLeft(1);
 			setScore(ship.score);
-			drawScore(ship.graphics.scoreBar, ship.score);
+			ship.graphics.scoreBar.set(ship.score)
 			elapsedTimeBetweenAnimationUpdate += delta;
 			elapsedTimeBetweenRoomUpdate += delta;
 

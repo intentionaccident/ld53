@@ -3,6 +3,7 @@ import { Ship } from "./types/Ship";
 import { ProgressBar } from "./types/ProgressBar";
 import { TextureAssetNames } from "./types/TextureAssetNames";
 import { TextureAssetLibrary } from "./types/TextureAssetLibrary";
+import {ScoreBoard} from "./draw/drawScore";
 
 export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibrary): Ship['graphics'] {
 	const shipContainer = new PIXI.Container();
@@ -31,10 +32,10 @@ export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibr
 	progressBar.root.y = app.renderer.height - progressBar.root.height - 58;
 	app.stage.addChild(progressBar.root);
 
-	const scoreBar = new PIXI.Graphics();
-	scoreBar.x = 10;
-	scoreBar.y = 350;
-	app.stage.addChild(scoreBar);
+	const scoreBar = new ScoreBoard(assets);
+	scoreBar.graphics.x = 10;
+	scoreBar.graphics.y = 350;
+	app.stage.addChild(scoreBar.graphics);
 
 	return {
 		root: shipContainer,
