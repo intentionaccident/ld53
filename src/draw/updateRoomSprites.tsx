@@ -7,14 +7,13 @@ export function updateRoomSprites(room: RoomHandle, assetLibrary: TextureAssetLi
 		room.graphics.room.alertAnimation.visible = room.data.feature.state === "requesting";
 	}
 
-	switch (room.data.feature.type) {
-		case "source": {
-			room.graphics.features.base.sprite.texture = assetLibrary.storage.asset
-			break;
-		} default: {
-			room.graphics.features.base.root.visible = false
-			return
-		}
+	if (room.data.feature.type === "source") {
+		room.graphics.features.base.sprite.texture = assetLibrary.storage.asset
+	} else if (room.data.feature.type === "sink" && room.data.feature.subtype === 'navigation') {
+		room.graphics.features.base.sprite.texture = assetLibrary["feature-radar"].asset
+	} else {
+		room.graphics.features.base.root.visible = false
+		return
 	}
 	room.graphics.features.base.root.visible = true
 }

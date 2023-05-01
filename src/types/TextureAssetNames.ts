@@ -47,4 +47,5 @@ export enum TextureAssetNames {
 
 	Engine = "engines",
 	StorageRoom = "storage",
+	NavigationRoom = "feature-radar",
 }
