@@ -84,11 +84,13 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	intersection.sprite.addChild(interactiveIntersection)
 
 	const feature = new PIXI.Graphics();
+	const progress = new PIXI.Graphics();
 	pipeGraphics.addChild(
 		feature,
 		verticalPipe.root,
 		horizontalPipe.root,
 		intersection.root,
+		progress
 	);
 
 	intersection.root.interactive = true;
@@ -131,6 +133,7 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 			interactive: interactiveIntersection
 		},
 		features: feature,
+		progress: progress,
 		dirty
 	};
 }

@@ -1,5 +1,5 @@
 import {Ship} from "./types/Ship";
-import {MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
+import {MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS} from "./constants";
 import {IntersectionDirection} from "./types/IntersectionDirection";
 import {RoomHandle} from "./types/RoomHandle";
 import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
@@ -27,7 +27,6 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleSinks.length > 0) {
 		const sink = idleSinks[Math.floor(Math.random() * idleSinks.length)];
 		sink.state = 'requesting';
-		sink.ticksLeft = SINK_REQUEST_TIMEOUT[sink.subtype];
 	}
 
 	for (let y = 0; y < ship.roomHandles.length; y++)
@@ -35,10 +34,10 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 			const feature = ship.roomHandles[y][x].data.feature;
 			if (feature.type === 'sink') {
 				if (feature.state === 'requesting') {
-					feature.ticksLeft -= 1;
 					if (feature.storage >= feature.capacity) {
 						feature.state = 'busy';
-						feature.ticksLeft = SINK_BUSY_TICKS[feature.subtype];
+						feature.maxTicks = SINK_BUSY_TICKS[feature.subtype];
+						feature.ticksLeft = feature.maxTicks;
 					} else if (feature.ticksLeft <= 0) {
 						if (feature.storage > 0) {
 							feature.state = 'releasing';

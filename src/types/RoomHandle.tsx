@@ -33,5 +33,6 @@ export interface RoomHandle {
 			animation: PIXI.AnimatedSprite
 		}
 		features: PIXI.Graphics;
+		progress: PIXI.Graphics;
 	};
 }

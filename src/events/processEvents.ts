@@ -1,5 +1,5 @@
 import { Ship } from "../types/Ship";
-import { DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT } from "../constants";
+import {DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS} from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
@@ -153,7 +153,6 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
 				if (feature.type === 'sink' && feature.state === 'idle') {
 					feature.state = 'requesting';
-					feature.ticksLeft = SINK_REQUEST_TIMEOUT[feature.subtype];
 				}
 				continue;
 			} case GameEventType.RoomEdit: {

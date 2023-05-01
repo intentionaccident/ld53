@@ -18,13 +18,6 @@ export const SINK_BUSY_TICKS = {
 	reactor: 25
 }
 
-const sinkRequestTimeout = Number.POSITIVE_INFINITY;
-export const SINK_REQUEST_TIMEOUT = {
-	thrusters: sinkRequestTimeout,
-	navigation: sinkRequestTimeout,
-	reactor: sinkRequestTimeout,
-}
-
 export const DEFAULT_PIPE_CAPACITY = 1;
 
 export const DELIVERY_TIME_LIMIT = 5 * 60;

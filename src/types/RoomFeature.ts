@@ -13,6 +13,7 @@ export type SinkFeature = {
 	capacity: number,
 	state: 'idle' | 'requesting' | 'busy' | 'done' | 'releasing';
 	ticksLeft: number
+	maxTicks: number
 }
 
 export type EmptyFeature = {
