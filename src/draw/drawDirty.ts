@@ -1,7 +1,8 @@
-import {LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH} from "../constants";
-import {RoomHandle} from "../types/RoomHandle";
+import { LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH } from "../constants";
+import { RoomHandle } from "../types/RoomHandle";
 
 export function drawDirty(room: RoomHandle) {
+	return;
 	const graphics = room.graphics.dirty;
 
 	graphics.clear();
