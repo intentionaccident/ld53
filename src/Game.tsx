@@ -65,7 +65,7 @@ export const Game = () => {
 		const gameLoop = (delta) => {
 			processEvents(ship, textureAssets, soundAssets);
 
-			ship.timeLeft += app.ticker.elapsedMS / 1000;
+			ship.timeLeft += app.ticker.elapsedMS / 1000 / 10;
 			setTimeLeft(1);
 			setScore(
 				Math.min(
