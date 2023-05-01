@@ -27,9 +27,8 @@ export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibr
 	shipContainer.addChild(foregroundContainer);
 
 	const progressBar = new ProgressBar();
-	const MARGIN = 6;
-	progressBar.graphics.x = app.renderer.width - progressBar.graphics.width - MARGIN;
-	progressBar.graphics.y = MARGIN
+	progressBar.graphics.x = 195;
+	progressBar.graphics.y = app.renderer.height - progressBar.graphics.height - 45;
 	app.stage.addChild(progressBar.graphics);
 
 	const scoreBar = new PIXI.Graphics();

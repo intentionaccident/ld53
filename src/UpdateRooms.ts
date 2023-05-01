@@ -94,7 +94,8 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 			showMessageBox("YOU WON!");
 		} else {
 			updateLevel(ship, shipLayoutMasks[ship.currentLevel], shipLayouts[ship.currentLevel], textureAssets);
-			showMessageBox("You have advanced to level " + ship.currentLevel);
+			showMessageBox(`You have advanced to level ${ship.currentLevel}. Score: ${ship.score}`);
 		}
+		ship.score = 0;
 	}
 }
