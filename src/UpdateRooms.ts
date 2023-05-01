@@ -1,5 +1,5 @@
 import {Ship} from "./types/Ship";
-import {MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS} from "./constants";
+import {MAX_CONCURRENT_DIRTY_ROOMS, REQUEST_DELAY_IN_TICKS, SINK_BUSY_TICKS} from "./constants";
 import {IntersectionDirection} from "./types/IntersectionDirection";
 import {RoomHandle} from "./types/RoomHandle";
 import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
@@ -26,8 +26,13 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 		}
 	}
 	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleEmptySinks.length > 0) {
-		const sink = idleEmptySinks[Math.floor(Math.random() * idleEmptySinks.length)];
-		sink.state = 'requesting';
+		ship.ticksBetweenRequests += 1;
+		if (ship.ticksBetweenRequests > REQUEST_DELAY_IN_TICKS) {
+			const sink = idleEmptySinks[Math.floor(Math.random() * idleEmptySinks.length)];
+			sink.state = 'requesting';
+		}
+	} else {
+		ship.ticksBetweenRequests = 0;
 	}
 
 	for (let y = 0; y < ship.roomHandles.length; y++)

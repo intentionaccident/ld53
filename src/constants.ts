@@ -15,7 +15,7 @@ export const SINK_CAPACITY = {
 export const SINK_BUSY_TICKS = {
 	thrusters: 15,
 	navigation: 10,
-	reactor: 25
+	reactor: 17
 }
 
 export const DEFAULT_PIPE_CAPACITY = 1;
@@ -23,3 +23,7 @@ export const DEFAULT_PIPE_CAPACITY = 1;
 export const DELIVERY_TIME_LIMIT = 60 * 60;
 
 export const MAX_CONCURRENT_DIRTY_ROOMS = 2;
+
+export const REQUEST_DELAY_IN_TICKS = 2;
+
+export const SHOW_WELCOME_MESSAGE = false;

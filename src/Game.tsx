@@ -9,7 +9,7 @@ import {
 	DEFAULT_PIPE_CAPACITY,
 	DELIVERY_TIME_LIMIT,
 	ANIMATION_UPDATE_INTERVAL,
-	ROOM_UPDATE_INTERVAL
+	ROOM_UPDATE_INTERVAL, SHOW_WELCOME_MESSAGE
 } from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
@@ -32,7 +32,9 @@ export const Game = () => {
 	const [score, setScore] = React.useState(0);
 	const [timeLeft, setTimeLeft] = React.useState(0);
 	const [message, setMessage] = React.useState(
-		'Good news everyone! We have received a delivery order of gloop to Nomicron Persai 9. As the engineer of the ship it will be your job to direct the pipes so that the ship will function well enough to deliver the valuable gloop. Good luck!'
+		SHOW_WELCOME_MESSAGE
+			? 'Good news everyone! We have received a delivery order of gloop to Nomicron Persai 9. As the engineer of the ship it will be your job to direct the pipes so that the ship will function well enough to deliver the valuable gloop. Good luck!'
+			: ''
 	);
 
 	const { textureAssets, soundAssets, animationAssets } = React.useContext(AssetContext);
@@ -49,7 +51,8 @@ export const Game = () => {
 			currentLevel: 0,
 			levelProgress: 0,
 			timeLeft: DELIVERY_TIME_LIMIT,
-			score: 0
+			score: 0,
+			ticksBetweenRequests: 0
 		}
 
 		// Manually activate the 'thrusters' for the first level
@@ -91,7 +94,7 @@ export const Game = () => {
 				drawRoom(room, textureAssets)
 		};
 
-		app.ticker.stop();
+		if (SHOW_WELCOME_MESSAGE) app.ticker.stop();
 		app.ticker.add(gameLoop);
 		window.addEventListener('keydown', keyDownListener, false);
 		return () => {
