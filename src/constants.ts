@@ -20,6 +20,6 @@ export const SINK_BUSY_TICKS = {
 
 export const DEFAULT_PIPE_CAPACITY = 1;
 
-export const DELIVERY_TIME_LIMIT = 5 * 60;
+export const DELIVERY_TIME_LIMIT = 60 * 60;
 
 export const MAX_CONCURRENT_DIRTY_ROOMS = 2;

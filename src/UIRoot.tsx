@@ -8,7 +8,7 @@ export const UIRoot = (props: { score: number, timeLeft: number }) => {
 			Score: {props.score}<br />
 			Time left: {formatTimeSpan(props.timeLeft)}
 		</>
-		: <h1></h1>;
+		: <h1>Game Over!</h1>;
 	return <div className={styles.uiRoot}>
 		{timeLeftMessage}
 	</div>
