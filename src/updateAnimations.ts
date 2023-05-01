@@ -40,7 +40,7 @@ export function updateAnimations(ship: Ship, setScore, soundAssets: SoundAssetLi
 					room.graphics.room.boxFillingAnimation.play()
 
 					ship.score += BOX_DELIVERY_SCORE;
-					// setScore(ship.score);
+					soundAssets.collect.asset.play();
 				}
 			}
 		}

@@ -46,6 +46,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 				})
 			}
 			ship.ticksBetweenDirtyRooms = 0;
+			soundAssets.request.asset.play()
 		}
 	} else {
 		ship.ticksBetweenDirtyRooms = 0;
