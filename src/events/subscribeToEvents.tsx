@@ -39,6 +39,16 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			return
 		}
 
+		if (event.altKey) {
+			ship.eventQueue.push({
+				type: GameEventType.RoomEdit, coord: room.coordinate, edit: {
+					target: RoomEditTarget.Intersection,
+					lock: true
+				}
+			});
+			return
+		}
+
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, clockwise: true, coord: room.coordinate });
 	});
 

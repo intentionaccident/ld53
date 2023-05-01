@@ -10,6 +10,36 @@ import {SoundAssetLibrary} from "../types/SoundAssetLibrary";
 import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
 import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
 import { SinkFeature, SourceFeature } from "../types/RoomFeature";
+import { RoomIntersectionEdit } from "./types/roomEdit/RoomIntersectionEdit";
+import { RoomHandle } from "../types/RoomHandle";
+
+function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
+	let state = room.data.intersectionStates.filter(s => s).length
+	const bar = room.data.intersectionStates[0] !== room.data.intersectionStates[1]
+	if (edit.lock) {
+		room.data.intersectionLocked = !room.data.intersectionLocked
+		return
+	}
+
+	if (edit.reverse) {
+		if (state === 3) {
+			room.data.intersectionStates = [true, false, true, false]
+			return
+		}
+
+		if (state !== 2 || !bar) {
+			state = (state + 4) % 5
+		}
+	} else {
+		if (state === 2 && !bar) {
+			room.data.intersectionStates = [true, false, true, false]
+			return
+		}
+		state = (state + 1) % 5
+	}
+
+	room.data.intersectionStates = [...Array(4)].map((_, i) => i < state)
+}
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
@@ -64,7 +94,7 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 				continue;
 			} case GameEventType.RotateIntersection: {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
-				if (room.data.lockSemaphore > 0) {
+				if (room.data.lockSemaphore > 0 || room.data.intersectionLocked) {
 					continue
 				}
 
@@ -141,26 +171,7 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 						room.data.rightPipeCapacity = room.data.rightPipeCapacity > 0 ? 0 : DEFAULT_PIPE_CAPACITY
 						continue
 					} case RoomEditTarget.Intersection: {
-						let state = room.data.intersectionStates.filter(s => s).length
-						const bar = room.data.intersectionStates[0] !== room.data.intersectionStates[1]
-						if (event.edit.reverse) {
-							if (state === 3) {
-								room.data.intersectionStates = [true, false, true, false]
-								continue
-							}
-
-							if (state !== 2 || !bar) {
-								state = (state + 4) % 5
-							}
-						} else {
-							if (state === 2 && !bar) {
-								room.data.intersectionStates = [true, false, true, false]
-								continue
-							}
-							state = (state + 1) % 5
-						}
-
-						room.data.intersectionStates = [...Array(4)].map((_, i) => i < state)
+						processIntersectionEdit(room, event.edit)
 						updateIntersectionTexture(room, assets)
 						continue
 					} case RoomEditTarget.Feature: {

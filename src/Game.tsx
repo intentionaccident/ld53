@@ -24,7 +24,7 @@ import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
-import {updateAnimations} from "./updateAnimations";
+import { updateAnimations } from "./updateAnimations";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -59,6 +59,7 @@ export const Game = () => {
 								['┼', '┤', '├', '│', '┬', '┐', '┌', '╷'].includes(layout?.i),
 								['┼', '┤', '┴', '┘', '┬', '┐', '─', '╴'].includes(layout?.i),
 							],
+							intersectionLocked: !!layout?.il,
 							roomOpen: true,
 
 							feature: createFeature(layout?.f),

@@ -50,6 +50,7 @@ export function saveLevel(ship: Ship): string {
 				? null
 				: {
 					i: toChar(d.intersectionStates),
+					il: d.intersectionLocked,
 					f: f,
 					p: p
 				};

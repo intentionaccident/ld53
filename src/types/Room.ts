@@ -8,6 +8,7 @@ export interface Room {
 	rightPipeCapacity: number;
 
 	intersectionStates: boolean[]
+	intersectionLocked: boolean
 
 	roomOpen: boolean;
 

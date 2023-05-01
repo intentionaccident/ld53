@@ -1,7 +1,6 @@
 import { RoomHandle } from "../types/RoomHandle";
-import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
 import { TextureAssetNames } from "../types/TextureAssetNames";
-import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
+import { TextureAssetLibrary } from "../types/TextureAssetLibrary";
 
 const textureMap = {
 	1: [TextureAssetNames.SingleIntersectionUp, TextureAssetNames.SingleIntersectionRight, TextureAssetNames.SingleIntersectionDown, TextureAssetNames.SingleIntersectionLeft],
@@ -10,6 +9,13 @@ const textureMap = {
 }
 
 export function updateIntersectionTexture(room: RoomHandle, assets: TextureAssetLibrary) {
+	for (let i = 0; i < 4; i++) {
+		room.graphics.intersection.clamps[i].visible =
+			room.data.intersectionLocked ? false : room.data.intersectionStates[i];
+	}
+
+	room.graphics.intersection.interactive.visible = !room.data.intersectionLocked;
+
 	const type = room.data.intersectionStates.filter(s => s).length
 	const firstConnection = room.data.intersectionStates.indexOf(true);
 	room.graphics.intersection.base.sprite.visible = true

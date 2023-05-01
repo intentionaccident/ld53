@@ -1,7 +1,7 @@
-import {Ship} from "./types/Ship";
-import {MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
-import {IntersectionDirection} from "./types/IntersectionDirection";
-import {RoomHandle} from "./types/RoomHandle";
+import { Ship } from "./types/Ship";
+import { MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT } from "./constants";
+import { IntersectionDirection } from "./types/IntersectionDirection";
+import { RoomHandle } from "./types/RoomHandle";
 
 export function updateRooms(ship: Ship) {
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
@@ -13,7 +13,7 @@ export function updateRooms(ship: Ship) {
 
 	if (dirtyRooms.length < MAX_CONCURRENT_DIRTY_ROOMS) {
 		function anyIntersectionIsOpen(r: RoomHandle) {
-			return r.data.intersectionStates.filter(s => s).length;
+			return r.data.intersectionStates.filter(s => s).length && r.data.lockSemaphore === 0;
 		}
 		const candidates = ship.roomHandles.flatMap(a => a).filter(anyIntersectionIsOpen);
 		if (candidates.length > 0) {
