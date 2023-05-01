@@ -14,7 +14,7 @@ export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibr
 	shipContainer.addChild(backgroundContainer);
 
 	const topEngine = new PIXI.Sprite(assets[TextureAssetNames.Engine].asset)
-	topEngine.x = 440
+	topEngine.x = 445
 	topEngine.y = -4
 	shipContainer.addChild(topEngine)
 
@@ -26,10 +26,10 @@ export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibr
 	const foregroundContainer = new PIXI.Container();
 	shipContainer.addChild(foregroundContainer);
 
-	const progressBar = new ProgressBar();
-	progressBar.graphics.x = 195;
-	progressBar.graphics.y = app.renderer.height - progressBar.graphics.height - 45;
-	app.stage.addChild(progressBar.graphics);
+	const progressBar = new ProgressBar(assets, 360, 50);
+	progressBar.root.x = 215;
+	progressBar.root.y = app.renderer.height - progressBar.root.height - 58;
+	app.stage.addChild(progressBar.root);
 
 	const scoreBar = new PIXI.Graphics();
 	scoreBar.x = 10;

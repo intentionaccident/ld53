@@ -13,6 +13,7 @@ import { RoomIntersectionEdit } from "./types/roomEdit/RoomIntersectionEdit";
 import { RoomHandle } from "../types/RoomHandle";
 import { HoverTarget } from "./types/HoverTarget";
 import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
+import {shipLayouts} from "../shipLayouts";
 
 function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
 	let state = room.data.intersectionStates.filter(s => s).length
@@ -46,7 +47,7 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
 		case 'n': {
 			ship.levelProgress = 1;
-			ship.graphics.progressBar.set(ship.levelProgress);
+			ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
 			return
 		} case 's': {
 			console.log(saveLevel(ship));

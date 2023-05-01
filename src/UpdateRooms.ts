@@ -77,7 +77,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 				} else if (feature.state === 'busy') {
 					feature.ticksLeft -= 1;
 					ship.levelProgress += 0.01 * PROGRESS_MODIFIER[ship.currentLevel];
-					ship.graphics.progressBar.set(ship.levelProgress);
+					ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
 					if (feature.ticksLeft <= 0) {
 						feature.state = 'done';
 					}
@@ -90,7 +90,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 	if (ship.levelProgress >= 1) {
 		ship.currentLevel += 1;
 		ship.levelProgress = 0;
-		ship.graphics.progressBar.set(ship.levelProgress);
+		ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
 		if (ship.currentLevel >= shipLayouts.length) {
 			showMessageBox("YOU WON!");
 		} else {
