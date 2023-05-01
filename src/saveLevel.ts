@@ -30,7 +30,7 @@ export function saveLevel(ship: Ship): string {
 			let f = undefined;
 			const feature = roomHandle.data.feature;
 			if (feature.type === 'source') {
-				f = '+';
+				f = feature.storage > 0 ? '+' : 'o';
 			} else if (feature.type === 'sink' && feature.subtype === 'thrusters') {
 				f = 't';
 			} else if (feature.type === 'sink' && feature.subtype === 'navigation') {

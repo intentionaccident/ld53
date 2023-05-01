@@ -1,9 +1,10 @@
 import {SINK_CAPACITY} from "./constants";
 import {RoomFeature} from "./types/RoomFeature";
 
-export function createFeature(f: "+" | "t" | "n" | "r" | undefined): RoomFeature {
+export function createFeature(f: "+" | "t" | "n" | "r" | 'o' | undefined): RoomFeature {
 	return ({
 		'+': {type: 'source', storage: 3, capacity: 3, enRoute: 0},
+		'o': {type: 'source', storage: 0, capacity: 3, enRoute: 0},
 		't': {
 			type: 'sink',
 			subtype: 'thrusters',
