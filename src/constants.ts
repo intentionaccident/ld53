@@ -7,9 +7,9 @@ export const INTERSECTION_RADIUS = 8;
 export const ROOM_UPDATE_INTERVAL = 25;
 export const ANIMATION_UPDATE_INTERVAL = 10;
 export const SINK_CAPACITY = {
-	thrusters: 15,
-	navigation: 5,
-	reactor: 30
+	thrusters: 2,
+	navigation: 1,
+	reactor: 3
 }
 
 export const SINK_BUSY_TICKS = {
@@ -25,18 +25,8 @@ export const SINK_REQUEST_TIMEOUT = {
 	reactor: sinkRequestTimeout,
 }
 
-export const SOURCE_RELEASE_SPEED = 2;
-const sinkReleaseSpeed = 6;
-export const SINK_RELEASE_SPEED = {
-	thrusters: sinkReleaseSpeed,
-	navigation: sinkReleaseSpeed,
-	reactor: sinkReleaseSpeed,
-}
-
 export const DEFAULT_PIPE_CAPACITY = 1;
 
 export const DELIVERY_TIME_LIMIT = 5 * 60;
 
 export const MAX_CONCURRENT_DIRTY_ROOMS = 2;
-
-export const GLOOP_AMOUNT = 40;

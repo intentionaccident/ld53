@@ -1,14 +1,13 @@
-import {SINK_CAPACITY, SINK_RELEASE_SPEED, SOURCE_RELEASE_SPEED} from "./constants";
+import {SINK_CAPACITY} from "./constants";
 import {RoomFeature} from "./types/RoomFeature";
 
 export function createFeature(f: "+" | "t" | "n" | "r" | undefined): RoomFeature {
 	return ({
-		'+': {type: 'source', releaseSpeed: SOURCE_RELEASE_SPEED, storage: 0},
+		'+': {type: 'source', storage: 3, capacity: 3},
 		't': {
 			type: 'sink',
 			subtype: 'thrusters',
 			capacity: SINK_CAPACITY['thrusters'],
-			releaseSpeed: SINK_RELEASE_SPEED['thrusters'],
 			state: 'idle',
 			storage: 0,
 			timeLeft: 0
@@ -17,7 +16,6 @@ export function createFeature(f: "+" | "t" | "n" | "r" | undefined): RoomFeature
 			type: 'sink',
 			subtype: 'navigation',
 			capacity: SINK_CAPACITY['navigation'],
-			releaseSpeed: SINK_RELEASE_SPEED['navigation'],
 			state: 'idle',
 			storage: 0,
 			timeLeft: 0
@@ -26,7 +24,6 @@ export function createFeature(f: "+" | "t" | "n" | "r" | undefined): RoomFeature
 			type: 'sink',
 			subtype: 'reactor',
 			capacity: SINK_CAPACITY['reactor'],
-			releaseSpeed: SINK_RELEASE_SPEED['reactor'],
 			state: 'idle',
 			storage: 0,
 			timeLeft: 0

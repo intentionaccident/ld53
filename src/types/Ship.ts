@@ -5,7 +5,6 @@ import { ProgressBar } from "./ProgressBar";
 import { AnimationInstance } from "./AnimationInstance";
 
 export interface Ship {
-	gloopAmount: number;
 	roomHandles: RoomHandle[][];
 	eventQueue: GameEvent[];
 	animationQueue: AnimationInstance[]

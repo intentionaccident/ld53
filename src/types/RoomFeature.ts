@@ -3,7 +3,7 @@ export type RoomFeature = SourceFeature | SinkFeature | EmptyFeature;
 export type SourceFeature = {
 	type: 'source',
 	storage: number,
-	releaseSpeed: number
+	capacity: number
 }
 
 export type SinkFeature = {
@@ -12,8 +12,7 @@ export type SinkFeature = {
 	storage: number,
 	capacity: number,
 	state: 'idle' | 'requesting' | 'busy' | 'done' | 'releasing';
-	ticksLeft: number,
-	releaseSpeed: number
+	ticksLeft: number
 }
 
 export type EmptyFeature = {

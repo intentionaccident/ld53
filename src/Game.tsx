@@ -8,7 +8,6 @@ import { updateRooms } from "./UpdateRooms";
 import {
 	DEFAULT_PIPE_CAPACITY,
 	DELIVERY_TIME_LIMIT,
-	GLOOP_AMOUNT,
 	ANIMATION_UPDATE_INTERVAL,
 	ROOM_UPDATE_INTERVAL
 } from "./constants";
@@ -28,7 +27,6 @@ import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 import { AnimationInstance } from "./types/AnimationInstance";
 
 export const Game = () => {
-	const [gloopAmount, setGloopAmount] = React.useState(100);
 	const [score, setScore] = React.useState(0);
 	const [timeLeft, setTimeLeft] = React.useState(0);
 
@@ -39,7 +37,6 @@ export const Game = () => {
 		const shipGraphics = initShipGraphics(app, assets)
 
 		const ship: Ship = {
-			gloopAmount: GLOOP_AMOUNT,
 			eventQueue: [],
 			animationQueue: [],
 			roomHandles: shipLayout.map((layoutRow, y) =>
@@ -100,11 +97,10 @@ export const Game = () => {
 		}
 
 		const gameLoop = (delta) => {
-			processEvents(ship, { setGloopAmount }, assets);
+			processEvents(ship, assets);
 
 			ship.timeLeft -= app.ticker.elapsedMS / 1000;
 			setTimeLeft(ship.timeLeft);
-			setGloopAmount(ship.gloopAmount);
 			setScore(ship.score);
 			elapsedTimeBetweenAnimationUpdate += delta;
 			elapsedTimeBetweenRoomUpdate += delta;
@@ -158,7 +154,6 @@ export const Game = () => {
 	return <>
 		<PixiRoot />
 		<UIRoot
-			gloopAmount={gloopAmount}
 			score={score}
 			timeLeft={timeLeft}
 		/>

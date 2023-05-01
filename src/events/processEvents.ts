@@ -10,17 +10,9 @@ import { AssetLibrary } from "../types/AssetLibrary";
 import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
 import {SinkFeature} from "../types/RoomFeature";
 
-export interface UIHooks {
-	setGloopAmount(_: number): void
-}
-
-function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
+function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
-		case ' ': {
-			ship.gloopAmount += 10;
-			hooks.setGloopAmount(ship.gloopAmount);
-			return
-		} case 'c': {
+		case 'c': {
 			for (let y = 0; y < ship.roomHandles.length; y++) {
 				for (let x = 0; x < ship.roomHandles[y].length; x++) {
 					ship.roomHandles[y][x].data.rightPipe = 0;
@@ -62,12 +54,12 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship, hooks: UIHooks) {
 	}
 }
 
-export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) {
+export function processEvents(ship: Ship, assets: AssetLibrary) {
 	while (ship.eventQueue.length) {
 		const event = ship.eventQueue.pop();
 		switch (event.type) {
 			case GameEventType.KeyPressed: {
-				processKeystroke(event, ship, hooks)
+				processKeystroke(event, ship)
 				continue;
 			} case GameEventType.RotateIntersection: {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
@@ -96,18 +88,17 @@ export function processEvents(ship: Ship, hooks: UIHooks, assets: AssetLibrary) 
 					if (paths.length > 0) {
 						const sinkPath = paths[0];
 						const sink = sinkPath.sink.data.feature as SinkFeature;
-						if (ship.gloopAmount >= sink.capacity) {
-							sink.storage += sink.capacity;
-							ship.gloopAmount -= sink.capacity;
-							hooks.setGloopAmount(ship.gloopAmount);
+						if (feature.storage > 0 && sink.storage < sink.capacity) {
+							sink.storage += 1;
+							feature.storage -= 1;
+							ship.eventQueue.push({
+								type: GameEventType.FlushPipe,
+								animationTemplate: {
+									gloop: 1,
+									path: sinkPath.path
+								}
+							});
 						}
-						ship.eventQueue.push({
-							type: GameEventType.FlushPipe,
-							animationTemplate: {
-								gloop: sink.capacity,
-								path: sinkPath.path
-							}
-						});
 					}
 				} else if (feature.type === 'sink' && feature.state === 'done') {
 					feature.state = 'releasing';
