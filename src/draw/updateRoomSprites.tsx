@@ -13,6 +13,8 @@ export function updateRoomSprites(room: RoomHandle, assetLibrary: TextureAssetLi
 		room.graphics.features.base.sprite.texture = assetLibrary["feature-radar"].asset
 	} else if (room.data.feature.type === "sink" && room.data.feature.subtype === 'thrusters') {
 		room.graphics.features.base.sprite.texture = assetLibrary["feature-control"].asset
+	} else if (room.data.feature.type === "sink" && room.data.feature.subtype === 'reactor') {
+		room.graphics.features.base.sprite.texture = assetLibrary["feature-reactor"].asset
 	} else {
 		room.graphics.features.base.root.visible = false
 		return
