@@ -24,6 +24,7 @@ import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
+import {updateAnimations} from "./updateAnimations";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -105,32 +106,7 @@ export const Game = () => {
 
 			while (elapsedTimeBetweenAnimationUpdate > ANIMATION_UPDATE_INTERVAL) {
 				elapsedTimeBetweenAnimationUpdate -= ANIMATION_UPDATE_INTERVAL;
-				for (const animation of ship.animationQueue) {
-					if (animation.flow < animation.template.path.length) {
-						const newPipe = animation.template.path[animation.flow];
-						animation.activePipes.push(newPipe)
-						const room = ship.roomHandles[newPipe.y][newPipe.x]
-						if (newPipe.vertical) {
-							room.data.bottomPipe++
-						} else {
-							room.data.rightPipe++
-						}
-					}
-
-					animation.flow++
-
-					if (animation.flow > animation.template.gloop) {
-						const removedPipe = animation.activePipes.shift()
-						const room = ship.roomHandles[removedPipe.y][removedPipe.x]
-						room.data.lockSemaphore--
-						if (removedPipe.vertical) {
-							room.data.bottomPipe--
-						} else {
-							room.data.rightPipe--
-						}
-					}
-				}
-				ship.animationQueue = ship.animationQueue.filter((animation) => animation.activePipes.length)
+				updateAnimations(ship, setScore);
 			}
 
 			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
