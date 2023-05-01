@@ -11,9 +11,8 @@ export interface Room {
 
 	roomOpen: boolean;
 
+	isLocked: boolean
+
 	feature: RoomFeature;
 	isDirty: boolean;
-
-	bottomPipeFramesSinceWater: number;
-	rightPipeFramesSinceWater: number;
 }

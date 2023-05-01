@@ -63,6 +63,10 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 				continue;
 			} case GameEventType.RotateIntersection: {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
+				if (room.data.isLocked) {
+					continue
+				}
+
 				if (event.clockwise) {
 					room.data.intersectionStates.push(room.data.intersectionStates.shift())
 				} else {

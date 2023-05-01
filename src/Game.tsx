@@ -24,7 +24,6 @@ import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
-import { AnimationInstance } from "./types/AnimationInstance";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -63,8 +62,7 @@ export const Game = () => {
 
 							feature: createFeature(layout?.f),
 							isDirty: false,
-							rightPipeFramesSinceWater: Number.POSITIVE_INFINITY,
-							bottomPipeFramesSinceWater: Number.POSITIVE_INFINITY,
+							isLocked: false,
 						},
 						graphics
 					} as RoomHandle;
@@ -113,9 +111,9 @@ export const Game = () => {
 						animation.activePipes.push(newPipe)
 						const room = ship.roomHandles[newPipe.y][newPipe.x]
 						if (newPipe.vertical) {
-							room.data.bottomPipeFramesSinceWater = 0
+							room.data.bottomPipe++
 						} else {
-							room.data.rightPipeFramesSinceWater = 0
+							room.data.rightPipe++
 						}
 					}
 
@@ -125,9 +123,9 @@ export const Game = () => {
 						const removedPipe = animation.activePipes.shift()
 						const room = ship.roomHandles[removedPipe.y][removedPipe.x]
 						if (removedPipe.vertical) {
-							room.data.bottomPipeFramesSinceWater = 3
+							room.data.bottomPipe--
 						} else {
-							room.data.rightPipeFramesSinceWater = 3
+							room.data.rightPipe--
 						}
 					}
 				}
