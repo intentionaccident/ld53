@@ -1,14 +1,14 @@
-import {Ship} from "../types/Ship";
-import {DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT} from "../constants";
-import {GameEventType} from "./types/GameEventType";
-import {KeyPressedEvent} from "./types/KeyPressedEvent";
-import {RoomEditTarget} from "./types/roomEdit/RoomEditTarget";
-import {saveLevel} from "../saveLevel";
-import {createFeature} from "../createFeature";
-import {updateIntersectionTexture} from "../utils/updateIntersectionTexture";
-import {AssetLibrary} from "../types/AssetLibrary";
-import {dijkstraGraph, dijkstraPath} from "../dijkstraGraph";
-import {SinkFeature, SourceFeature} from "../types/RoomFeature";
+import { Ship } from "../types/Ship";
+import { DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT } from "../constants";
+import { GameEventType } from "./types/GameEventType";
+import { KeyPressedEvent } from "./types/KeyPressedEvent";
+import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
+import { saveLevel } from "../saveLevel";
+import { createFeature } from "../createFeature";
+import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
+import { AssetLibrary } from "../types/AssetLibrary";
+import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
+import { SinkFeature, SourceFeature } from "../types/RoomFeature";
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
@@ -68,9 +68,9 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 				}
 
 				if (event.clockwise) {
-					room.data.intersectionStates.push(room.data.intersectionStates.shift())
-				} else {
 					room.data.intersectionStates.unshift(room.data.intersectionStates.pop())
+				} else {
+					room.data.intersectionStates.push(room.data.intersectionStates.shift())
 				}
 				updateIntersectionTexture(room, assets)
 
@@ -85,11 +85,11 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 								(r.data.feature.type === 'sink' && r.data.feature.state === 'requesting')
 								|| (r.data.feature.type === 'source' && r.data.feature.storage < r.data.feature.capacity)
 							);
-					const graph = dijkstraGraph(ship.roomHandles, {x: roomHandle.coordinate.x, y: roomHandle.coordinate.y});
+					const graph = dijkstraGraph(ship.roomHandles, { x: roomHandle.coordinate.x, y: roomHandle.coordinate.y });
 					const paths = targetCandidates.map(target => {
 						return {
 							sink: target,
-							path: dijkstraPath(graph, {x: target.coordinate.x, y: target.coordinate.y})
+							path: dijkstraPath(graph, { x: target.coordinate.x, y: target.coordinate.y })
 						}
 					}).filter(path => path.path.length > 0);
 					paths.sort((a, b) => {

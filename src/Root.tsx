@@ -9,7 +9,7 @@ export const app = new Application({
 	width: 640,
 	height: 480,
 	antialias: true,
-	backgroundColor: 0xffffff
+	backgroundColor: 0x222222
 });
 
 export const Root: React.FC = () => {
