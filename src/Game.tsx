@@ -30,7 +30,8 @@ import {SinkFeature} from "./types/RoomFeature";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
-	const [timeLeft, setTimeLeft] = React.useState(0);
+	const [timeLeft, setTimeLeft] = React.useState(1);
+	const [message, setMessage] = React.useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
 
 	const { textureAssets, soundAssets } = React.useContext(AssetContext);
 	const { app } = React.useContext(AppContext);
@@ -88,6 +89,7 @@ export const Game = () => {
 				drawRoom(room, textureAssets)
 		};
 
+		app.ticker.stop();
 		app.ticker.add(gameLoop);
 		window.addEventListener('keydown', keyDownListener, false);
 		return () => {
@@ -96,11 +98,18 @@ export const Game = () => {
 		}
 	}, []);
 
+	function handleMessageBoxClosed() {
+		app.ticker.start();
+		setMessage('');
+	}
+
 	return <>
 		<PixiRoot />
 		<UIRoot
+			text={message}
 			score={score}
 			timeLeft={timeLeft}
+			handleMessageBoxClosed={handleMessageBoxClosed}
 		/>
 	</>
 }
