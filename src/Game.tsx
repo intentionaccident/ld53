@@ -17,6 +17,8 @@ import { Ship } from "./types/Ship";
 import { updateAnimations } from "./updateAnimations";
 import { initializeLevel } from "./initializeLevel";
 import { SinkFeature } from "./types/RoomFeature";
+import {drawSource} from "./draw/drawSource";
+import {drawScore} from "./draw/drawScore";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -65,14 +67,14 @@ export const Game = () => {
 		const gameLoop = (delta) => {
 			processEvents(ship, textureAssets, soundAssets);
 
-			ship.timeLeft += app.ticker.elapsedMS / 1000 / 10;
+			ship.timeLeft += app.ticker.elapsedMS / 100 / 2;
 			setTimeLeft(1);
-			setScore(
-				Math.min(
-					ship.score - (ship.timeLeft | 0),
-					SCORE_MAX
-				)
-			);
+			const score = Math.max(Math.min(
+				ship.score - (ship.timeLeft | 0),
+				SCORE_MAX
+			), 0);
+			setScore(score);
+			drawScore(ship.graphics.scoreBar, score);
 			elapsedTimeBetweenAnimationUpdate += delta;
 			elapsedTimeBetweenRoomUpdate += delta;
 

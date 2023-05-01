@@ -32,10 +32,16 @@ export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibr
 	progressBar.graphics.y = MARGIN
 	app.stage.addChild(progressBar.graphics);
 
+	const scoreBar = new PIXI.Graphics();
+	scoreBar.x = 10;
+	scoreBar.y = 350;
+	app.stage.addChild(scoreBar);
+
 	return {
 		root: shipContainer,
 		background: backgroundContainer,
 		foreground: foregroundContainer,
-		progressBar: progressBar
+		progressBar: progressBar,
+		scoreBar: scoreBar
 	};
 }

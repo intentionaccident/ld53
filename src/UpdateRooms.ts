@@ -29,8 +29,6 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 			maxConcurrentDirtyRooms = limit.value;
 		}
 	}
-	console.log(maxConcurrentDirtyRooms);
-	console.log(`${ship.ticksBetweenDirtyRooms}/${DIRTY_ROOM_DELAY_IN_TICKS}`)
 	if (dirtyRooms.length < maxConcurrentDirtyRooms) {
 		ship.ticksBetweenDirtyRooms += 1;
 		if (ship.ticksBetweenDirtyRooms > DIRTY_ROOM_DELAY_IN_TICKS) {

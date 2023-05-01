@@ -12,13 +12,9 @@ import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 import { AnimationAssetLibrary } from "./types/AnimationAssetLibrary";
 import { updateRoomSprites } from "./draw/updateRoomSprites";
+import {Ship} from "./types/Ship";
 
-export function initializeLevel(shipGraphics: {
-	root: Container;
-	background: Container;
-	foreground: Container;
-	progressBar: ProgressBar
-}, textureAssets: TextureAssetLibrary, animationAssets: AnimationAssetLibrary) {
+export function initializeLevel(shipGraphics: Ship['graphics'], textureAssets: TextureAssetLibrary, animationAssets: AnimationAssetLibrary) {
 	return shipLayouts[0].map((layoutRow, y) =>
 		layoutRow.map((layout, x) => {
 			const coordinate = new PIXI.Point(x, y)

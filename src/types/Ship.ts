@@ -13,6 +13,7 @@ export interface Ship {
 		background: PIXI.Container;
 		foreground: PIXI.Container;
 		progressBar: ProgressBar;
+		scoreBar: PIXI.Graphics;
 	},
 	currentLevel: number,
 	levelProgress: number,
