@@ -61,7 +61,7 @@ export const Game = () => {
 		}
 
 		const gameLoop = (delta) => {
-			processEvents(ship, textureAssets);
+			processEvents(ship, textureAssets, soundAssets);
 
 			ship.timeLeft -= app.ticker.elapsedMS / 1000;
 			setTimeLeft(ship.timeLeft);

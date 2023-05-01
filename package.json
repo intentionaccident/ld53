@@ -9,6 +9,10 @@
     "dev": "webpack-dev-server"
   },
   "dependencies": {
+    "@pixi/assets": "^7.2.4",
+    "@pixi/core": "^7.2.4",
+    "@pixi/sound": "^5.1.2",
+    "@pixi/utils": "^7.2.4",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "@types/react": "^18.2.0",
     "css-loader": "^6.7.3",

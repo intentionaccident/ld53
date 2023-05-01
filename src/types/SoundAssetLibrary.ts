@@ -1,4 +1,3 @@
-import * as PIXI from "pixi.js";
+import {Sound} from '@pixi/sound';
 import { SoundAssetNames } from "./SoundAssetNames";
-
-export type SoundAssetLibrary = Record<SoundAssetNames, { asset: PIXI.Texture; }>;
+export type SoundAssetLibrary = Record<SoundAssetNames, { asset: Sound; }>;

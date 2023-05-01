@@ -54,7 +54,7 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	}
 }
 
-export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
+export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, soundAssets: SoundAssetLibrary) {
 	while (ship.eventQueue.length) {
 		const event = ship.eventQueue.pop();
 		switch (event.type) {
@@ -72,7 +72,7 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 				} else {
 					room.data.intersectionStates.push(room.data.intersectionStates.shift())
 				}
-				updateIntersectionTexture(room, assets)
+				updateIntersectionTexture(room, textureAssets)
 
 				continue
 			} case GameEventType.ActivateFeature: {
@@ -102,6 +102,7 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 						}
 					});
 					console.log(paths);
+					let failed = true;
 					if (paths.length > 0) {
 						const sinkPath = paths[0];
 						const sink = sinkPath.sink.data.feature as (SinkFeature | SourceFeature);
@@ -116,10 +117,14 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 									target: sink
 								}
 							});
+							failed = false;
 							if (feature.type === 'sink' && feature.state === 'done' && feature.storage === 0) {
 								feature.state = 'idle';
 							}
 						}
+					}
+					if (failed) {
+						soundAssets.boing.asset.play();
 					}
 				}
 				continue;
@@ -141,7 +146,7 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 						continue
 					} case RoomEditTarget.Intersection: {
 						processIntersectionEdit(room, event.edit)
-						updateIntersectionTexture(room, assets)
+						updateIntersectionTexture(room, textureAssets)
 						continue
 					} case RoomEditTarget.Feature: {
 						if (room.data.feature.type === 'empty') {

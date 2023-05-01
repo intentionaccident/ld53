@@ -5,6 +5,20 @@ import { SoundAssetLibrary } from "./types/SoundAssetLibrary";
 import { TextureAssetNames } from "./types/TextureAssetNames";
 import {SoundAssetNames} from "./types/SoundAssetNames";
 import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
+import {Sound} from "@pixi/sound";
+
+function loadSound(name: string): Promise<Sound> {
+	return new Promise<Sound>((resolve, reject) => {
+		Sound.from({
+			url: `assets/${name}.mp3`,
+			preload: true,
+			loaded: function (err, sound) {
+				if (err) reject(err)
+				else resolve(sound)
+			}
+		})
+	});
+}
 
 export const AssetLoader: React.FC<React.PropsWithChildren> = ({ children }) => {
 	const [textureAssets, setTextureAssets] = React.useState<TextureAssetLibrary>(null)
@@ -23,7 +37,7 @@ export const AssetLoader: React.FC<React.PropsWithChildren> = ({ children }) => 
 		))
 		Promise.all(
 			Object.values(SoundAssetNames).map(
-				name => PIXI.Assets.load(`assets/${name}.mp3`)
+				name => loadSound(name)
 					.then(asset => ({ name, asset }))
 			)
 		).then(assets => setSoundAssets(
