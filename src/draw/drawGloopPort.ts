@@ -1,15 +1,15 @@
-import { AssetLibrary } from "../types/AssetLibrary";
-import { AssetNames } from "../types/AssetNames";
 import { RoomHandle } from "../types/RoomHandle";
+import {TextureAssetNames} from "../types/TextureAssetNames";
+import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
 
 const gloopMap = [
 	[],
-	[AssetNames.GloopPortSingleEmpty, AssetNames.GloopPortSingleFull],
-	[AssetNames.GloopPortDoubleEmpty, AssetNames.GloopPortDoubleHalf, AssetNames.GloopPortDoubleFull],
-	[AssetNames.GloopPortTripleEmpty, AssetNames.GloopPortTripleOne, AssetNames.GloopPortTripleTwo, AssetNames.GloopPortTripleFull],
+	[TextureAssetNames.GloopPortSingleEmpty, TextureAssetNames.GloopPortSingleFull],
+	[TextureAssetNames.GloopPortDoubleEmpty, TextureAssetNames.GloopPortDoubleHalf, TextureAssetNames.GloopPortDoubleFull],
+	[TextureAssetNames.GloopPortTripleEmpty, TextureAssetNames.GloopPortTripleOne, TextureAssetNames.GloopPortTripleTwo, TextureAssetNames.GloopPortTripleFull],
 ]
 
-export function drawGloopPort(room: RoomHandle, assets: AssetLibrary) {
+export function drawGloopPort(room: RoomHandle, assets: TextureAssetLibrary) {
 	const graphics = room.graphics.room.gloopPort;
 	if (room.data.feature.type !== "sink" && room.data.feature.type !== "source") {
 		graphics.visible = false;

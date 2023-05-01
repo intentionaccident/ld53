@@ -2,8 +2,9 @@ import * as PIXI from "pixi.js";
 import { DualRender, RoomHandle } from "../types/RoomHandle";
 import { INTERSECTION_RADIUS, SLANT, SLANTEDNESS, TILE_HEIGHT, TILE_WIDTH } from "../constants";
 import { Ship } from "../types/Ship";
-import { AssetLibrary } from "../types/AssetLibrary";
-import { AssetNames } from "../types/AssetNames";
+import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
+import { TextureAssetNames } from "../types/TextureAssetNames";
+import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
 
 function createDualRender(texture: PIXI.Texture): DualRender {
 	const root = new PIXI.Container();
@@ -16,14 +17,14 @@ function createDualRender(texture: PIXI.Texture): DualRender {
 	}
 }
 
-export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], assetLibrary: AssetLibrary): RoomHandle['graphics'] {
-	const room = createDualRender(assetLibrary[AssetNames.Template].asset)
+export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], assetLibrary: TextureAssetLibrary): RoomHandle['graphics'] {
+	const room = createDualRender(assetLibrary[TextureAssetNames.Template].asset)
 	room.root.x = TILE_WIDTH * coord.x - SLANT * coord.y;
 	room.root.y = TILE_HEIGHT * coord.y;
 	room.sprite.x = -SLANT;
 	graphics.background.addChild(room.root);
 
-	const gloopPort = new PIXI.Sprite(assetLibrary[AssetNames.GloopPortTripleEmpty].asset)
+	const gloopPort = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortTripleEmpty].asset)
 	room.root.addChild(gloopPort)
 	gloopPort.x = -SLANT;
 	gloopPort.visible = false;
@@ -38,19 +39,19 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	pipeGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y + TILE_WIDTH / 2 - SLANT / 2;
 	pipeGraphics.y = TILE_HEIGHT * coord.y + TILE_HEIGHT / 2;
 
-	const verticalPipe = createDualRender(assetLibrary[AssetNames.PipeVerticalEmpty].asset)
+	const verticalPipe = createDualRender(assetLibrary[TextureAssetNames.PipeVerticalEmpty].asset)
 	verticalPipe.sprite.x = -INTERSECTION_RADIUS * 3 * SLANTEDNESS - INTERSECTION_RADIUS / 2
 	verticalPipe.sprite.y = INTERSECTION_RADIUS;
-	const horizontalPipe = createDualRender(assetLibrary[AssetNames.PipeHorizontalEmpty].asset)
+	const horizontalPipe = createDualRender(assetLibrary[TextureAssetNames.PipeHorizontalEmpty].asset)
 	const horizontalPipeAnimation = new PIXI.AnimatedSprite([
-		assetLibrary[AssetNames.PipeHorizontalAnimationFrame1].asset,
-		assetLibrary[AssetNames.PipeHorizontalAnimationFrame2].asset,
-		assetLibrary[AssetNames.PipeHorizontalAnimationFrame3].asset,
+		assetLibrary[TextureAssetNames.PipeHorizontalAnimationFrame1].asset,
+		assetLibrary[TextureAssetNames.PipeHorizontalAnimationFrame2].asset,
+		assetLibrary[TextureAssetNames.PipeHorizontalAnimationFrame3].asset,
 	])
 	horizontalPipeAnimation.x = horizontalPipe.sprite.x = INTERSECTION_RADIUS - INTERSECTION_RADIUS / 2 * SLANTEDNESS
 	horizontalPipeAnimation.y = horizontalPipe.sprite.y = -INTERSECTION_RADIUS / 2;
 
-	const intersection = createDualRender(assetLibrary[AssetNames.CrossIntersection].asset)
+	const intersection = createDualRender(assetLibrary[TextureAssetNames.CrossIntersection].asset)
 	intersection.sprite.x = -10;
 	intersection.sprite.y = -8;
 
@@ -65,10 +66,10 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	const clampsRoot = new PIXI.Container()
 	intersection.sprite.addChild(clampsRoot)
 	const clamps = [
-		AssetNames.ClampUp,
-		AssetNames.ClampRight,
-		AssetNames.ClampDown,
-		AssetNames.ClampLeft
+		TextureAssetNames.ClampUp,
+		TextureAssetNames.ClampRight,
+		TextureAssetNames.ClampDown,
+		TextureAssetNames.ClampLeft
 	].map(clamp => {
 		const clampSprite = new PIXI.Sprite(assetLibrary[clamp].asset)
 		clampSprite.x = -1;
@@ -77,7 +78,7 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		return clampSprite
 	})
 
-	const interactiveIntersection = new PIXI.Sprite(assetLibrary[AssetNames.InteractiveIntersection].asset)
+	const interactiveIntersection = new PIXI.Sprite(assetLibrary[TextureAssetNames.InteractiveIntersection].asset)
 	interactiveIntersection.x = 5;
 	interactiveIntersection.y = 5;
 	intersection.sprite.addChild(interactiveIntersection)

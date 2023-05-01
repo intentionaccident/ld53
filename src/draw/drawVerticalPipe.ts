@@ -1,14 +1,15 @@
 import { LINE_SIZE, SLANT, TILE_HEIGHT } from "../constants";
-import { AssetLibrary } from "../types/AssetLibrary";
-import { AssetNames } from "../types/AssetNames";
+import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
+import { TextureAssetNames } from "../types/TextureAssetNames";
 import { RoomHandle } from "../types/RoomHandle";
 import { getPipeColor } from "./getPipeColor";
+import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
 
-export function drawVerticalPipe(room: RoomHandle, assetLibrary: AssetLibrary) {
+export function drawVerticalPipe(room: RoomHandle, assetLibrary: TextureAssetLibrary) {
 	room.graphics.verticalPipe.base.sprite.texture
 		= room.data.bottomPipe > 0
-			? assetLibrary[AssetNames.PipeVerticalFull].asset
-			: assetLibrary[AssetNames.PipeVerticalEmpty].asset
+			? assetLibrary[TextureAssetNames.PipeVerticalFull].asset
+			: assetLibrary[TextureAssetNames.PipeVerticalEmpty].asset
 	room.graphics.verticalPipe.base.sprite.visible = room.data.bottomPipeCapacity > 0;
 
 	const graphics = room.graphics.verticalPipe.base.primitive;

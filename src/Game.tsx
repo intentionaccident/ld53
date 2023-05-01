@@ -30,11 +30,11 @@ export const Game = () => {
 	const [score, setScore] = React.useState(0);
 	const [timeLeft, setTimeLeft] = React.useState(0);
 
-	const { assets } = React.useContext(AssetContext);
+	const { textureAssets, soundAssets } = React.useContext(AssetContext);
 	const { app } = React.useContext(AppContext);
 
 	React.useEffect(() => {
-		const shipGraphics = initShipGraphics(app, assets)
+		const shipGraphics = initShipGraphics(app, textureAssets)
 
 		const ship: Ship = {
 			eventQueue: [],
@@ -42,7 +42,7 @@ export const Game = () => {
 			roomHandles: shipLayout.map((layoutRow, y) =>
 				layoutRow.map((layout, x) => {
 					const coordinate = new PIXI.Point(x, y)
-					const graphics = initRoomGraphics(coordinate, shipGraphics, assets)
+					const graphics = initRoomGraphics(coordinate, shipGraphics, textureAssets)
 					const hidden = layout == null
 					const room = {
 						coordinate,
@@ -72,7 +72,7 @@ export const Game = () => {
 					if (hidden) {
 						setRoomVisibility(room, false)
 					}
-					updateIntersectionTexture(room, assets)
+					updateIntersectionTexture(room, textureAssets)
 					return room
 				})
 			),
@@ -96,7 +96,7 @@ export const Game = () => {
 		}
 
 		const gameLoop = (delta) => {
-			processEvents(ship, assets);
+			processEvents(ship, textureAssets);
 
 			ship.timeLeft -= app.ticker.elapsedMS / 1000;
 			setTimeLeft(ship.timeLeft);
@@ -115,7 +115,7 @@ export const Game = () => {
 			}
 
 			for (const room of roomHandlesDrawQueue)
-				drawRoom(room, assets)
+				drawRoom(room, textureAssets)
 		};
 
 		app.ticker.add(gameLoop);

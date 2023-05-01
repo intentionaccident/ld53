@@ -1,8 +1,11 @@
 import * as React from "react";
-import { AssetLibrary } from "./types/AssetLibrary";
+import { SoundAssetLibrary } from "./types/SoundAssetLibrary";
+import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
 
 export const AssetContext = React.createContext<{
-	assets: AssetLibrary
+	textureAssets: TextureAssetLibrary,
+	soundAssets: SoundAssetLibrary
 }>({
-	assets: null
+	textureAssets: null,
+	soundAssets: null
 })

@@ -1,14 +1,15 @@
 import { LINE_SIZE, TILE_WIDTH } from "../constants";
-import { AssetLibrary } from "../types/AssetLibrary";
-import { AssetNames } from "../types/AssetNames";
+import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
+import { TextureAssetNames } from "../types/TextureAssetNames";
 import { RoomHandle } from "../types/RoomHandle";
 import { getPipeColor } from "./getPipeColor";
+import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
 
-export function drawHorizontalPipe(room: RoomHandle, assetLibrary: AssetLibrary) {
+export function drawHorizontalPipe(room: RoomHandle, assetLibrary: TextureAssetLibrary) {
 	room.graphics.horizontalPipe.base.sprite.texture
 		= room.data.rightPipe > 0
-			? assetLibrary[AssetNames.PipeHorizontalFull].asset
-			: assetLibrary[AssetNames.PipeHorizontalEmpty].asset
+			? assetLibrary[TextureAssetNames.PipeHorizontalFull].asset
+			: assetLibrary[TextureAssetNames.PipeHorizontalEmpty].asset
 	room.graphics.horizontalPipe.base.sprite.visible = room.data.rightPipeCapacity > 0;
 
 	const graphics = room.graphics.horizontalPipe.base.primitive;

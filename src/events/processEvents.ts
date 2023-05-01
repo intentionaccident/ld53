@@ -6,7 +6,8 @@ import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
 import { saveLevel } from "../saveLevel";
 import { createFeature } from "../createFeature";
 import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
-import { AssetLibrary } from "../types/AssetLibrary";
+import {SoundAssetLibrary} from "../types/SoundAssetLibrary";
+import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
 import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
 import { SinkFeature, SourceFeature } from "../types/RoomFeature";
 
@@ -54,7 +55,7 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	}
 }
 
-export function processEvents(ship: Ship, assets: AssetLibrary) {
+export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 	while (ship.eventQueue.length) {
 		const event = ship.eventQueue.pop();
 		switch (event.type) {

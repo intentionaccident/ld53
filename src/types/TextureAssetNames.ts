@@ -1,5 +1,5 @@
 
-export enum AssetNames {
+export enum TextureAssetNames {
 	Template = "template",
 	InteractiveIntersection = "interactive-intersection",
 	ClampUp = "clamps1",
