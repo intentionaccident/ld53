@@ -110,8 +110,6 @@ export const Game = () => {
 		<PixiRoot />
 		<UIRoot
 			text={message}
-			score={score}
-			timeLeft={timeLeft}
 			handleMessageBoxClosed={closeMessageBox}
 		/>
 	</>
