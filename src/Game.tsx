@@ -43,7 +43,7 @@ export const Game = () => {
 			currentLevel: 0,
 			levelProgress: 0,
 			timeLeft: 0,
-			score: SCORE_MAX,
+			score: 0,
 			ticksBetweenRequests: 0,
 			ticksBetweenDirtyRooms: 0
 		}
@@ -67,14 +67,9 @@ export const Game = () => {
 		const gameLoop = (delta) => {
 			processEvents(ship, textureAssets, soundAssets);
 
-			ship.timeLeft += app.ticker.elapsedMS / 100 / 2;
 			setTimeLeft(1);
-			const score = Math.max(Math.min(
-				ship.score - (ship.timeLeft | 0),
-				SCORE_MAX
-			), 0);
-			setScore(score);
-			drawScore(ship.graphics.scoreBar, score);
+			setScore(ship.score);
+			drawScore(ship.graphics.scoreBar, ship.score);
 			elapsedTimeBetweenAnimationUpdate += delta;
 			elapsedTimeBetweenRoomUpdate += delta;
 

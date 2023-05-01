@@ -14,12 +14,6 @@ export function drawScore(g: PIXI.Graphics, score: number) {
 	let progress = score / SCORE_MAX;
 	progress = Math.min(progress, 1);
 	progress = Math.max(progress, 0);
-	if (progress >= 0 && progress < 0.75) {
-		progress = (progress / 0.75) * 0.50
-	}
-	if (progress >= 0.75 && progress <= 1) {
-		progress = 0.50 + ((progress - 0.75) / 0.25) * 0.50
-	}
 	progress = (progress) * 0.924 + 0.06;
 
 	g.beginFill(0x7A9E96);
