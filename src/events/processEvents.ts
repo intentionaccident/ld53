@@ -194,6 +194,12 @@ export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, so
 					}
 				}
 				continue;
+			} case GameEventType.DeliveryRequest: {
+				const room = ship.roomHandles[event.coord.y][event.coord.x];
+				room.data.isDirty = true
+				room.graphics.room.boxArrivalAnimation.visible = true
+				room.graphics.room.boxArrivalAnimation.play()
+				continue
 			} default: {
 				console.warn("unprocessed event", event)
 				continue;

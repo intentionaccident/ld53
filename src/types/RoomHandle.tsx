@@ -18,6 +18,8 @@ export interface RoomHandle {
 			gloopSyphon: PIXI.Sprite
 			alertAnimation: PIXI.AnimatedSprite
 			alertScreen: PIXI.Sprite
+			boxArrivalAnimation: PIXI.AnimatedSprite
+			boxFillingAnimation: PIXI.AnimatedSprite
 		}
 		dirty: PIXI.Graphics;
 		pipes: PIXI.Container;

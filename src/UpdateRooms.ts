@@ -1,11 +1,12 @@
-import {Ship} from "./types/Ship";
-import {MAX_CONCURRENT_DIRTY_ROOMS, REQUEST_DELAY_IN_TICKS, SINK_BUSY_TICKS} from "./constants";
-import {IntersectionDirection} from "./types/IntersectionDirection";
-import {RoomHandle} from "./types/RoomHandle";
-import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
-import {shipLayoutMasks, shipLayouts} from "./shipLayouts";
-import {updateLevel} from "./updateLevel";
-import {SoundAssetLibrary} from "./types/SoundAssetLibrary";
+import { MAX_CONCURRENT_DIRTY_ROOMS, REQUEST_DELAY_IN_TICKS, SINK_BUSY_TICKS } from "./constants";
+import { GameEventType } from "./events/types/GameEventType";
+import { shipLayouts, shipLayoutMasks } from "./shipLayouts";
+import { RoomHandle } from "./types/RoomHandle";
+import { Ship } from "./types/Ship";
+import { SoundAssetLibrary } from "./types/SoundAssetLibrary";
+import { TextureAssetLibrary } from "./types/TextureAssetLibrary";
+import { updateLevel } from "./updateLevel";
+
 
 export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soundAssets: SoundAssetLibrary, showMessageBox: (message: string) => void) {
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
@@ -19,10 +20,16 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 		function anyIntersectionIsOpen(r: RoomHandle) {
 			return r.data.intersectionStates.filter(s => s).length && r.data.lockSemaphore === 0;
 		}
+
+
 		const candidates = ship.roomHandles.flatMap(a => a).filter(anyIntersectionIsOpen);
 		if (candidates.length > 0) {
 			const room = candidates[Math.floor(Math.random() * candidates.length)];
-			room.data.isDirty = true;
+
+			ship.eventQueue.push({
+				type: GameEventType.DeliveryRequest,
+				coord: room.coordinate
+			})
 		}
 	}
 	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleEmptySinks.length > 0) {

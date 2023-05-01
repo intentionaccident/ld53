@@ -1,3 +1,4 @@
 export enum AnimationAssetNames {
-	Alert = "alert"
+	Alert = "alert",
+	Box = "box"
 }

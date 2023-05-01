@@ -40,9 +40,21 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	alertAnimation.visible = false
 	alertAnimation.play()
 
+	const boxArrivalAnimation = new PIXI.AnimatedSprite(animationAssets.box.textures.slice(0, 13))
+	boxArrivalAnimation.x = -SLANT;
+	boxArrivalAnimation.animationSpeed = 0.2;
+	boxArrivalAnimation.visible = false
+	boxArrivalAnimation.loop = false
+
+	const boxFillingAnimation = new PIXI.AnimatedSprite(animationAssets.box.textures.slice(13))
+	boxFillingAnimation.x = -SLANT;
+	boxFillingAnimation.animationSpeed = 0.2;
+	boxFillingAnimation.visible = false
+	boxArrivalAnimation.loop = false
+
 	const alertScreen = new PIXI.Sprite(animationAssets.alert.textures[0])
 	alertScreen.x = -SLANT;
-	room.root.addChild(alertScreen, alertAnimation)
+	room.root.addChild(alertScreen, alertAnimation, boxArrivalAnimation, boxFillingAnimation)
 
 	const gloopPort = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortTripleEmpty].asset)
 	const gloopSyphon = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortSyphonEmpty].asset)
@@ -140,7 +152,9 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 			gloopPort,
 			gloopSyphon,
 			alertAnimation,
-			alertScreen
+			alertScreen,
+			boxArrivalAnimation,
+			boxFillingAnimation
 		},
 		verticalPipe: {
 			base: verticalPipe,

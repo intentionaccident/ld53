@@ -7,4 +7,5 @@ export enum GameEventType {
 	ActivateFeature,
 	FlushPipe,
 	HoverButton,
+	DeliveryRequest
 }

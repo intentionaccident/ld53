@@ -5,6 +5,7 @@ import { ActivateSinkEvent } from "./ActivateSinkEvent";
 import { ActivateFeatureEvent } from "./ActivateFeatureEvent";
 import { FlushPipeEvent } from "./FlushPipeEvent";
 import { HoverButtonEvent } from "./HoverButtonEvent";
+import { DeliveryRequestEvent } from "./DeliveryRequestEvent";
 
 export type GameEvent = RoomEditEvent
 	| KeyPressedEvent
@@ -13,5 +14,4 @@ export type GameEvent = RoomEditEvent
 	| ActivateFeatureEvent
 	| FlushPipeEvent
 	| HoverButtonEvent
-
-
+	| DeliveryRequestEvent

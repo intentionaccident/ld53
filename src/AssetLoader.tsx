@@ -23,7 +23,8 @@ function loadSound(name: string): Promise<Sound> {
 }
 
 const animationLengths: Record<AnimationAssetNames, number> = {
-	[AnimationAssetNames.Alert]: 11
+	[AnimationAssetNames.Alert]: 11,
+	[AnimationAssetNames.Box]: 28
 }
 
 export const AssetLoader: React.FC<React.PropsWithChildren> = ({ children }) => {
