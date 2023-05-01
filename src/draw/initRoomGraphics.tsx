@@ -117,8 +117,10 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	})
 
 	const interactiveIntersectionAnimation = new PIXI.AnimatedSprite(animationAssets["interactable-intersection"].textures)
+	interactiveIntersectionAnimation.interactive = true;
+	interactiveIntersectionAnimation.on('mouseenter', interactiveIntersectionAnimation.play);
+	interactiveIntersectionAnimation.on('mouseleave', interactiveIntersectionAnimation.stop);
 	interactiveIntersectionAnimation.animationSpeed = 0.1
-	interactiveIntersectionAnimation.play()
 	interactiveIntersectionAnimation.x = 10 - TILE_WIDTH / 2 - SLANT / 2;
 	interactiveIntersectionAnimation.y = 8 - TILE_HEIGHT / 2;
 	intersection.sprite.addChild(interactiveIntersectionAnimation)
