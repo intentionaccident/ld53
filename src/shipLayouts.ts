@@ -6,23 +6,8 @@ export type RoomLayout = {
 } | null;
 // ┼  ┤  ┴  ┘  ├  │  └  ╵  ┬  ┐  ─  ╴  ┌  ╷  ╶
 export const shipLayouts: RoomLayout[][][] = [
-	[[{"i": "┼", "f": "t", "p": "+"}, {"i": "┼", "p": "-"}, {
-		"i": "┼",
-		"f": "+",
-		"p": "|"
-	}, {}, {}, {}, {}, {}, {}, {}, {}], [{"i": "┼", "p": "|"}, {}, {
-		"i": "┼",
-		"p": "|"
-	}, {}, {}, {}, {}, {}, {}, {}, {}], [{"i": "┼", "p": "|"}, {}, {
-		"i": "┼",
-		"p": "|"
-	}, {}, {}, {}, {}, {}, {}, {}, {}], [{"i": "┼", "p": "|"}, {}, {
-		"i": "┼",
-		"p": "|"
-	}, {}, {}, {}, {}, {}, {}, {}, {}], [{"i": "┼", "f": "n", "p": "-"}, {"i": "┼", "p": "-"}, {
-		"i": "┼",
-		"f": "r"
-	}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, null, null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, null, null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, null, null, null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}], [null, null, null, null, null, null, {}, {}, {}, {}, {}, {}, {}, {}, {}]],
+
+	[[{ "i": "┌", "il": true, "p": "+" }, { "i": "╶", "il": false, "f": "t", "p": "+" }, { "i": "┐", "il": false, "p": "|" }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [{ "i": "└", "il": false, "p": "+" }, { "i": "│", "il": false, "p": "+" }, { "i": "┤", "il": false, "p": "|" }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [{ "i": "│", "il": true, "p": "|" }, { "i": "─", "il": false, "p": "+" }, { "i": "╶", "il": false, "f": "+", "p": "|" }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [{ "i": "└", "il": true, "p": "-" }, { "i": "┼", "il": true, "p": "+" }, { "i": "┘", "il": false, "p": "|" }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [{ "i": "╶", "il": true, "f": "n", "p": "-" }, { "i": "┴", "il": false, "p": "-" }, { "i": "┘", "il": true }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, null, null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, null, null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, null, null, null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }], [null, null, null, null, null, null, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }, { "il": false }]],
 	[
 		[{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
 		[{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
