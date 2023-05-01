@@ -43,19 +43,19 @@ export const shipLayoutMasks: string[][] = [
 		"           ",
 		"           "
 	], [
-		"kkk        ",
-		"kkk        ",
-		"kkk        ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           ",
-		"           "
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk",
+		"kkkkkkkkkkk"
 	]
 ];
