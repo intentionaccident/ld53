@@ -24,7 +24,10 @@ export const Game = () => {
 	const [timeLeft, setTimeLeft] = React.useState(0);
 	const [message, setMessage] = React.useState(
 		SHOW_WELCOME_MESSAGE
-			? 'Good news everyone! We have received a delivery order of gloop to Nomicron Persai 9. As the engineer of the ship it will be your job to direct the pipes so that the ship will function well enough to deliver the valuable gloop. Good luck!'
+			? 'Good news everyone! We have received a delivery order of gloop to Nomicron Persai 9.' +
+			'\n\n' +
+			'As the engineer of the ship it will be your job to direct the ' +
+			'gloop to the ship components as necessary. Good luck!'
 			: ''
 	);
 

@@ -92,10 +92,22 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 		ship.levelProgress = 0;
 		ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
 		if (ship.currentLevel >= shipLayouts.length) {
-			showMessageBox("YOU WON! Final score" + ship.score);
+			showMessageBox(
+				`With the final delivery done, you can now take a rest and enjoy the refreshing taste of It's Gloop!™\n\nYOU WON!\n\nFinal score: ${ship.score}`
+			);
 		} else {
 			updateLevel(ship, shipLayoutMasks[ship.currentLevel], shipLayouts[ship.currentLevel], textureAssets);
-			showMessageBox(`You have advanced to level ${ship.currentLevel}. Score: ${ship.score}`);
+			if (ship.currentLevel === 1) {
+				showMessageBox(
+					`One delivery done, two to go.\n\nScore: ${ship.score}`
+				);
+			}
+
+			if (ship.currentLevel === 2) {
+				showMessageBox(
+					`Good job getting the second delivery through. Now for the final planet.\n\nScore: ${ship.score}`
+				);
+			}
 		}
 		// ship.score = 0;
 	}
