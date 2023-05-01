@@ -112,6 +112,9 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 									path: sinkPath.path
 								}
 							});
+							if (feature.type === 'sink' && feature.storage === 0) {
+								feature.state = 'idle';
+							}
 						}
 					}
 				} else if (feature.type === 'sink' && feature.state === 'done') {
