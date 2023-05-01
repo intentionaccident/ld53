@@ -56,7 +56,12 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 
 	const alertScreen = new PIXI.Sprite(animationAssets.alert.textures[0])
 	alertScreen.x = -SLANT;
-	room.root.addChild(alertScreen, alertAnimation, boxArrivalAnimation, boxFillingAnimation)
+
+
+	const feature = createDualRender(assetLibrary.storage.asset)
+	feature.root.x = -TILE_WIDTH / 2 + SLANT / 2;
+	room.root.addChild(feature.root)
+	room.root.addChild(feature.root, alertScreen, alertAnimation, boxArrivalAnimation, boxFillingAnimation)
 
 	const gloopPort = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortTripleEmpty].asset)
 	const gloopSyphon = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortSyphonEmpty].asset)
@@ -116,10 +121,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	interactiveIntersection.y = 5;
 	intersection.sprite.addChild(interactiveIntersection)
 
-	const feature = new PIXI.Graphics();
 	const progress = new PIXI.Graphics();
 	pipeGraphics.addChild(
-		feature,
 		verticalPipe.root,
 		horizontalPipe.root,
 		gloopPort,
@@ -129,8 +132,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	);
 
 	intersection.root.interactive = true;
-	feature.interactive = true;
-	feature.cursor = 'pointer';
+	feature.root.interactive = true;
+	feature.root.cursor = 'pointer';
 	verticalPipe.root.hitArea = new PIXI.Polygon([
 		-INTERSECTION_RADIUS, INTERSECTION_RADIUS,
 		INTERSECTION_RADIUS, INTERSECTION_RADIUS,
@@ -172,7 +175,7 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 			clamps,
 			interactive: interactiveIntersection
 		},
-		features: feature,
+		features: { base: feature },
 		progress: progress,
 		dirty
 	};

@@ -54,7 +54,7 @@ export function initializeLevel(shipGraphics: {
 				setRoomVisibility(room, false)
 			}
 			updateIntersectionTexture(room, textureAssets)
-			updateRoomSprites(room);
+			updateRoomSprites(room, textureAssets);
 			return room
 		})
 	);

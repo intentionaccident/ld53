@@ -1,29 +1,19 @@
 import * as React from "react"
-import * as PIXI from "pixi.js";
 import { AppContext } from "./AppContext";
 import { AssetContext } from "./AssetContext";
 import { PixiRoot } from "./PixiRoot";
 import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
 import {
-	DEFAULT_PIPE_CAPACITY,
-	DELIVERY_TIME_LIMIT,
 	ANIMATION_UPDATE_INTERVAL,
 	ROOM_UPDATE_INTERVAL, SHOW_WELCOME_MESSAGE, SCORE_MAX
 } from "./constants";
-import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
-import { drawRoomBackground } from "./draw/drawRoomBackground";
-import { initRoomGraphics } from "./draw/initRoomGraphics";
 import { processEvents } from "./events/processEvents";
 import { subscribeToEvents } from "./events/subscribeToEvents";
 import { GameEventType } from "./events/types/GameEventType";
 import { initShipGraphics } from "./initShipGraphics";
-import { shipLayouts } from "./shipLayouts";
-import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
-import { setRoomVisibility } from "./utils/setRoomVisibility";
-import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 import { updateAnimations } from "./updateAnimations";
 import { initializeLevel } from "./initializeLevel";
 import { SinkFeature } from "./types/RoomFeature";

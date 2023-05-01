@@ -46,4 +46,5 @@ export enum TextureAssetNames {
 	GloopPortSyphonFull = "gloop-syphon2",
 
 	Engine = "engines",
+	StorageRoom = "storage",
 }

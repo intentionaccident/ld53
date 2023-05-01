@@ -37,7 +37,9 @@ export interface RoomHandle {
 			base: DualRender
 			animation: PIXI.AnimatedSprite
 		}
-		features: PIXI.Graphics;
+		features: {
+			base: DualRender
+		}
 		progress: PIXI.Graphics;
 	};
 	gloopButtonActive: boolean

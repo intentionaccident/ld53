@@ -48,7 +48,7 @@ export function drawRoom(room: RoomHandle, assets: TextureAssetLibrary) {
 	drawVerticalPipe(room, assets)
 	drawHorizontalPipe(room, assets)
 	drawFeatureProgress(room);
-	updateRoomSprites(room)
+	updateRoomSprites(room, assets)
 }
 
 
