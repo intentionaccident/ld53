@@ -55,6 +55,7 @@ export class ProgressBar {
 	}
 
 	public set(progress: number) {
+		progress = Math.max(Math.min(progress, 1), 0)
 		const shipStart = -this.ship.width / 2;
 		const shipEnd = this.width - this.ship.width / 2;
 		this.ship.x = shipStart + Math.round((shipEnd - shipStart) * progress);
