@@ -78,7 +78,7 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 			} case GameEventType.ActivateFeature: {
 				const roomHandle = ship.roomHandles[event.coord.y][event.coord.x];
 				const feature = roomHandle.data.feature;
-				if (feature.type === 'source' || (feature.type === 'sink' && feature.state === 'done')) {
+				if (feature.type === 'source' || (feature.type === 'sink' && (feature.state === 'done' || feature.state === 'requesting'))) {
 					const targetCandidates =
 						ship.roomHandles.flatMap(r => r)
 							.filter(r =>
@@ -115,7 +115,7 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 									path: sinkPath.path
 								}
 							});
-							if (feature.type === 'sink' && feature.storage === 0) {
+							if (feature.type === 'sink' && feature.state === 'done' && feature.storage === 0) {
 								feature.state = 'idle';
 							}
 						}
