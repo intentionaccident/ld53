@@ -56,6 +56,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 			const sink = idleEmptySinks[Math.floor(Math.random() * idleEmptySinks.length)];
 			sink.state = 'requesting';
 			ship.ticksBetweenRequests = 0;
+			soundAssets.alarm.asset.play();
 		}
 	} else {
 		ship.ticksBetweenRequests = 0;

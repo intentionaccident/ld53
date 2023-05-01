@@ -20,8 +20,6 @@ export const SINK_BUSY_TICKS = {
 
 export const DEFAULT_PIPE_CAPACITY = 1;
 
-export const DELIVERY_TIME_LIMIT = 60 * 60;
-
 export const MAX_CONCURRENT_DIRTY_ROOMS = [
 	{level: 0, value: 0},
 	{level: 0.5, value: 1},
@@ -35,7 +33,7 @@ export const PROGRESS_MODIFIER = [
 	0.5
 ]
 
-export const REQUEST_DELAY_IN_TICKS = 2;
+export const REQUEST_DELAY_IN_TICKS = 4;
 
 export const DIRTY_ROOM_DELAY_IN_TICKS = 5;
 
