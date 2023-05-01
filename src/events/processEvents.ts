@@ -8,7 +8,7 @@ import {createFeature} from "../createFeature";
 import {updateIntersectionTexture} from "../utils/updateIntersectionTexture";
 import {AssetLibrary} from "../types/AssetLibrary";
 import {dijkstraGraph, dijkstraPath} from "../dijkstraGraph";
-import {SinkFeature} from "../types/RoomFeature";
+import {SinkFeature, SourceFeature} from "../types/RoomFeature";
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
@@ -98,14 +98,13 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 						if (aType == bType) {
 							return a.path.length - b.path.length
 						} else {
-							bType - aType;
+							return aType - bType;
 						}
-
 					});
 					console.log(paths);
 					if (paths.length > 0) {
 						const sinkPath = paths[0];
-						const sink = sinkPath.sink.data.feature as SinkFeature;
+						const sink = sinkPath.sink.data.feature as (SinkFeature | SourceFeature);
 						if (feature.storage > 0 && sink.storage < sink.capacity) {
 							sink.storage += 1;
 							feature.storage -= 1;
@@ -121,8 +120,6 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 							}
 						}
 					}
-				} else if (feature.type === 'sink' && feature.state === 'done') {
-					feature.state = 'releasing';
 				}
 				continue;
 			} case GameEventType.ActivateSink: {
