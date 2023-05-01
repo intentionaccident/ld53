@@ -93,10 +93,14 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 						}
 					}).filter(path => path.path.length > 0);
 					paths.sort((a, b) => {
-						if (a.sink.data.feature.type === 'source') {
-							return -1;
+						const aType = a.sink.data.feature.type === 'source' ? 1 : 0;
+						const bType = b.sink.data.feature.type === 'source' ? 1 : 0;
+						if (aType == bType) {
+							return a.path.length - b.path.length
+						} else {
+							bType - aType;
 						}
-						return a.path.length - b.path.length
+
 					});
 					console.log(paths);
 					if (paths.length > 0) {
