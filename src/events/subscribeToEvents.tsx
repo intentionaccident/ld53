@@ -110,16 +110,13 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		}
 	});
 
-	console.log(room.coordinate)
-	room.graphics.room.gloopPort.on("mouseover", () => {
-		console.log(room.coordinate)
-
+	room.graphics.room.gloopPort.on("mouseenter", () => {
 		ship.eventQueue.push({
 			type: GameEventType.HoverButton, coord: room.coordinate, active: true, target: HoverTarget.GloopButton
 		});
 	})
 
-	room.graphics.room.gloopPort.on("mouseout", () => {
+	room.graphics.room.gloopPort.on("mouseleave", () => {
 		ship.eventQueue.push({
 			type: GameEventType.HoverButton, coord: room.coordinate, active: false, target: HoverTarget.GloopButton
 		});

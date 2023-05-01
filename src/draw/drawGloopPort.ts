@@ -16,11 +16,13 @@ export function drawGloopPort(room: RoomHandle, assets: TextureAssetLibrary) {
 		return;
 	}
 
-	if (room.data.feature.storage > 0) {
-		room.graphics.room.gloopSyphon.texture = room.gloopButtonActive
-			? assets[TextureAssetNames.GloopPortSyphonFull].asset
-			: assets[TextureAssetNames.GloopPortSyphonEmpty].asset
-	}
+	const highlightGloopButton =
+		room.gloopButtonActive
+		&& room.data.feature.storage > 0
+		&& (room.data.feature.type !== 'sink' || room.data.feature.state !== 'busy');
+	room.graphics.room.gloopSyphon.texture = highlightGloopButton
+		? assets[TextureAssetNames.GloopPortSyphonFull].asset
+		: assets[TextureAssetNames.GloopPortSyphonEmpty].asset
 
 	const asset = gloopMap[room.data.feature.capacity]?.[room.data.feature.storage];
 	if (asset == null) {
