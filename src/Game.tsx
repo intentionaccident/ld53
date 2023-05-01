@@ -19,12 +19,13 @@ import { processEvents } from "./events/processEvents";
 import { subscribeToEvents } from "./events/subscribeToEvents";
 import { GameEventType } from "./events/types/GameEventType";
 import { initShipGraphics } from "./initShipGraphics";
-import { shipLayout } from "./shipLayout";
+import { shipLayouts } from "./shipLayouts";
 import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
-import { updateAnimations } from "./updateAnimations";
+import {updateAnimations} from "./updateAnimations";
+import {initializeLevel} from "./initializeLevel";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -39,44 +40,7 @@ export const Game = () => {
 		const ship: Ship = {
 			eventQueue: [],
 			animationQueue: [],
-			roomHandles: shipLayout.map((layoutRow, y) =>
-				layoutRow.map((layout, x) => {
-					const coordinate = new PIXI.Point(x, y)
-					const graphics = initRoomGraphics(coordinate, shipGraphics, textureAssets)
-					const hidden = layout == null
-					const room = {
-						coordinate,
-						data: {
-							hidden,
-							bottomPipe: 0,
-							bottomPipeCapacity: ['+', '|'].includes(layout?.p) ? DEFAULT_PIPE_CAPACITY : 0,
-							rightPipe: 0,
-							rightPipeCapacity: ['+', '-'].includes(layout?.p) ? DEFAULT_PIPE_CAPACITY : 0,
-
-							intersectionStates: [
-								['┼', '┤', '┴', '┘', '├', '│', '└', '╵'].includes(layout?.i),
-								['┼', '┴', '├', '└', '┬', '─', '┌', '╶'].includes(layout?.i),
-								['┼', '┤', '├', '│', '┬', '┐', '┌', '╷'].includes(layout?.i),
-								['┼', '┤', '┴', '┘', '┬', '┐', '─', '╴'].includes(layout?.i),
-							],
-							intersectionLocked: !!layout?.il,
-							roomOpen: true,
-
-							feature: createFeature(layout?.f),
-							isDirty: false,
-							lockSemaphore: 0,
-						},
-						graphics
-					} as RoomHandle;
-
-					drawRoomBackground(room)
-					if (hidden) {
-						setRoomVisibility(room, false)
-					}
-					updateIntersectionTexture(room, textureAssets)
-					return room
-				})
-			),
+			roomHandles: initializeLevel(shipGraphics, textureAssets),
 			graphics: shipGraphics,
 			currentLevel: 0,
 			levelProgress: 0,
@@ -112,7 +76,7 @@ export const Game = () => {
 
 			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
 				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
-				updateRooms(ship);
+				updateRooms(ship, textureAssets);
 			}
 
 			for (const room of roomHandlesDrawQueue)

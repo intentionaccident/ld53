@@ -43,13 +43,9 @@ function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 	switch (event.key) {
-		case 'c': {
-			for (let y = 0; y < ship.roomHandles.length; y++) {
-				for (let x = 0; x < ship.roomHandles[y].length; x++) {
-					ship.roomHandles[y][x].data.rightPipe = 0;
-					ship.roomHandles[y][x].data.bottomPipe = 0;
-				}
-			}
+		case 'n': {
+			ship.levelProgress = 1;
+			ship.graphics.progressBar.set(ship.levelProgress);
 			return
 		} case 's': {
 			console.log(saveLevel(ship));

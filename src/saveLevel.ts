@@ -24,7 +24,7 @@ export function saveLevel(ship: Ship): string {
 		console.error('Unreachable');
 	}
 
-	return 'export const shipLayout: RoomLayout[][] = ' + JSON.stringify(ship.roomHandles.map(rows =>
+	return JSON.stringify(ship.roomHandles.map(rows =>
 		rows.map(roomHandle => {
 			const d = roomHandle.data;
 			let f = undefined;
@@ -55,5 +55,5 @@ export function saveLevel(ship: Ship): string {
 					p: p
 				};
 		})
-	)) + ';';
+	)) + ',';
 }

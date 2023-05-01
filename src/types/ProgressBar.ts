@@ -23,7 +23,7 @@ export class ProgressBar {
 		// fg
 		g.beginFill(0xffffff)
 		g.lineStyle(LINE_SIZE, 0x333333);
-		progress = Math.min(1, progress);
+		progress = Math.max(Math.min(1, progress), 0);
 		g.drawRect(0, 0, progress * 100, 10);
 	}
 }

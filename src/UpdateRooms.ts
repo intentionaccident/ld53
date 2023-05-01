@@ -1,9 +1,12 @@
-import { Ship } from "./types/Ship";
-import { MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT } from "./constants";
-import { IntersectionDirection } from "./types/IntersectionDirection";
-import { RoomHandle } from "./types/RoomHandle";
+import {Ship} from "./types/Ship";
+import {MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from "./constants";
+import {IntersectionDirection} from "./types/IntersectionDirection";
+import {RoomHandle} from "./types/RoomHandle";
+import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
+import {shipLayouts} from "./shipLayouts";
+import {updateLevel} from "./updateLevel";
 
-export function updateRooms(ship: Ship) {
+export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
 	const idleSinks = sinks.filter(s => s.state === 'idle');
 	const doneSinks = sinks.filter(s => s.state === 'done');
@@ -55,4 +58,15 @@ export function updateRooms(ship: Ship) {
 				}
 			}
 		}
+
+	if (ship.levelProgress >= 1) {
+		ship.currentLevel += 1;
+		ship.levelProgress = 0;
+		ship.graphics.progressBar.set(ship.levelProgress);
+		if (ship.currentLevel >= shipLayouts.length) {
+			console.log("YOU WON!")
+		} else {
+			updateLevel(ship, shipLayouts[ship.currentLevel], textureAssets);
+		}
+	}
 }
