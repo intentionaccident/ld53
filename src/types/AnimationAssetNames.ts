@@ -1,4 +1,5 @@
 export enum AnimationAssetNames {
 	Alert = "alert",
-	Box = "box"
+	Box = "box",
+	InteractableIntersetion = "interactable-intersection"
 }

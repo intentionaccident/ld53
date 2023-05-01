@@ -27,7 +27,7 @@ export interface RoomHandle {
 			base: DualRender
 			clamps: PIXI.Sprite[]
 			clampsRoot: PIXI.Container
-			interactive: PIXI.Sprite
+			interactive: PIXI.AnimatedSprite
 		}
 		verticalPipe: {
 			base: DualRender

@@ -24,7 +24,8 @@ function loadSound(name: string): Promise<Sound> {
 
 const animationLengths: Record<AnimationAssetNames, number> = {
 	[AnimationAssetNames.Alert]: 11,
-	[AnimationAssetNames.Box]: 28
+	[AnimationAssetNames.Box]: 28,
+	[AnimationAssetNames.InteractableIntersetion]: 2
 }
 
 export const AssetLoader: React.FC<React.PropsWithChildren> = ({ children }) => {

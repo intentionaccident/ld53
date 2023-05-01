@@ -116,10 +116,12 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 		return clampSprite
 	})
 
-	const interactiveIntersection = new PIXI.Sprite(assetLibrary[TextureAssetNames.InteractiveIntersection].asset)
-	interactiveIntersection.x = 5;
-	interactiveIntersection.y = 5;
-	intersection.sprite.addChild(interactiveIntersection)
+	const interactiveIntersectionAnimation = new PIXI.AnimatedSprite(animationAssets["interactable-intersection"].textures)
+	interactiveIntersectionAnimation.animationSpeed = 0.1
+	interactiveIntersectionAnimation.play()
+	interactiveIntersectionAnimation.x = 10 - TILE_WIDTH / 2 - SLANT / 2;
+	interactiveIntersectionAnimation.y = 8 - TILE_HEIGHT / 2;
+	intersection.sprite.addChild(interactiveIntersectionAnimation)
 
 	const progress = new PIXI.Graphics();
 	pipeGraphics.addChild(
@@ -173,7 +175,7 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 			base: intersection,
 			clampsRoot,
 			clamps,
-			interactive: interactiveIntersection
+			interactive: interactiveIntersectionAnimation
 		},
 		features: { base: feature },
 		progress: progress,
