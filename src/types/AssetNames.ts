@@ -34,5 +34,15 @@ export enum AssetNames {
 	PipeVerticalAnimationFrame2 = "pipe-vertical4",
 	PipeVerticalAnimationFrame3 = "pipe-vertical5",
 
+	GloopPortSingleEmpty = "gloop-port1",
+	GloopPortSingleFull = "gloop-port2",
+	GloopPortDoubleEmpty = "gloop-port3",
+	GloopPortDoubleHalf = "gloop-port4",
+	GloopPortDoubleFull = "gloop-port5",
+	GloopPortTripleEmpty = "gloop-port6",
+	GloopPortTripleOne = "gloop-port7",
+	GloopPortTripleTwo = "gloop-port8",
+	GloopPortTripleFull = "gloop-port9",
+
 	Engine = "engines",
 }
