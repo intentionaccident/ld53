@@ -38,12 +38,6 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 						feature.state = 'busy';
 						feature.maxTicks = SINK_BUSY_TICKS[feature.subtype];
 						feature.ticksLeft = feature.maxTicks;
-					} else if (feature.ticksLeft <= 0) {
-						if (feature.storage > 0) {
-							feature.state = 'releasing';
-						} else {
-							feature.state = 'idle';
-						}
 					}
 				} else if (feature.state === 'busy') {
 					feature.ticksLeft -= 1;
