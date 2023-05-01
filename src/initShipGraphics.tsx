@@ -13,10 +13,15 @@ export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibr
 	const backgroundContainer = new PIXI.Container();
 	shipContainer.addChild(backgroundContainer);
 
-	const engine = new PIXI.Sprite(assets[TextureAssetNames.Engine].asset)
-	engine.x = 440
-	engine.y = -4
-	shipContainer.addChild(engine)
+	const topEngine = new PIXI.Sprite(assets[TextureAssetNames.Engine].asset)
+	topEngine.x = 440
+	topEngine.y = -4
+	shipContainer.addChild(topEngine)
+
+	const bottomEngine = new PIXI.Sprite(assets[TextureAssetNames.Engine].asset)
+	bottomEngine.x = 414
+	bottomEngine.y = 155
+	shipContainer.addChild(bottomEngine)
 
 	const foregroundContainer = new PIXI.Container();
 	shipContainer.addChild(foregroundContainer);
