@@ -1,4 +1,10 @@
-import { MAX_CONCURRENT_DIRTY_ROOMS, REQUEST_DELAY_IN_TICKS, SINK_BUSY_TICKS } from "./constants";
+import {
+	DIRTY_ROOM_DELAY_IN_TICKS,
+	MAX_CONCURRENT_DIRTY_ROOMS,
+	PROGRESS_MODIFIER,
+	REQUEST_DELAY_IN_TICKS,
+	SINK_BUSY_TICKS
+} from "./constants";
 import { GameEventType } from "./events/types/GameEventType";
 import { shipLayouts, shipLayoutMasks } from "./shipLayouts";
 import { RoomHandle } from "./types/RoomHandle";
@@ -23,27 +29,35 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 			maxConcurrentDirtyRooms = limit.value;
 		}
 	}
+	console.log(maxConcurrentDirtyRooms);
+	console.log(`${ship.ticksBetweenDirtyRooms}/${DIRTY_ROOM_DELAY_IN_TICKS}`)
 	if (dirtyRooms.length < maxConcurrentDirtyRooms) {
-		function anyIntersectionIsOpen(r: RoomHandle) {
-			return r.data.intersectionStates.filter(s => s).length && r.data.lockSemaphore === 0;
+		ship.ticksBetweenDirtyRooms += 1;
+		if (ship.ticksBetweenDirtyRooms > DIRTY_ROOM_DELAY_IN_TICKS) {
+			function anyIntersectionIsOpen(r: RoomHandle) {
+				return r.data.intersectionStates.filter(s => s).length && r.data.lockSemaphore === 0;
+			}
+
+			const candidates = ship.roomHandles.flatMap(a => a).filter(anyIntersectionIsOpen).filter(r => !r.data.isDirty).filter(r => r.data.feature.type === 'empty');
+			if (candidates.length > 0) {
+				const room = candidates[Math.floor(Math.random() * candidates.length)];
+
+				ship.eventQueue.push({
+					type: GameEventType.DeliveryRequest,
+					coord: room.coordinate
+				})
+			}
+			ship.ticksBetweenDirtyRooms = 0;
 		}
-
-
-		const candidates = ship.roomHandles.flatMap(a => a).filter(anyIntersectionIsOpen);
-		if (candidates.length > 0) {
-			const room = candidates[Math.floor(Math.random() * candidates.length)];
-
-			ship.eventQueue.push({
-				type: GameEventType.DeliveryRequest,
-				coord: room.coordinate
-			})
-		}
+	} else {
+		ship.ticksBetweenDirtyRooms = 0;
 	}
 	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleEmptySinks.length > 0) {
 		ship.ticksBetweenRequests += 1;
 		if (ship.ticksBetweenRequests > REQUEST_DELAY_IN_TICKS) {
 			const sink = idleEmptySinks[Math.floor(Math.random() * idleEmptySinks.length)];
 			sink.state = 'requesting';
+			ship.ticksBetweenRequests = 0;
 		}
 	} else {
 		ship.ticksBetweenRequests = 0;
@@ -62,7 +76,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 					}
 				} else if (feature.state === 'busy') {
 					feature.ticksLeft -= 1;
-					ship.levelProgress += 0.01;
+					ship.levelProgress += 0.01 * PROGRESS_MODIFIER[ship.currentLevel];
 					ship.graphics.progressBar.set(ship.levelProgress);
 					if (feature.ticksLeft <= 0) {
 						feature.state = 'done';

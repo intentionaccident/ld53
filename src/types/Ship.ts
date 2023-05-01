@@ -18,5 +18,6 @@ export interface Ship {
 	levelProgress: number,
 	score: number,
 	timeLeft: number,
-	ticksBetweenRequests: number
+	ticksBetweenRequests: number,
+	ticksBetweenDirtyRooms: number
 }

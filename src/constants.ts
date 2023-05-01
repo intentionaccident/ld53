@@ -29,7 +29,15 @@ export const MAX_CONCURRENT_DIRTY_ROOMS = [
 	{level: 2, value: 3},
 ]
 
+export const PROGRESS_MODIFIER = [
+	1.4,
+	0.8,
+	0.5
+]
+
 export const REQUEST_DELAY_IN_TICKS = 2;
+
+export const DIRTY_ROOM_DELAY_IN_TICKS = 10;
 
 export const SHOW_WELCOME_MESSAGE = false;
 export const SCORE_MAX = 100;

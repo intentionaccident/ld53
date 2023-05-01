@@ -42,7 +42,8 @@ export const Game = () => {
 			levelProgress: 0,
 			timeLeft: 0,
 			score: SCORE_MAX,
-			ticksBetweenRequests: 0
+			ticksBetweenRequests: 0,
+			ticksBetweenDirtyRooms: 0
 		}
 
 		// Manually activate the 'thrusters' for the first level
