@@ -40,3 +40,5 @@ export const DIRTY_ROOM_DELAY_IN_TICKS = 5;
 export const SHOW_WELCOME_MESSAGE = false;
 export const SCORE_MAX = 50;
 export const BOX_DELIVERY_SCORE = 1;
+
+export const DEBUG = false;

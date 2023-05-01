@@ -1,5 +1,5 @@
 import { Ship } from "../types/Ship";
-import { DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS } from "../constants";
+import {DEBUG, DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS} from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
@@ -44,22 +44,25 @@ function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
 }
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
-	switch (event.key) {
-		case 'p': {
-			ship.score += 1;
-			return
-		}
-		case 'P': {
-			ship.score += 10;
-			return
-		}
-		case 'n': {
-			ship.levelProgress = 1;
-			ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
-			return
-		} case 's': {
-			console.log(saveLevel(ship));
-			return
+	if (DEBUG) {
+		switch (event.key) {
+			case 'p': {
+				ship.score += 1;
+				return
+			}
+			case 'P': {
+				ship.score += 10;
+				return
+			}
+			case 'n': {
+				ship.levelProgress = 1;
+				ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
+				return
+			}
+			case 's': {
+				console.log(saveLevel(ship));
+				return
+			}
 		}
 	}
 }
