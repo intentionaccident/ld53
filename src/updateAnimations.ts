@@ -1,4 +1,5 @@
 import {Ship} from "./types/Ship";
+import {Node} from "./dijkstraGraph";
 
 export function updateAnimations(ship: Ship, setScore) {
 	for (const animation of ship.animationQueue) {
@@ -11,10 +12,24 @@ export function updateAnimations(ship: Ship, setScore) {
 			} else {
 				room.data.rightPipe++
 			}
-			if (ship.roomHandles[newPipe.y][newPipe.x].data.isDirty) {
-				ship.roomHandles[newPipe.y][newPipe.x].data.isDirty = false;
-				ship.score += 1;
-				setScore(ship.score);
+
+			function outOfBounds(n: Node): boolean {
+				return n.y < 0 || n.y >= ship.roomHandles.length || n.x < 0 || n.x >= ship.roomHandles[n.y].length;
+			}
+
+			// Every pipe touches two intersections, we check both of them
+			let dirtyRoomCandidates = [
+				{x: newPipe.x, y: newPipe.y},
+				newPipe.vertical
+					? {x: newPipe.x, y: newPipe.y + 1}
+					: {x: newPipe.x + 1, y: newPipe.y}
+			];
+			for (const candidate of dirtyRoomCandidates) {
+				if (!outOfBounds(candidate) && ship.roomHandles[candidate.y][candidate.x].data.isDirty) {
+					ship.roomHandles[candidate.y][candidate.x].data.isDirty = false;
+					ship.score += 1;
+					setScore(ship.score);
+				}
 			}
 		}
 
