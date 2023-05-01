@@ -24,8 +24,8 @@ import { RoomHandle } from "./types/RoomHandle";
 import { Ship } from "./types/Ship";
 import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
-import {updateAnimations} from "./updateAnimations";
-import {initializeLevel} from "./initializeLevel";
+import { updateAnimations } from "./updateAnimations";
+import { initializeLevel } from "./initializeLevel";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -71,7 +71,7 @@ export const Game = () => {
 
 			while (elapsedTimeBetweenAnimationUpdate > ANIMATION_UPDATE_INTERVAL) {
 				elapsedTimeBetweenAnimationUpdate -= ANIMATION_UPDATE_INTERVAL;
-				updateAnimations(ship, setScore);
+				updateAnimations(ship, setScore, soundAssets);
 			}
 
 			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {

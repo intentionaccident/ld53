@@ -1,9 +1,14 @@
-import {Ship} from "./types/Ship";
-import {Node} from "./dijkstraGraph";
-import {SinkFeature, SourceFeature} from "./types/RoomFeature";
+import { Ship } from "./types/Ship";
+import { Node } from "./dijkstraGraph";
+import { SoundAssetLibrary } from "./types/SoundAssetLibrary";
+import { SoundAssetNames } from "./types/SoundAssetNames";
 
-export function updateAnimations(ship: Ship, setScore) {
+export function updateAnimations(ship: Ship, setScore, soundAssets: SoundAssetLibrary) {
 	for (const animation of ship.animationQueue) {
+		if (animation.flow === 0) {
+			soundAssets[SoundAssetNames.Glop].asset.play()
+		}
+
 		if (animation.flow < animation.template.path.length) {
 			const newPipe = animation.template.path[animation.flow];
 			animation.activePipes.push(newPipe)
@@ -20,10 +25,10 @@ export function updateAnimations(ship: Ship, setScore) {
 
 			// Every pipe touches two intersections, we check both of them
 			let dirtyRoomCandidates = [
-				{x: newPipe.x, y: newPipe.y},
+				{ x: newPipe.x, y: newPipe.y },
 				newPipe.vertical
-					? {x: newPipe.x, y: newPipe.y + 1}
-					: {x: newPipe.x + 1, y: newPipe.y}
+					? { x: newPipe.x, y: newPipe.y + 1 }
+					: { x: newPipe.x + 1, y: newPipe.y }
 			];
 			for (const candidate of dirtyRoomCandidates) {
 				if (!outOfBounds(candidate) && ship.roomHandles[candidate.y][candidate.x].data.isDirty) {
