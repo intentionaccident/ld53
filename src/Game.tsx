@@ -26,6 +26,7 @@ import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 import { updateAnimations } from "./updateAnimations";
 import { initializeLevel } from "./initializeLevel";
+import {SinkFeature} from "./types/RoomFeature";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -47,6 +48,10 @@ export const Game = () => {
 			timeLeft: DELIVERY_TIME_LIMIT,
 			score: 0
 		}
+
+		// Manually activate the 'thrusters' for the first level
+		const room = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'sink' && r.data.feature.subtype === 'thrusters')[0];
+		(room.data.feature as SinkFeature).state = 'requesting';
 
 		const keyDownListener = (event) => {
 			ship.eventQueue.push({ type: GameEventType.KeyPressed, key: event.key });
