@@ -12,11 +12,11 @@ import {setRoomVisibility} from "./utils/setRoomVisibility";
 import {updateIntersectionTexture} from "./utils/updateIntersectionTexture";
 import {Ship} from "./types/Ship";
 
-export function updateLevel(ship: Ship, shipLayout: RoomLayout[][], textureAssets: TextureAssetLibrary) {
+export function updateLevel(ship: Ship, shipLayoutMask: string[], shipLayout: RoomLayout[][], textureAssets: TextureAssetLibrary) {
 	for (let y = 0; y < ship.roomHandles.length; y++)
 		for (let x = 0; x < ship.roomHandles[y].length; x++) {
 			const layout = shipLayout[y][x];
-			if (layout === 'k') continue;
+			if (shipLayoutMask[y][x] === 'k') continue;
 			ship.roomHandles[y][x].data.hidden = layout === null;
 			ship.roomHandles[y][x].data.bottomPipe = 0;
 			ship.roomHandles[y][x].data.bottomPipeCapacity = ['+', '|'].includes(layout?.p) ? DEFAULT_PIPE_CAPACITY : 0;

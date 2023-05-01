@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import {Container} from "pixi.js";
 import {ProgressBar} from "./types/ProgressBar";
 import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
-import {shipLayouts} from "./shipLayouts";
+import {shipLayoutMasks, shipLayouts} from "./shipLayouts";
 import {initRoomGraphics} from "./draw/initRoomGraphics";
 import {DEFAULT_PIPE_CAPACITY} from "./constants";
 import {createFeature} from "./createFeature";
@@ -19,7 +19,6 @@ export function initializeLevel(shipGraphics: {
 }, textureAssets: TextureAssetLibrary) {
 	return shipLayouts[0].map((layoutRow, y) =>
 		layoutRow.map((layout, x) => {
-			if (layout === 'k') throw new Error('Unreachable');
 			const coordinate = new PIXI.Point(x, y)
 			const graphics = initRoomGraphics(coordinate, shipGraphics, textureAssets)
 			const hidden = layout == null

@@ -3,7 +3,7 @@ import {MAX_CONCURRENT_DIRTY_ROOMS, SINK_BUSY_TICKS, SINK_REQUEST_TIMEOUT} from 
 import {IntersectionDirection} from "./types/IntersectionDirection";
 import {RoomHandle} from "./types/RoomHandle";
 import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
-import {shipLayouts} from "./shipLayouts";
+import {shipLayoutMasks, shipLayouts} from "./shipLayouts";
 import {updateLevel} from "./updateLevel";
 
 export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
@@ -66,7 +66,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 		if (ship.currentLevel >= shipLayouts.length) {
 			console.log("YOU WON!")
 		} else {
-			updateLevel(ship, shipLayouts[ship.currentLevel], textureAssets);
+			updateLevel(ship, shipLayoutMasks[ship.currentLevel], shipLayouts[ship.currentLevel], textureAssets);
 		}
 	}
 }
