@@ -35,7 +35,7 @@ export const Game = () => {
 		'Good news everyone! We have received a delivery order of gloop to Nomicron Persai 9. As the engineer of the ship it will be your job to direct the pipes so that the ship will function well enough to deliver the valuable gloop. Good luck!'
 	);
 
-	const { textureAssets, soundAssets } = React.useContext(AssetContext);
+	const { textureAssets, soundAssets, animationAssets } = React.useContext(AssetContext);
 	const { app } = React.useContext(AppContext);
 
 	React.useEffect(() => {
@@ -44,7 +44,7 @@ export const Game = () => {
 		const ship: Ship = {
 			eventQueue: [],
 			animationQueue: [],
-			roomHandles: initializeLevel(shipGraphics, textureAssets),
+			roomHandles: initializeLevel(shipGraphics, textureAssets, animationAssets),
 			graphics: shipGraphics,
 			currentLevel: 0,
 			levelProgress: 0,

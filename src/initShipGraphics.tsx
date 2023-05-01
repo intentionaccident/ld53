@@ -1,9 +1,8 @@
 import * as PIXI from "pixi.js";
 import { Ship } from "./types/Ship";
 import { ProgressBar } from "./types/ProgressBar";
-import { SoundAssetLibrary } from "./types/SoundAssetLibrary";
 import { TextureAssetNames } from "./types/TextureAssetNames";
-import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
+import { TextureAssetLibrary } from "./types/TextureAssetLibrary";
 
 export function initShipGraphics(app: PIXI.Application, assets: TextureAssetLibrary): Ship['graphics'] {
 	const shipContainer = new PIXI.Container();

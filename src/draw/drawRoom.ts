@@ -1,14 +1,12 @@
-import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
 import { RoomHandle } from "../types/RoomHandle";
 import { drawHorizontalPipe } from "./drawHorizontalPipe";
 import { drawIntersection } from "./drawIntersection";
 import { drawSource } from "./drawSource";
 import { drawVerticalPipe } from "./drawVerticalPipe";
 import { drawDirty } from "./drawDirty";
-import { TextureAssetNames } from "../types/TextureAssetNames";
-import {TextureAssetLibrary} from "../types/TextureAssetLibrary";
+import { TextureAssetLibrary } from "../types/TextureAssetLibrary";
 import { drawGloopPort } from "./drawGloopPort";
-import {INTERSECTION_RADIUS, LINE_SIZE, SLANT, TILE_HEIGHT, TILE_WIDTH} from "../constants";
+import { updateRoomSprites } from "./updateRoomSprites";
 
 function drawFeatureProgress(room: RoomHandle) {
 	const g = room.graphics.progress;
@@ -50,6 +48,7 @@ export function drawRoom(room: RoomHandle, assets: TextureAssetLibrary) {
 	drawVerticalPipe(room, assets)
 	drawHorizontalPipe(room, assets)
 	drawFeatureProgress(room);
+	updateRoomSprites(room)
 }
 
 

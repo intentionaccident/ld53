@@ -16,6 +16,8 @@ export interface RoomHandle {
 			base: DualRender
 			gloopPort: PIXI.Sprite
 			gloopSyphon: PIXI.Sprite
+			alertAnimation: PIXI.AnimatedSprite
+			alertScreen: PIXI.Sprite
 		}
 		dirty: PIXI.Graphics;
 		pipes: PIXI.Container;

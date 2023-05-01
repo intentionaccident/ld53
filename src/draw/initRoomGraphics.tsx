@@ -2,9 +2,9 @@ import * as PIXI from "pixi.js";
 import { DualRender, RoomHandle } from "../types/RoomHandle";
 import { INTERSECTION_RADIUS, SLANT, SLANTEDNESS, TILE_HEIGHT, TILE_WIDTH } from "../constants";
 import { Ship } from "../types/Ship";
-import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
 import { TextureAssetNames } from "../types/TextureAssetNames";
 import { TextureAssetLibrary } from "../types/TextureAssetLibrary";
+import { AnimationAssetLibrary } from "../types/AnimationAssetLibrary";
 
 function createDualRender(texture: PIXI.Texture): DualRender {
 	const root = new PIXI.Container();
@@ -17,7 +17,7 @@ function createDualRender(texture: PIXI.Texture): DualRender {
 	}
 }
 
-export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], assetLibrary: TextureAssetLibrary): RoomHandle['graphics'] {
+export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], assetLibrary: TextureAssetLibrary, animationAssets: AnimationAssetLibrary): RoomHandle['graphics'] {
 	const room = createDualRender(assetLibrary[TextureAssetNames.Template].asset)
 	room.root.x = TILE_WIDTH * coord.x - SLANT * coord.y;
 	room.root.y = TILE_HEIGHT * coord.y;
@@ -33,6 +33,16 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	graphics.foreground.addChild(pipeGraphics);
 	pipeGraphics.x = TILE_WIDTH * coord.x - SLANT * coord.y + TILE_WIDTH / 2 - SLANT / 2;
 	pipeGraphics.y = TILE_HEIGHT * coord.y + TILE_HEIGHT / 2;
+
+	const alertAnimation = new PIXI.AnimatedSprite(animationAssets.alert.textures.slice(1))
+	alertAnimation.x = -SLANT;
+	alertAnimation.animationSpeed = 0.1;
+	alertAnimation.visible = false
+	alertAnimation.play()
+
+	const alertScreen = new PIXI.Sprite(animationAssets.alert.textures[0])
+	alertScreen.x = -SLANT;
+	room.root.addChild(alertScreen, alertAnimation)
 
 	const gloopPort = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortTripleEmpty].asset)
 	const gloopSyphon = new PIXI.Sprite(assetLibrary[TextureAssetNames.GloopPortSyphonEmpty].asset)
@@ -129,6 +139,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 			base: room,
 			gloopPort,
 			gloopSyphon,
+			alertAnimation,
+			alertScreen
 		},
 		verticalPipe: {
 			base: verticalPipe,

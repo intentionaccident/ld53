@@ -1,4 +1,3 @@
-
 export enum TextureAssetNames {
 	Template = "template",
 	InteractiveIntersection = "interactive-intersection",

@@ -1,26 +1,28 @@
 import * as PIXI from "pixi.js";
-import {Container} from "pixi.js";
-import {ProgressBar} from "./types/ProgressBar";
-import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
-import {shipLayoutMasks, shipLayouts} from "./shipLayouts";
-import {initRoomGraphics} from "./draw/initRoomGraphics";
-import {DEFAULT_PIPE_CAPACITY} from "./constants";
-import {createFeature} from "./createFeature";
-import {RoomHandle} from "./types/RoomHandle";
-import {drawRoomBackground} from "./draw/drawRoomBackground";
-import {setRoomVisibility} from "./utils/setRoomVisibility";
-import {updateIntersectionTexture} from "./utils/updateIntersectionTexture";
+import { Container } from "pixi.js";
+import { ProgressBar } from "./types/ProgressBar";
+import { TextureAssetLibrary } from "./types/TextureAssetLibrary";
+import { shipLayoutMasks, shipLayouts } from "./shipLayouts";
+import { initRoomGraphics } from "./draw/initRoomGraphics";
+import { DEFAULT_PIPE_CAPACITY } from "./constants";
+import { createFeature } from "./createFeature";
+import { RoomHandle } from "./types/RoomHandle";
+import { drawRoomBackground } from "./draw/drawRoomBackground";
+import { setRoomVisibility } from "./utils/setRoomVisibility";
+import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
+import { AnimationAssetLibrary } from "./types/AnimationAssetLibrary";
+import { updateRoomSprites } from "./draw/updateRoomSprites";
 
 export function initializeLevel(shipGraphics: {
 	root: Container;
 	background: Container;
 	foreground: Container;
 	progressBar: ProgressBar
-}, textureAssets: TextureAssetLibrary) {
+}, textureAssets: TextureAssetLibrary, animationAssets: AnimationAssetLibrary) {
 	return shipLayouts[0].map((layoutRow, y) =>
 		layoutRow.map((layout, x) => {
 			const coordinate = new PIXI.Point(x, y)
-			const graphics = initRoomGraphics(coordinate, shipGraphics, textureAssets)
+			const graphics = initRoomGraphics(coordinate, shipGraphics, textureAssets, animationAssets)
 			const hidden = layout == null
 			const room = {
 				coordinate,
@@ -52,6 +54,7 @@ export function initializeLevel(shipGraphics: {
 				setRoomVisibility(room, false)
 			}
 			updateIntersectionTexture(room, textureAssets)
+			updateRoomSprites(room);
 			return room
 		})
 	);
