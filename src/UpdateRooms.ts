@@ -5,8 +5,9 @@ import {RoomHandle} from "./types/RoomHandle";
 import {TextureAssetLibrary} from "./types/TextureAssetLibrary";
 import {shipLayoutMasks, shipLayouts} from "./shipLayouts";
 import {updateLevel} from "./updateLevel";
+import {SoundAssetLibrary} from "./types/SoundAssetLibrary";
 
-export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
+export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soundAssets: SoundAssetLibrary) {
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
 	const idleEmptySinks = sinks.filter(s => s.state === 'idle' && s.storage === 0 && s.enRoute === 0);
 	const doneSinks = sinks.filter(s => s.state === 'done');
@@ -38,6 +39,7 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 						feature.state = 'busy';
 						feature.maxTicks = SINK_BUSY_TICKS[feature.subtype];
 						feature.ticksLeft = feature.maxTicks;
+						soundAssets.busy.asset.play();
 					}
 				} else if (feature.state === 'busy') {
 					feature.ticksLeft -= 1;

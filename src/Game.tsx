@@ -76,7 +76,7 @@ export const Game = () => {
 
 			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
 				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
-				updateRooms(ship, textureAssets);
+				updateRooms(ship, textureAssets, soundAssets);
 			}
 
 			for (const room of roomHandlesDrawQueue)

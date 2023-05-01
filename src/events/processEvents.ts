@@ -127,6 +127,8 @@ export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, so
 					if (failed) {
 						soundAssets.boing.asset.play();
 					}
+				} else if (feature.type === 'sink' && feature.state === 'busy') {
+					soundAssets.busy.asset.play();
 				}
 				continue;
 			} case GameEventType.ActivateSink: {
