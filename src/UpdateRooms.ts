@@ -16,7 +16,14 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 	const busySinks = sinks.filter(r => r.state === 'busy');
 	const dirtyRooms = ship.roomHandles.flatMap(a => a).filter(r => r.data.isDirty);
 
-	if (dirtyRooms.length < MAX_CONCURRENT_DIRTY_ROOMS) {
+	let maxConcurrentDirtyRooms = 0;
+	const level = ship.currentLevel + ship.levelProgress;
+	for (const limit of MAX_CONCURRENT_DIRTY_ROOMS) {
+		if (level >= limit.level) {
+			maxConcurrentDirtyRooms = limit.value;
+		}
+	}
+	if (dirtyRooms.length < maxConcurrentDirtyRooms) {
 		function anyIntersectionIsOpen(r: RoomHandle) {
 			return r.data.intersectionStates.filter(s => s).length && r.data.lockSemaphore === 0;
 		}
