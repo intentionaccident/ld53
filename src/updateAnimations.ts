@@ -2,6 +2,7 @@ import { Ship } from "./types/Ship";
 import { Node } from "./dijkstraGraph";
 import { SoundAssetLibrary } from "./types/SoundAssetLibrary";
 import { SoundAssetNames } from "./types/SoundAssetNames";
+import { BOX_DELIVERY_SCORE } from "./constants";
 
 export function updateAnimations(ship: Ship, setScore, soundAssets: SoundAssetLibrary) {
 	for (const animation of ship.animationQueue) {
@@ -38,8 +39,8 @@ export function updateAnimations(ship: Ship, setScore, soundAssets: SoundAssetLi
 					room.graphics.room.boxFillingAnimation.visible = true;
 					room.graphics.room.boxFillingAnimation.play()
 
-					ship.score += 1;
-					setScore(ship.score);
+					ship.score += BOX_DELIVERY_SCORE;
+					// setScore(ship.score);
 				}
 			}
 		}

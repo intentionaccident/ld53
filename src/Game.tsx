@@ -9,7 +9,7 @@ import {
 	DEFAULT_PIPE_CAPACITY,
 	DELIVERY_TIME_LIMIT,
 	ANIMATION_UPDATE_INTERVAL,
-	ROOM_UPDATE_INTERVAL, SHOW_WELCOME_MESSAGE
+	ROOM_UPDATE_INTERVAL, SHOW_WELCOME_MESSAGE, SCORE_MAX
 } from "./constants";
 import { createFeature } from "./createFeature";
 import { drawRoom } from "./draw/drawRoom";
@@ -26,7 +26,7 @@ import { setRoomVisibility } from "./utils/setRoomVisibility";
 import { updateIntersectionTexture } from "./utils/updateIntersectionTexture";
 import { updateAnimations } from "./updateAnimations";
 import { initializeLevel } from "./initializeLevel";
-import {SinkFeature} from "./types/RoomFeature";
+import { SinkFeature } from "./types/RoomFeature";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
@@ -50,8 +50,8 @@ export const Game = () => {
 			graphics: shipGraphics,
 			currentLevel: 0,
 			levelProgress: 0,
-			timeLeft: DELIVERY_TIME_LIMIT,
-			score: 0,
+			timeLeft: 0,
+			score: SCORE_MAX,
 			ticksBetweenRequests: 0
 		}
 
@@ -74,9 +74,14 @@ export const Game = () => {
 		const gameLoop = (delta) => {
 			processEvents(ship, textureAssets, soundAssets);
 
-			ship.timeLeft -= app.ticker.elapsedMS / 1000;
-			setTimeLeft(ship.timeLeft);
-			setScore(ship.score);
+			ship.timeLeft += app.ticker.elapsedMS / 1000;
+			setTimeLeft(1);
+			setScore(
+				Math.min(
+					ship.score - (ship.timeLeft | 0),
+					SCORE_MAX
+				)
+			);
 			elapsedTimeBetweenAnimationUpdate += delta;
 			elapsedTimeBetweenRoomUpdate += delta;
 

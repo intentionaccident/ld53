@@ -27,3 +27,5 @@ export const MAX_CONCURRENT_DIRTY_ROOMS = 2;
 export const REQUEST_DELAY_IN_TICKS = 2;
 
 export const SHOW_WELCOME_MESSAGE = false;
+export const SCORE_MAX = 100;
+export const BOX_DELIVERY_SCORE = 5;

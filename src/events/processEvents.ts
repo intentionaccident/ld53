@@ -192,7 +192,6 @@ export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, so
 				continue
 			} case GameEventType.HoverButton: {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
-				console.log(room.coordinate)
 				switch (event.target) {
 					case HoverTarget.GloopButton: {
 						room.gloopButtonActive = event.active
