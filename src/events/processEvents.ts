@@ -50,33 +50,6 @@ function processKeystroke(event: KeyPressedEvent, ship: Ship) {
 		} case 's': {
 			console.log(saveLevel(ship));
 			return
-		} case 'f': {
-			ship.eventQueue.push({
-				type: GameEventType.FlushPipe,
-				animationTemplate: {
-					gloop: 10,
-					path: [...Array(10)].map(_ => ({
-						x: Math.random() * 10 | 0,
-						y: Math.random() * 10 | 0,
-						vertical: Math.random() > 0.5
-					}))
-				}
-			})
-			return
-		} case 'd': {
-			const source = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'source')[0];
-			const sink = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'sink' && r.data.feature.subtype === 'reactor')[0];
-			const graph = dijkstraGraph(ship.roomHandles, { x: source.coordinate.x, y: source.coordinate.y });
-			const path = dijkstraPath(graph, { x: sink.coordinate.x, y: sink.coordinate.y });
-			ship.eventQueue.push({
-				type: GameEventType.FlushPipe,
-				animationTemplate: {
-					gloop: 10,
-					path: path
-				}
-			})
-			console.log(path);
-			return
 		}
 	}
 }
@@ -132,14 +105,15 @@ export function processEvents(ship: Ship, assets: TextureAssetLibrary) {
 					if (paths.length > 0) {
 						const sinkPath = paths[0];
 						const sink = sinkPath.sink.data.feature as (SinkFeature | SourceFeature);
-						if (feature.storage > 0 && sink.storage < sink.capacity) {
-							sink.storage += 1;
+						if (feature.storage > 0 && (sink.storage + sink.enRoute) < sink.capacity) {
+							sink.enRoute += 1;
 							feature.storage -= 1;
 							ship.eventQueue.push({
 								type: GameEventType.FlushPipe,
 								animationTemplate: {
 									gloop: 1,
-									path: sinkPath.path
+									path: sinkPath.path,
+									target: sink
 								}
 							});
 							if (feature.type === 'sink' && feature.state === 'done' && feature.storage === 0) {

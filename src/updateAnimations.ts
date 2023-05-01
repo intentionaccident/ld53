@@ -1,5 +1,6 @@
 import {Ship} from "./types/Ship";
 import {Node} from "./dijkstraGraph";
+import {SinkFeature, SourceFeature} from "./types/RoomFeature";
 
 export function updateAnimations(ship: Ship, setScore) {
 	for (const animation of ship.animationQueue) {
@@ -44,6 +45,11 @@ export function updateAnimations(ship: Ship, setScore) {
 			} else {
 				room.data.rightPipe--
 			}
+		}
+
+		if (animation.activePipes.length === 0) {
+			animation.template.target.enRoute -= 1;
+			animation.template.target.storage += 1;
 		}
 	}
 	ship.animationQueue = ship.animationQueue.filter((animation) => animation.activePipes.length)
