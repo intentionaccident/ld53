@@ -76,6 +76,15 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			return
 		}
 
+		if (event.ctrlKey) {
+			ship.eventQueue.push({
+				type: GameEventType.RoomEdit, coord: room.coordinate, edit: {
+					target: RoomEditTarget.FeatureGloop,
+				}
+			});
+			return
+		}
+
 		ship.eventQueue.push({ type: GameEventType.ActivateFeature, coord: room.coordinate });
 	});
 
@@ -83,7 +92,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		if (event.ctrlKey) {
 			ship.eventQueue.push({
 				type: GameEventType.RoomEdit, coord: room.coordinate, edit: {
-					target: RoomEditTarget.Feature,
+					target: RoomEditTarget.FeatureGloop,
 					reverse: true
 				}
 			});

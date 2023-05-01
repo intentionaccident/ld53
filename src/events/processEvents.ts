@@ -1,13 +1,13 @@
-import { Ship } from "../types/Ship";
-import { DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT } from "../constants";
-import { GameEventType } from "./types/GameEventType";
-import { KeyPressedEvent } from "./types/KeyPressedEvent";
-import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
-import { saveLevel } from "../saveLevel";
-import { createFeature } from "../createFeature";
-import { updateIntersectionTexture } from "../utils/updateIntersectionTexture";
-import { AssetLibrary } from "../types/AssetLibrary";
-import { dijkstraGraph, dijkstraPath } from "../dijkstraGraph";
+import {Ship} from "../types/Ship";
+import {DEFAULT_PIPE_CAPACITY, SINK_REQUEST_TIMEOUT} from "../constants";
+import {GameEventType} from "./types/GameEventType";
+import {KeyPressedEvent} from "./types/KeyPressedEvent";
+import {RoomEditTarget} from "./types/roomEdit/RoomEditTarget";
+import {saveLevel} from "../saveLevel";
+import {createFeature} from "../createFeature";
+import {updateIntersectionTexture} from "../utils/updateIntersectionTexture";
+import {AssetLibrary} from "../types/AssetLibrary";
+import {dijkstraGraph, dijkstraPath} from "../dijkstraGraph";
 import {SinkFeature} from "../types/RoomFeature";
 
 function processKeystroke(event: KeyPressedEvent, ship: Ship) {
@@ -76,18 +76,28 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 
 				continue
 			} case GameEventType.ActivateFeature: {
-				const feature = ship.roomHandles[event.coord.y][event.coord.x].data.feature;
-				if (feature.type === 'source') {
-					const requestingSinks = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'sink' && r.data.feature.state === 'requesting');
-					const source = ship.roomHandles.flatMap(r => r).filter(r => r.data.feature.type === 'source')[0];
-					const graph = dijkstraGraph(ship.roomHandles, {x: source.coordinate.x, y: source.coordinate.y});
-					const paths = requestingSinks.map(sink => {
+				const roomHandle = ship.roomHandles[event.coord.y][event.coord.x];
+				const feature = roomHandle.data.feature;
+				if (feature.type === 'source' || (feature.type === 'sink' && feature.state === 'done')) {
+					const targetCandidates =
+						ship.roomHandles.flatMap(r => r)
+							.filter(r =>
+								(r.data.feature.type === 'sink' && r.data.feature.state === 'requesting')
+								|| (r.data.feature.type === 'source' && r.data.feature.storage < r.data.feature.capacity)
+							);
+					const graph = dijkstraGraph(ship.roomHandles, {x: roomHandle.coordinate.x, y: roomHandle.coordinate.y});
+					const paths = targetCandidates.map(target => {
 						return {
-							sink,
-							path: dijkstraPath(graph, {x: sink.coordinate.x, y: sink.coordinate.y})
+							sink: target,
+							path: dijkstraPath(graph, {x: target.coordinate.x, y: target.coordinate.y})
 						}
 					}).filter(path => path.path.length > 0);
-					paths.sort((a, b) => a.path.length - b.path.length);
+					paths.sort((a, b) => {
+						if (a.sink.data.feature.type === 'source') {
+							return -1;
+						}
+						return a.path.length - b.path.length
+					});
 					console.log(paths);
 					if (paths.length > 0) {
 						const sinkPath = paths[0];
@@ -160,7 +170,12 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 						} else {
 							room.data.feature = createFeature(undefined);
 						}
-						room.data.feature
+						continue
+					} case RoomEditTarget.FeatureGloop: {
+						if (room.data.feature.type === 'sink' || room.data.feature.type === 'source') {
+							room.data.feature.storage = room.data.feature.storage + (event.edit.reverse ? -1 : 1) % room.data.feature.capacity;
+							if (room.data.feature.storage < 0) room.data.feature.storage += room.data.feature.capacity;
+						}
 						continue
 					}
 				}
