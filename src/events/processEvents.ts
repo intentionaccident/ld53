@@ -177,8 +177,8 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 						continue
 					} case RoomEditTarget.FeatureGloop: {
 						if (room.data.feature.type === 'sink' || room.data.feature.type === 'source') {
-							room.data.feature.storage = room.data.feature.storage + (event.edit.reverse ? -1 : 1) % room.data.feature.capacity;
-							if (room.data.feature.storage < 0) room.data.feature.storage += room.data.feature.capacity;
+							room.data.feature.storage = (room.data.feature.storage + (event.edit.reverse ? -1 : 1)) % (room.data.feature.capacity + 1);
+							if (room.data.feature.storage < 0) room.data.feature.storage = room.data.feature.capacity;
 						}
 						continue
 					}
