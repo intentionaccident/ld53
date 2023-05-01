@@ -33,6 +33,7 @@ export const Game = () => {
 
 	const { textureAssets, soundAssets, animationAssets } = React.useContext(AssetContext);
 	const { app } = React.useContext(AppContext);
+	app.stage.scale.set(2);
 
 	React.useEffect(() => {
 		const shipGraphics = initShipGraphics(app, textureAssets)

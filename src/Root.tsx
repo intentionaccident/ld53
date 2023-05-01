@@ -6,9 +6,9 @@ import { AssetLoader } from "./AssetLoader";
 import { Game } from "./Game";
 
 export const app = new Application({
-	width: 640,
-	height: 480,
-	antialias: true,
+	width: 640 * 2,
+	height: 480 * 2,
+	antialias: false,
 	backgroundColor: 0x222222
 });
 
