@@ -8,7 +8,7 @@ import {updateLevel} from "./updateLevel";
 
 export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
-	const idleSinks = sinks.filter(s => s.state === 'idle');
+	const idleEmptySinks = sinks.filter(s => s.state === 'idle' && s.storage === 0 && s.enRoute === 0);
 	const doneSinks = sinks.filter(s => s.state === 'done');
 	const requestingSinks = sinks.filter(r => r.state === 'requesting');
 	const busySinks = sinks.filter(r => r.state === 'busy');
@@ -24,8 +24,8 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary) {
 			room.data.isDirty = true;
 		}
 	}
-	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleSinks.length > 0) {
-		const sink = idleSinks[Math.floor(Math.random() * idleSinks.length)];
+	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleEmptySinks.length > 0) {
+		const sink = idleEmptySinks[Math.floor(Math.random() * idleEmptySinks.length)];
 		sink.state = 'requesting';
 	}
 
