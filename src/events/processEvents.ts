@@ -63,7 +63,7 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 				continue;
 			} case GameEventType.RotateIntersection: {
 				const room = ship.roomHandles[event.coord.y][event.coord.x];
-				if (room.data.isLocked) {
+				if (room.data.lockSemaphore > 0) {
 					continue
 				}
 
@@ -166,6 +166,10 @@ export function processEvents(ship: Ship, assets: AssetLibrary) {
 				}
 				continue
 			} case GameEventType.FlushPipe: {
+				for (const pipe of event.animationTemplate.path) {
+					ship.roomHandles[pipe.y][pipe.x].data.lockSemaphore++
+				}
+
 				ship.animationQueue.push({
 					template: event.animationTemplate,
 					activePipes: [],

@@ -62,7 +62,7 @@ export const Game = () => {
 
 							feature: createFeature(layout?.f),
 							isDirty: false,
-							isLocked: false,
+							lockSemaphore: 0,
 						},
 						graphics
 					} as RoomHandle;
@@ -122,6 +122,7 @@ export const Game = () => {
 					if (animation.flow > animation.template.gloop) {
 						const removedPipe = animation.activePipes.shift()
 						const room = ship.roomHandles[removedPipe.y][removedPipe.x]
+						room.data.lockSemaphore--
 						if (removedPipe.vertical) {
 							room.data.bottomPipe--
 						} else {

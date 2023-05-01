@@ -11,7 +11,7 @@ export interface Room {
 
 	roomOpen: boolean;
 
-	isLocked: boolean
+	lockSemaphore: number
 
 	feature: RoomFeature;
 	isDirty: boolean;
