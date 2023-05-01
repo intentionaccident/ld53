@@ -8,6 +8,7 @@ import { TextureAssetLibrary } from "./types/TextureAssetLibrary";
 import { Sound } from "@pixi/sound";
 import { AnimationAssetNames } from "./types/AnimationAssetNames";
 import { AnimationAssetLibrary } from "./types/AnimationAssetLibrary";
+import styles from "./Loading.sass";
 
 function loadSound(name: string): Promise<Sound> {
 	return new Promise<Sound>((resolve, reject) => {
@@ -73,6 +74,6 @@ export const AssetLoader: React.FC<React.PropsWithChildren> = ({ children }) => 
 	}, [])
 
 	return <AssetContext.Provider value={{ soundAssets, textureAssets, animationAssets }}>
-		{(textureAssets && soundAssets && animationAssets) ? children : null}
+		{(textureAssets && soundAssets && animationAssets) ? children : <h1 className={styles.loading}>Loading...</h1>}
 	</AssetContext.Provider>
 }
