@@ -160,6 +160,12 @@ export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, so
 							room.data.feature = createFeature('r');
 						} else if (room.data.feature.type === 'sink' && room.data.feature.subtype === 'reactor') {
 							room.data.feature = createFeature('+');
+						} else if (room.data.feature.type === 'source' && room.data.feature.storage === 0) {
+							room.data.feature = createFeature('++');
+						} else if (room.data.feature.type === 'source' && room.data.feature.storage === 1) {
+							room.data.feature = createFeature('+++');
+						} else if (room.data.feature.type === 'source' && room.data.feature.storage === 2) {
+							room.data.feature = createFeature('++++');
 						} else {
 							room.data.feature = createFeature(undefined);
 						}
