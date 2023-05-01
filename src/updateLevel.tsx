@@ -32,6 +32,7 @@ export function updateLevel(ship: Ship, shipLayoutMask: string[], shipLayout: Ro
 
 			ship.roomHandles[y][x].data.feature = createFeature(layout?.f);
 			ship.roomHandles[y][x].data.isDirty = false;
+			ship.roomHandles[y][x].data.intersectionLocked = layout?.il === true;
 
 			if (ship.roomHandles[y][x].data.hidden) {
 				setRoomVisibility(ship.roomHandles[y][x], false)
