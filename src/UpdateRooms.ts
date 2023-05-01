@@ -16,8 +16,10 @@ export function updateRooms(ship: Ship) {
 			return r.data.intersectionStates.filter(s => s).length;
 		}
 		const candidates = ship.roomHandles.flatMap(a => a).filter(anyIntersectionIsOpen);
-		const room = candidates[Math.floor(Math.random() * candidates.length)];
-		room.data.isDirty = true;
+		if (candidates.length > 0) {
+			const room = candidates[Math.floor(Math.random() * candidates.length)];
+			room.data.isDirty = true;
+		}
 	}
 	if (requestingSinks.length === 0 && busySinks.length <= 1 && idleSinks.length > 0) {
 		const sink = idleSinks[Math.floor(Math.random() * idleSinks.length)];
