@@ -6,7 +6,7 @@ import { UIRoot } from "./UIRoot";
 import { updateRooms } from "./UpdateRooms";
 import {
 	ANIMATION_UPDATE_INTERVAL,
-	ROOM_UPDATE_INTERVAL, SHOW_WELCOME_MESSAGE, SCORE_MAX
+	ROOM_UPDATE_INTERVAL, SHOW_WELCOME_MESSAGE, SCORE_MAX, BOX_DELIVERY_SCORE
 } from "./constants";
 import { drawRoom } from "./draw/drawRoom";
 import { processEvents } from "./events/processEvents";
@@ -45,6 +45,13 @@ export const Game = () => {
 			score: 0,
 			ticksBetweenRequests: 0,
 			ticksBetweenDirtyRooms: 0
+		}
+
+		for (let roomHandle of ship.roomHandles.flatMap(r => r)) {
+			roomHandle.graphics.room.boxFillingAnimation.onComplete = () => {
+				roomHandle.graphics.room.boxFillingAnimation.visible = false;
+				ship.score += BOX_DELIVERY_SCORE;
+			}
 		}
 
 		// Manually activate the 'thrusters' for the first level

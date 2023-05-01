@@ -52,8 +52,6 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	boxFillingAnimation.visible = false
 	boxFillingAnimation.loop = false
 
-	boxFillingAnimation.onComplete = () => boxFillingAnimation.visible = false;
-
 	const alertScreen = new PIXI.Sprite(animationAssets.alert.textures[0])
 	alertScreen.x = -SLANT;
 

@@ -38,8 +38,6 @@ export function updateAnimations(ship: Ship, setScore, soundAssets: SoundAssetLi
 					room.graphics.room.boxArrivalAnimation.visible = false;
 					room.graphics.room.boxFillingAnimation.visible = true;
 					room.graphics.room.boxFillingAnimation.play()
-
-					ship.score += BOX_DELIVERY_SCORE;
 					soundAssets.collect.asset.play();
 				}
 			}
