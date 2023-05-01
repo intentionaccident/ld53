@@ -7,7 +7,7 @@ import {shipLayoutMasks, shipLayouts} from "./shipLayouts";
 import {updateLevel} from "./updateLevel";
 import {SoundAssetLibrary} from "./types/SoundAssetLibrary";
 
-export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soundAssets: SoundAssetLibrary) {
+export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soundAssets: SoundAssetLibrary, showMessageBox: (message: string) => void) {
 	const sinks = ship.roomHandles.flatMap(a => a).map(r => r.data.feature.type === 'sink' ? r.data.feature : null).filter(r => r != null);
 	const idleEmptySinks = sinks.filter(s => s.state === 'idle' && s.storage === 0 && s.enRoute === 0);
 	const doneSinks = sinks.filter(s => s.state === 'done');
@@ -59,9 +59,10 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 		ship.levelProgress = 0;
 		ship.graphics.progressBar.set(ship.levelProgress);
 		if (ship.currentLevel >= shipLayouts.length) {
-			console.log("YOU WON!")
+			showMessageBox("YOU WON!");
 		} else {
 			updateLevel(ship, shipLayoutMasks[ship.currentLevel], shipLayouts[ship.currentLevel], textureAssets);
+			showMessageBox("You have advanced to level " + ship.currentLevel);
 		}
 	}
 }

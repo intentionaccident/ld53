@@ -1,14 +1,8 @@
 import * as React from 'react'
+import {MouseEventHandler} from 'react'
 import styles from "./UIRoot.sass"
 import {formatTimeSpan} from "./formatTimeSpan";
-import {MouseEventHandler} from "react";
-
-function TextBox(props: {message: string, handleMessageBoxClosed: MouseEventHandler}) {
-	return <div>
-		{props.message}
-		<button onClick={props.handleMessageBoxClosed}>OK</button>
-	</div>;
-}
+import {TextBox} from "./TextBox";
 
 export const UIRoot = (props: { text: string, score: number, timeLeft: number, handleMessageBoxClosed: MouseEventHandler }) => {
 	const timeLeftMessage = props.timeLeft > 0

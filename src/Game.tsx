@@ -30,8 +30,10 @@ import {SinkFeature} from "./types/RoomFeature";
 
 export const Game = () => {
 	const [score, setScore] = React.useState(0);
-	const [timeLeft, setTimeLeft] = React.useState(1);
-	const [message, setMessage] = React.useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+	const [timeLeft, setTimeLeft] = React.useState(0);
+	const [message, setMessage] = React.useState(
+		'Good news everyone! We have received a delivery order of gloop to Nomicron Persai 9. As the engineer of the ship it will be your job to direct the pipes so that the ship will function well enough to deliver the valuable gloop. Good luck!'
+	);
 
 	const { textureAssets, soundAssets } = React.useContext(AssetContext);
 	const { app } = React.useContext(AppContext);
@@ -82,7 +84,7 @@ export const Game = () => {
 
 			while (elapsedTimeBetweenRoomUpdate > ROOM_UPDATE_INTERVAL) {
 				elapsedTimeBetweenRoomUpdate -= ROOM_UPDATE_INTERVAL;
-				updateRooms(ship, textureAssets, soundAssets);
+				updateRooms(ship, textureAssets, soundAssets, showMessageBox);
 			}
 
 			for (const room of roomHandlesDrawQueue)
@@ -98,9 +100,14 @@ export const Game = () => {
 		}
 	}, []);
 
-	function handleMessageBoxClosed() {
+	function closeMessageBox() {
 		app.ticker.start();
 		setMessage('');
+	}
+
+	function showMessageBox(message: string) {
+		app.ticker.stop();
+		setMessage(message);
 	}
 
 	return <>
@@ -109,7 +116,7 @@ export const Game = () => {
 			text={message}
 			score={score}
 			timeLeft={timeLeft}
-			handleMessageBoxClosed={handleMessageBoxClosed}
+			handleMessageBoxClosed={closeMessageBox}
 		/>
 	</>
 }
