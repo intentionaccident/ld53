@@ -24,6 +24,11 @@ export class ScoreBoard {
 			this.graphics.addChild(crate);
 		}
 
+		while (this.crates.length > score) {
+			const crate = this.crates.pop();
+			this.graphics.removeChild(crate);
+		}
+
 		const lineWidth = Math.round(this.width / 7);
 		const lineHeight = Math.round(this.height / 11);
 		const padding = this.assets["box-icon"].asset.width;

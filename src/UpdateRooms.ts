@@ -92,11 +92,11 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 		ship.levelProgress = 0;
 		ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
 		if (ship.currentLevel >= shipLayouts.length) {
-			showMessageBox("YOU WON!");
+			showMessageBox("YOU WON! Final score" + ship.score);
 		} else {
 			updateLevel(ship, shipLayoutMasks[ship.currentLevel], shipLayouts[ship.currentLevel], textureAssets);
 			showMessageBox(`You have advanced to level ${ship.currentLevel}. Score: ${ship.score}`);
 		}
-		ship.score = 0;
+		// ship.score = 0;
 	}
 }
