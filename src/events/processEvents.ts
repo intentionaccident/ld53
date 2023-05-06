@@ -1,5 +1,5 @@
 import { Ship } from "../types/Ship";
-import {DEBUG, DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS} from "../constants";
+import { DEBUG, DEFAULT_PIPE_CAPACITY, SINK_BUSY_TICKS } from "../constants";
 import { GameEventType } from "./types/GameEventType";
 import { KeyPressedEvent } from "./types/KeyPressedEvent";
 import { RoomEditTarget } from "./types/roomEdit/RoomEditTarget";
@@ -13,7 +13,7 @@ import { RoomIntersectionEdit } from "./types/roomEdit/RoomIntersectionEdit";
 import { RoomHandle } from "../types/RoomHandle";
 import { HoverTarget } from "./types/HoverTarget";
 import { SoundAssetLibrary } from "../types/SoundAssetLibrary";
-import {shipLayouts} from "../shipLayouts";
+import { shipLayouts } from "../shipLayouts";
 
 function processIntersectionEdit(room: RoomHandle, edit: RoomIntersectionEdit) {
 	let state = room.data.intersectionStates.filter(s => s).length
@@ -137,7 +137,16 @@ export function processEvents(ship: Ship, textureAssets: TextureAssetLibrary, so
 						}
 					}
 					if (failed) {
-						soundAssets.boing.asset.play();
+						const sinks = ship.roomHandles.flatMap(a => a).filter(r => r => r.data.feature.type === 'sink' && r.state === 'requesting');
+						if (!sinks.length) {
+							soundAssets.boing.asset.play()
+							continue
+						} else {
+							soundAssets.alarm.asset.play()
+							for (const sink of sinks) {
+								sink.graphics.room.alertAnimation.play()
+							}
+						}
 					}
 				} else if (feature.type === 'sink' && feature.state === 'busy') {
 					soundAssets.busy.asset.play();

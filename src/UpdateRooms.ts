@@ -69,17 +69,14 @@ export function updateRooms(ship: Ship, textureAssets: TextureAssetLibrary, soun
 			if (feature.type === 'sink') {
 				if (feature.state === 'requesting') {
 					if (feature.storage >= feature.capacity) {
-						feature.state = 'busy';
-						feature.maxTicks = SINK_BUSY_TICKS[feature.subtype];
-						feature.ticksLeft = feature.maxTicks;
-						soundAssets.busy.asset.play();
-					}
-				} else if (feature.state === 'busy') {
-					feature.ticksLeft -= 1;
-					ship.levelProgress += 0.01 * PROGRESS_MODIFIER[ship.currentLevel];
-					ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
-					if (feature.ticksLeft <= 0) {
 						feature.state = 'done';
+
+						feature.maxTicks = 0;
+						feature.ticksLeft = 0;
+						ship.levelProgress += SINK_BUSY_TICKS[feature.subtype] * 0.01 * PROGRESS_MODIFIER[ship.currentLevel];
+						ship.graphics.progressBar.set((ship.currentLevel + ship.levelProgress) / shipLayouts.length);
+
+						soundAssets.busy.asset.play();
 					}
 				} else if (feature.state === 'releasing' && feature.storage === 0) {
 					feature.state = 'idle';

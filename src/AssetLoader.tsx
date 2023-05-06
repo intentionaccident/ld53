@@ -24,7 +24,7 @@ function loadSound(name: string): Promise<Sound> {
 }
 
 const animationLengths: Record<AnimationAssetNames, number> = {
-	[AnimationAssetNames.Alert]: 11,
+	[AnimationAssetNames.Alert]: 13,
 	[AnimationAssetNames.Box]: 28,
 	[AnimationAssetNames.InteractableIntersetion]: 2
 }

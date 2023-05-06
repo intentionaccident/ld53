@@ -38,7 +38,8 @@ export function initRoomGraphics(coord: PIXI.Point, graphics: Ship['graphics'], 
 	alertAnimation.x = -SLANT;
 	alertAnimation.animationSpeed = 0.1;
 	alertAnimation.visible = false
-	alertAnimation.play()
+	alertAnimation.loop = true
+	alertAnimation.onLoop = () => { alertAnimation.gotoAndStop(0) }
 
 	const boxArrivalAnimation = new PIXI.AnimatedSprite(animationAssets.box.textures.slice(0, 13))
 	boxArrivalAnimation.x = -SLANT;

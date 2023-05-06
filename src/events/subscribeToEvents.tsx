@@ -17,7 +17,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		}
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, coord: room.coordinate });
 	});
-	room.graphics.intersection.base.root.on('mousedown', (event) => {
+	room.graphics.intersection.base.root.on('pointerdown', (event) => {
 		if (event.button !== 0) {
 			return
 		}
@@ -53,7 +53,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		ship.eventQueue.push({ type: GameEventType.RotateIntersection, clockwise: true, coord: room.coordinate });
 	});
 
-	room.graphics.verticalPipe.base.root.on('mousedown', (event) => {
+	room.graphics.verticalPipe.base.root.on('pointerdown', (event) => {
 		if (!event.ctrlKey) {
 			return;
 		}
@@ -67,7 +67,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 			}
 		});
 	});
-	room.graphics.horizontalPipe.base.root.on('mousedown', (event) => {
+	room.graphics.horizontalPipe.base.root.on('pointerdown', (event) => {
 		if (!event.ctrlKey) {
 			return;
 		}
@@ -81,7 +81,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		});
 	});
 
-	room.graphics.features.base.root.on('mousedown', (event) => {
+	room.graphics.features.base.root.on('pointerdown', (event) => {
 		if (event.shiftKey) {
 			ship.eventQueue.push({ type: GameEventType.ActivateSink, coord: room.coordinate });
 			return
@@ -122,7 +122,7 @@ export function subscribeToEvents(ship: Ship, room: RoomHandle) {
 		});
 	})
 
-	room.graphics.room.gloopPort.on("mousedown", () => {
+	room.graphics.room.gloopPort.on("pointerdown", () => {
 		ship.eventQueue.push({ type: GameEventType.ActivateFeature, coord: room.coordinate });
 	})
 }
